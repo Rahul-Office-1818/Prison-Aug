@@ -1,0 +1,25 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-image: url("../images/background.jpeg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#home-page {
+
+    #map,
+    #jammer-info,
+    #drawer-jammer {
+        height: 93.4vh;
+    }
+}
+
+.jammer-icon{
+    filter: invert(100%);
+    -webkit-filter: invert(100%);
+}
