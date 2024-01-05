@@ -45,7 +45,6 @@ jammerApi.get("/", async (req, res) => {
     }
 });
 
-
 // B L O C K - O N L Y
 jammerApi.get('/block', async (req, res) => {
     try {
@@ -59,11 +58,5 @@ jammerApi.get('/block', async (req, res) => {
         return res.status(500).json({ message: "Internal server error!", err });
     }
 })
-
-
-
-
-
-
 
 export default jammerApi;

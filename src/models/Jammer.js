@@ -32,6 +32,11 @@ const Jammer = sequelize.define('Jammer', {
         type: Datatypes.STRING,
         allowNull: false
     },
+    status: {
+        type: Datatypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0
+    }
 }, { timestamps: true });
 
 export default Jammer;
