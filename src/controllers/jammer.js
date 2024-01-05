@@ -4,6 +4,7 @@ import Jammer from '../models/Jammer.js';
 const jammerApi = Router();
 
 // J A M M E R O N L Y 
+// /api/jammer
 jammerApi.get("/", async (req, res) => {
     try {
         if (req.query.id) {
@@ -46,6 +47,7 @@ jammerApi.get("/", async (req, res) => {
 });
 
 // B L O C K - O N L Y
+// /api/jammer/block
 jammerApi.get('/block', async (req, res) => {
     try {
         if (req.query.id) {
@@ -57,6 +59,6 @@ jammerApi.get('/block', async (req, res) => {
         console.log(err);
         return res.status(500).json({ message: "Internal server error!", err });
     }
-})
+});
 
 export default jammerApi;

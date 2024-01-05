@@ -3,6 +3,7 @@ import User from '../models/User.js';
 
 const auth = Router();
 
+// /auth/login
 auth.get('/login', async (req, res) => {
     const { username, password } = req.query;
     try {
@@ -15,6 +16,7 @@ auth.get('/login', async (req, res) => {
     }
 });
 
+// /auth/register
 auth.post('/register', async (req, res) => {
     const { username, password } = req.body;
     try {

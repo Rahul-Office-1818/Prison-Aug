@@ -10,6 +10,7 @@ import router from './src/routes/router.js';
 import sequelize from './src/database/db.js';
 import auth from './src/controllers/auth.js';
 import jammer from './src/controllers/jammer.js';
+import toggleJammerRoutes from './src/controllers/toggleJammer.js';
 config();
 
 
@@ -33,6 +34,7 @@ app
     .use(router)
     .use('/auth', auth)
     .use('/api/jammer', jammer)
+    .use("/api/jammer-toggle", toggleJammerRoutes)
 
 sequelize.sync()
     .then(() => {

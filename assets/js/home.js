@@ -12,12 +12,14 @@ const onJammer = L.icon({
     iconSize: [90, 90],
     iconAnchor: [50, 60],
     className: 'jammer-icon',
+    name: "on"
 });
 const offJammer = L.icon({
     iconUrl: './assets/icon/off.png',
     iconSize: [90, 90],
     iconAnchor: [50, 60],
     className: 'jammer-icon',
+    name: "off"
 });
 
 // DOM Selector :- 
@@ -147,7 +149,9 @@ async function onBlockCLick(ev) {
         const jammersDivSelector = document.querySelector("#jammers-div");
         jammersDivSelector.innerHTML = '';
         response.block.forEach((el, idx) => {
-            jammersDivSelector.innerHTML += `<button class="bg-red-500 border text-center font-bold text-xl text-black p-6 rounded" jammerId="${el.id}" title="${el.name}" onclick="jammerToggle(this)">J ${idx + 1}</button>`
+            let bgColor = el.status ? "bg-green-500" : "bg-red-500";
+            jammersDivSelector.innerHTML += `<button class="${bgColor} border text-center font-bold text-xl text-black p-6 rounded" jammerId="${el.id}" title="${el.name}" ip="${el.ipAddress}" port="${el.ipPort}"
+            onclick="jammerToggle(this)">J ${idx + 1}</button>`
         });
     } else {
         Toast.fire({ icon: "warning", title: response.message })
@@ -174,10 +178,10 @@ async function onBlockLoad() {
     });
 
     let response = await get.json();
-    if (get.status === 200) {
+    if (get.status === 200 && response.jammers.length != 0) {
         markerGroup.clearLayers();
         response.jammers.forEach(el => {
-            let marker = L.marker([el.lat, el.lng], { icon: offJammer, jammerId: el.id })
+            let marker = L.marker([el.lat, el.lng], { icon: el.status ? onJammer : offJammer, jammerId: el.id })
                 .bindPopup(`<table class="text-lg font-bold text-center">
                                 <tr>
                                     <td scope="col" class="px-3 py-1 text-right">Name</td>
@@ -199,6 +203,7 @@ async function onBlockLoad() {
 
             markerGroup.addLayer(marker)
         });
+
         map.addLayer(markerGroup);
         map.fitBounds(markerGroup.getBounds());
 
@@ -206,15 +211,14 @@ async function onBlockLoad() {
         blocksDivSelector.innerHTML = "";
         if (response.jammers.length <= 10) {
             response.jammers.forEach(async (el, idx) => {
-                
-                blocksDivSelector.innerHTML += `<button class="bg-red-500 border text-center font-bold text-xl text-black p-6 rounded" jammerId="${el.id}" title="${el.name}" ip="${el.ipAddress}" port="${el.ipPort}"
+                let bgColor = el.status ? "bg-green-500" : "bg-red-500";
+                blocksDivSelector.innerHTML += `<button class="${bgColor} border text-center font-bold text-xl text-black p-6 rounded" jammerId="${el.id}" title="${el.name}" ip="${el.ipAddress}" port="${el.ipPort}"
                  onclick="jammerToggle(this)">J ${idx + 1}</button>`
             })
             return;
         }
 
         const jammers = removeDuplicates(response.jammers);
-
 
         jammers.forEach((el) => {
             blocksDivSelector.innerHTML += `<button class="bg-red-500 border text-center font-bold text-2xl text-black p-6 rounded" onclick="onBlockCLick(this)" blockId="${el.blockId}" title="Jammer Block">B ${el.blockId}</button>`
@@ -258,13 +262,66 @@ async function initial() {
 
 async function jammerToggle(ev) {
     let id = ev.getAttribute("jammerId");
+    let ip = ev.getAttribute("ip");
+    let port = ev.getAttribute("port");
 
+    // if (ev.classList.contains("bg-red-500")) {
+    //     ev.classList.remove("bg-red-500");
+    //     ev.classList.add("bg-green-500");
+    // } else {
+    //     ev.classList.remove("bg-green-500");
+    //     ev.classList.add("bg-red-500");
+    // }
 
-    markerGroup.eachLayer(marker => {
+    markerGroup.eachLayer(async (marker) => {
         if (marker.options.jammerId === Number(id)) {
-            marker.setIcon(onJammer);
-        } else {
-            marker.setIcon(offJammer);
+            let currentStatus = (String(marker.options.icon.options.name).includes("off"))
+            console.log(id, ip, port, currentStatus)
+            // currentStatus ? marker.setIcon(onJammer) : marker.setIcon(offJammer);
+
+            let onOffJammer = currentStatus ? await fetch(`/api/jammer-toggle?id=${id}&ip=${ip}&port=${port}&mode=1`, {
+                method: "GET", headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                }
+            }) :
+                await fetch(`/api/jammer-toggle?id=${id}&ip=${ip}&port=${port}&mode=0`, {
+                    method: "GET", headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${localStorage.getItem("token")}`
+                    }
+                });
+
+            let response = await onOffJammer.json();
+            if (onOffJammer.status === 200) {
+                if (response.status) {
+                    marker.setIcon(onJammer);
+                    ev.classList.remove("bg-red-500");
+                    ev.classList.add("bg-green-500");
+                } else {
+                    marker.setIcon(offJammer);
+                    ev.classList.remove("bg-green-500");
+                    ev.classList.add("bg-red-500");
+                }
+            } else if (onOffJammer.status === 404) {
+                Toast.fire({ icon: "info", title: response.message })
+            }
+
+            // const response = await onOffJammer.json();
+
+            // if (onOffJammer.status === 200) {
+            //     console.log(response)
+            //     (mode) ? marker.setIcon(offJammer) : marker.setIcon(onJammer);
+
+            //     Toast.fire({ icon: "success", title: response.message })
+            // } else if (onOffJammer.status === 404) {
+            //     Toast.fire({ icon: "warning", title: response.message })
+            // } else if (onOffJammer.status === 500) {
+            //     Toast.fire({ icon: "error", title: response.message })
+            // } else {
+            //     console.warn(response.message);
+            //     Toast.fire({ icon: "warning", title: "Something went wrong!" })
+            // }
         }
     })
 }
