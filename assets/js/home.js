@@ -43,7 +43,7 @@ function removeDuplicates(arr) {
 
 L.tileLayer('http://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}', {
     maxZoom: 22,
-    minZoom: 15,
+    // minZoom: 15,
     attribution: 'Prison Jammer'
 }).addTo(map);
 
@@ -150,7 +150,7 @@ async function onBlockCLick(ev) {
         jammersDivSelector.innerHTML = '';
         response.block.forEach((el, idx) => {
             let bgColor = el.status ? "bg-green-500" : "bg-red-500";
-            jammersDivSelector.innerHTML += `<button class="${bgColor} border text-center font-bold text-xl text-black p-6 rounded" jammerId="${el.id}" title="${el.name}" ip="${el.ipAddress}" port="${el.ipPort}"
+            jammersDivSelector.innerHTML += `<button class="${bgColor} border text-center font-bold text-xl text-black p-6 rounded" jammerId="${el.id}" block="${el.blockId}" title="${el.name}" ip="${el.ipAddress}" port="${el.ipPort}"
             onclick="jammerToggle(this)">J ${idx + 1}</button>`
         });
     } else {
@@ -210,9 +210,10 @@ async function onBlockLoad() {
         const blocksDivSelector = document.querySelector('#blocks-div');
         blocksDivSelector.innerHTML = "";
         if (response.jammers.length <= 10) {
+            document.querySelector("#block-title").innerHTML = "JAMMERS"
             response.jammers.forEach(async (el, idx) => {
                 let bgColor = el.status ? "bg-green-500" : "bg-red-500";
-                blocksDivSelector.innerHTML += `<button class="${bgColor} border text-center font-bold text-xl text-black p-6 rounded" jammerId="${el.id}" title="${el.name}" ip="${el.ipAddress}" port="${el.ipPort}"
+                blocksDivSelector.innerHTML += `<button class="${bgColor} border text-center font-bold text-xl text-black p-6 rounded" jammerId="${el.id}" block="${el.blockId}" title="${el.name}" ip="${el.ipAddress}" port="${el.ipPort}"
                  onclick="jammerToggle(this)">J ${idx + 1}</button>`
             })
             return;
@@ -264,28 +265,20 @@ async function jammerToggle(ev) {
     let id = ev.getAttribute("jammerId");
     let ip = ev.getAttribute("ip");
     let port = ev.getAttribute("port");
-
-    // if (ev.classList.contains("bg-red-500")) {
-    //     ev.classList.remove("bg-red-500");
-    //     ev.classList.add("bg-green-500");
-    // } else {
-    //     ev.classList.remove("bg-green-500");
-    //     ev.classList.add("bg-red-500");
-    // }
+    let name = ev.getAttribute("title");
+    let block = ev.getAttribute("block")
 
     markerGroup.eachLayer(async (marker) => {
         if (marker.options.jammerId === Number(id)) {
             let currentStatus = (String(marker.options.icon.options.name).includes("off"))
-            console.log(id, ip, port, currentStatus)
-            // currentStatus ? marker.setIcon(onJammer) : marker.setIcon(offJammer);
 
-            let onOffJammer = currentStatus ? await fetch(`/api/jammer-toggle?id=${id}&ip=${ip}&port=${port}&mode=1`, {
+            let onOffJammer = currentStatus ? await fetch(`/api/jammer-toggle?id=${id}&name=${name}&block=${block}&ip=${ip}&port=${port}&mode=1`, {
                 method: "GET", headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${localStorage.getItem("token")}`
                 }
             }) :
-                await fetch(`/api/jammer-toggle?id=${id}&ip=${ip}&port=${port}&mode=0`, {
+                await fetch(`/api/jammer-toggle?id=${id}&name=${name}&block=${block}&ip=${ip}&port=${port}&mode=0`, {
                     method: "GET", headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${localStorage.getItem("token")}`

@@ -11,6 +11,7 @@ import sequelize from './src/database/db.js';
 import auth from './src/controllers/auth.js';
 import jammer from './src/controllers/jammer.js';
 import toggleJammerRoutes from './src/controllers/toggleJammer.js';
+import logRoutes from './src/controllers/log.js';
 config();
 
 
@@ -34,11 +35,13 @@ app
     .use(router)
     .use('/auth', auth)
     .use('/api/jammer', jammer)
+    .use('/api/logs', logRoutes)
     .use("/api/jammer-toggle", toggleJammerRoutes)
 
 sequelize.sync()
     .then(() => {
-        secureApp.listen(process.env.SECURE_PORT, process.env.HOST, () => console.log(` [${new Date().toLocaleTimeString()}] SERVER RUNNING ON https://${process.env.HOST}:${process.env.SECURE_PORT}`))
+        // secureApp.listen(process.env.SECURE_PORT, process.env.SECURE_HOST, () => console.log(` [${new Date().toLocaleTimeString()}] SERVER RUNNING ON https://${process.env.SECURE_HOST}:${process.env.SECURE_PORT}`))
+        app.listen(process.env.PORT, process.env.HOST, () => console.log(` [${new Date().toLocaleTimeString()}] SERVER RUNNING ON http://${process.env.HOST}:${process.env.PORT}`))
     })
     .catch(err => {
         console.log(err);
