@@ -1,13 +1,28 @@
 <%- include('../partial/header'); %>
 
     <div class="w-full">
-        <div class="filter-div border border-red-500 w-3/4 m-auto mt-2">
-            <label for="start" class="text-white font-bold">Start Date : </label>
-            <input type="datetime" name="start" id="start">
-            <label for="end" class="text-white font-bold ml-2">End Date : </label>
-            <input type="datetime" name="end" id="end">
+        <div class="filter-div  w-3/4 m-auto mt-2">
+            <div class="flex flex-row gap-4">
+                <label for="startdate" class="text-white font-bold py-1">Start</label>
+                <input name="startdate" id="startdate" class="px-2 py-1 opacity-60 rounded hover:opacity-80 ease-in-out duration-300" type="datetime-local" placeholder="start date" />
+                <label for="enddate" class="text-white font-bold py-1">End</label>
+                <input name="enddate" id="enddate" class="px-2 py-1 opacity-60 rounded hover:opacity-80 ease-in-out duration-300" type="datetime-local" placeholder="start date" />
+                <button type="button" id="date-filter"><img class="h-8 w-auto invert py-1" src="./assets/icon/filter.png" alt="filter" srcset=""></button>
+            </div>
+            <div class="flex flex-row gap-1 mt-2">
+                <label for="status" class="text-white font-bold py-1">Status</label>
+                <select name="status" id="status" class="px-2 py-1 opacity-60 rounded hover:opacity-80 ease-in-out duration-300">
+                    <option value="" selected disabled>select</option>
+                    <option value="1">ON</option>
+                    <option value="0">OFF</option>
+                </select>
+            </div>
+
         </div>
-        <div class="w-3/4 m-auto mt-6 overflow-auto" style="height: 50vh;">
+
+
+
+        <div id="logs-div" class="w-3/4 m-auto mt-6 overflow-auto">
             <table id="logs-table"
                 class="w-full text-white border-slate-500 divide-y divide-gray-300 bg-sky-700 text-xl">
                 <thead class="sticky top-0 bg-sky-700">

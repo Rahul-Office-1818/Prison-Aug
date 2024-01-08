@@ -19,4 +19,34 @@ body {
     }
 }
 
+#logs-div {
+    height: 75vh;
+}
 
+@media screen and (max-width: 600px) {
+    #logs-div {
+        height: 60vh;
+    }
+}
+
+
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #c0bfbf96;
+    border-radius: 2rem;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
