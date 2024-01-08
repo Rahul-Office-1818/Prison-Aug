@@ -1,7 +1,35 @@
 <%- include('../partial/header'); %>
 
-    <div class="w-full h-full text-white">
-        dia
+    <div class="w-full">
+        <div class="filter-div border border-red-500 w-3/4 m-auto mt-2">
+            <label for="start" class="text-white font-bold">Start Date : </label>
+            <input type="datetime" name="start" id="start">
+            <label for="end" class="text-white font-bold ml-2">End Date : </label>
+            <input type="datetime" name="end" id="end">
+        </div>
+        <div class="w-3/4 m-auto mt-6 overflow-auto" style="height: 50vh;">
+            <table id="logs-table"
+                class="w-full text-white border-slate-500 divide-y divide-gray-300 bg-sky-700 text-xl">
+                <thead class="sticky top-0 bg-sky-700">
+                    <tr class="divide-x divide-gray-200">
+                        <th scope="col" class="py-2 text-yellow-50">S.N.</th>
+                        <th scope="col" class="py-2 text-yellow-50">NAME</th>
+                        <th scope="col" class="py-2 text-yellow-50">BLOCK</th>
+                        <th scope="col" class="py-2 text-yellow-50">STATUS</th>
+                        <th scope="col" class="py-2 text-yellow-50">DATE TIME</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y overflow-y-auto  w-full">
+                    <!-- <tr class="text-center text-xl divide-x divide-gray-200">
+                        <td scope="col" class="py-2">1</td>
+                        <td scope="col" class="py-2">jammer Name</td>
+                        <td scope="col" class="py-2">block 1</td>
+                        <td scope="col" class="py-2">ON</td>
+                        <td scope="col" class="py-2">06/12/2024 14:25</td>
+                    </tr> -->
+                </tbody>
+            </table>
+        </div>
     </div>
-
+    <script src="./assets/js/history.js"></script>
     <%- include('../partial/footer'); %>
