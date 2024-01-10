@@ -13,12 +13,14 @@ async function onLogsLoad() {
     if (get.status === 200) {
         logsTableBodySelector.innerHTML = "";
         response.logs.forEach((el, idx) => {
+            let d = new Date(el.dateTime);
+            let datetime = `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`
             logsTableBodySelector.innerHTML += `<tr class="text-center text-xl divide-x divide-gray-200" status="${el.status}">
                                                     <td scope="col" class="py-2">${idx + 1}</td>
                                                     <td scope="col" class="py-2">${el.jammerName}</td>
                                                     <td scope="col" class="py-2">Block ${el.blockId}</td>
                                                     <td scope="col" class="py-2">${el.status ? "Jammer ON" : "Jammer OFF"}</td>
-                                                    <td scope="col" class="py-2">${new Date(el.createdAt).toLocaleString("in").replace(",", "").replaceAll(".", ":", 2)}</td>
+                                                    <td scope="col" class="py-2" datetime="${el.dateTime}">${datetime}</td>
                                                 </tr>`
         })
         return;
@@ -37,20 +39,22 @@ async function filterByDateTime(ev) {
     let start = document.querySelector("#startdate");
     let end = document.querySelector("#enddate");
     
-    if (!start.value) { Toast.fire({ icon: "info", title: "PLEASE FILL THE START DATE!" }); return; }
-    if (!end.value) { Toast.fire({ icon: "info", title: "PLEASE FILL THE END DATE!" }); return; }
+    if (!start.value) { Toast.fire({ icon: "info", title: "Please fill start date!" }); return; }
+    if (!end.value) { Toast.fire({ icon: "info", title: "Please fill end date!" }); return; }
 
-    start = new Date(start.value);
-    end = new Date(end.value);
-
+    let startDate = new Date(start.value).getTime();
+    let endDate = new Date(end.value).getTime(); 
     let i = 1;
-    
-    logsTableBodySelector.querySelectorAll("tr").forEach(row => {
-        let itemDate = new Date(row.querySelectorAll('td')[4].innerText)
-        console.log(`item ${itemDate.getTime()} | start : ${start.getTime()} | end : ${end.getTime()} condition ${itemDate.getTime() >= start.getTime()}`);
-        
+    logsTableBodySelector.querySelectorAll('tr').forEach(row => {
+        let itemDate = new Date(row.querySelectorAll('td')[4].getAttribute("datetime")).getTime();
+        if(itemDate >= startDate && itemDate <= endDate){
+            row.style.display = "";
+            row.querySelectorAll("td")[0].innerHTML = i++;
+            return;
+        }
+        row.style.display = "none";
     })
-   
+    Toast.fire({ icon: "success", title: "Filter apply successfully!" });
 
 }
 
@@ -63,8 +67,7 @@ async function onStatusChange(ev) {
             logsTableBodySelector.querySelectorAll("tr").forEach((row) => {
                 if(row.getAttribute("status") ===  op.value) {
                     row.style.display = "";
-                    row.querySelectorAll("td")[0].innerHTML = i;
-                    i++;
+                    row.querySelectorAll("td")[0].innerHTML = i++;
                     return;
                 }
                 row.style.display = "none";

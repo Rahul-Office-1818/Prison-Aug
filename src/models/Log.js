@@ -31,6 +31,11 @@ const Log = sequelize.define("Log", {
     status: {
         type: Datatypes.INTEGER,
         allowNull: false
+    },
+    dateTime :{
+        type: Datatypes.STRING,
+        defaultValue: new Date().toString(),
+        allowNull: false
     }
 }, { timestamps: true });
 
