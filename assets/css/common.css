@@ -29,6 +29,37 @@ body {
     }
 }
 
+@media (max-width: 767px) {
+    #map,
+    #jammer-info,
+    #drawer-jammer {
+        height: 76.7vh;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    #map,
+    #jammer-info,
+    #drawer-jammer {
+        height: 68.5vh;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    #map,
+    #jammer-info,
+    #drawer-jammer {
+        height: 62.2vh;
+    }
+}
+
+@media (min-width: 1200px) {
+    #map,
+    #jammer-info,
+    #drawer-jammer {
+        height: 50vh;
+    }
+}
 
 /* width */
 ::-webkit-scrollbar {
