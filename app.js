@@ -40,8 +40,8 @@ app
 
 sequelize.sync()
     .then(() => {
-        secureApp.listen(process.env.SECURE_PORT, process.env.SECURE_HOST, () => console.log(` [${new Date().toLocaleTimeString()}] SERVER RUNNING ON https://${process.env.SECURE_HOST}:${process.env.SECURE_PORT}`))
-        // app.listen(process.env.PORT, process.env.HOST, () => console.log(` [${new Date().toLocaleTimeString()}] SERVER RUNNING ON http://${process.env.HOST}:${process.env.PORT}`))
+        // secureApp.listen(process.env.SECURE_PORT, process.env.SECURE_HOST, () => console.log(` [${new Date().toLocaleTimeString()}] SERVER RUNNING ON https://${process.env.SECURE_HOST}:${process.env.SECURE_PORT}`))
+        app.listen(process.env.PORT, process.env.HOST, () => console.log(` [${new Date().toLocaleTimeString()}] SERVER RUNNING ON http://${process.env.HOST}:${process.env.PORT}`))
     })
     .catch(err => {
         console.log(err);

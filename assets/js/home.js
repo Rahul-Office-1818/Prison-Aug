@@ -2,7 +2,7 @@ const map = L.map('map', {
     doubleClickZoom: false,
     center: [28.617224, 77.101703],
     zoom: 16,
-})
+});
 const markerGroup = L.markerClusterGroup({
     chunkedLoading: true,
 });
@@ -165,8 +165,8 @@ async function drawerOpen() {
 }
 
 async function drawerClose() {
-    console.log('im close')
     drawerSelector.classList.add("hidden");
+    onBlockLoad();
 }
 
 async function onBlockLoad() {
@@ -209,7 +209,7 @@ async function onBlockLoad() {
 
         const blocksDivSelector = document.querySelector('#blocks-div');
         blocksDivSelector.innerHTML = "";
-        if (response.jammers.length <= 10) {
+        if (response.jammers.length <= 7) {
             document.querySelector("#block-title").innerHTML = "JAMMERS"
             response.jammers.forEach(async (el, idx) => {
                 let bgColor = el.status ? "bg-green-500" : "bg-red-500";
@@ -221,8 +221,11 @@ async function onBlockLoad() {
 
         const jammers = removeDuplicates(response.jammers);
 
+        let BlockStatus = true;
+        response.jammers.forEach((el) => !el.status ? BlockStatus = false : null);
+
         jammers.forEach((el) => {
-            blocksDivSelector.innerHTML += `<button class="bg-red-500 border text-center font-bold text-2xl text-black p-6 rounded" onclick="onBlockCLick(this)" blockId="${el.blockId}" title="Jammer Block">B ${el.blockId}</button>`
+            blocksDivSelector.innerHTML += `<button class="${BlockStatus ? "bg-green-500" : "bg-red-500"} border text-center font-bold text-2xl text-black p-6 rounded" onclick="onBlockCLick(this)" blockId="${el.blockId}" title="Jammer Block">B ${el.blockId}</button>`
         })
     } else {
         Toast.fire({ icon: "warning", title: response.message })

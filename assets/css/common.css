@@ -18,6 +18,13 @@ body {
         height: 93.4vh;
     }
 }
+.diagnosis-div {
+    height: 88vh;
+    transition: all 0.2s ease-in-out;
+}
+
+
+
 
 #logs-div {
     height: 75vh;
@@ -25,6 +32,27 @@ body {
 
 #setting-div {
     height: 88vh;
+}
+
+/* Styles for larger screens */
+@media only screen and (min-width: 768px) {
+    .diagnosis-div {
+        height: 86vh;
+    }
+}
+
+/* Styles for medium-sized screens */
+@media only screen and (min-width: 576px) and (max-width: 767px) {
+    .diagnosis-div {
+        height: 70vh;
+    }
+}
+
+/* Styles for small screens */
+@media only screen and (max-width: 575px) {
+    .diagnosis-div {
+        height: 55vh;
+    }
 }
 
 @media screen and (max-width: 768px) {
