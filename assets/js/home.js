@@ -1,8 +1,10 @@
 const map = L.map('map', {
-    doubleClickZoom: false,
-    center: [28.617224, 77.101703],
     zoom: 16,
+    doubleClickZoom: false,
+    center: [30.291904, 74.981839],
+    layers: L.tileLayer('http://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', { maxZoom: 22, attribution: 'Prison Jammer' })
 });
+
 const markerGroup = L.markerClusterGroup({
     chunkedLoading: true,
 });
@@ -14,6 +16,7 @@ const onJammer = L.icon({
     className: 'jammer-icon',
     name: "on"
 });
+
 const offJammer = L.icon({
     iconUrl: './assets/icon/off.png',
     iconSize: [90, 90],
@@ -41,16 +44,12 @@ function removeDuplicates(arr) {
     return outputArr;
 }
 
-L.tileLayer('http://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}', {
-    maxZoom: 22,
-    // minZoom: 15,
-    attribution: 'Prison Jammer'
-}).addTo(map);
 
 function onMapClick(ev) {
     // console.log(ev.latlng)
 
 }
+
 async function onDblClick(ev) {
     let latlng = ev.latlng;
 
@@ -150,8 +149,11 @@ async function onBlockCLick(ev) {
         jammersDivSelector.innerHTML = '';
         response.block.forEach((el, idx) => {
             let bgColor = el.status ? "bg-green-500" : "bg-red-500";
-            jammersDivSelector.innerHTML += `<button class="${bgColor} border text-center font-bold text-xl text-black p-6 rounded" jammerId="${el.id}" block="${el.blockId}" title="${el.name}" ip="${el.ipAddress}" port="${el.ipPort}"
-            onclick="jammerToggle(this)">J ${idx + 1}</button>`
+            jammersDivSelector.innerHTML += `<button class="p-4 grid grid-rows-2 text-black ${bgColor} border rounded" jammerId="${el.id}" block="${el.blockId}" title="${el.name}" ip="${el.ipAddress}" port="${el.ipPort}"
+            onclick="jammerToggle(this)">
+            <span class="font-bold ">J ${idx + 1}</span>
+            <span class="text-sm shadow rounded-full">${String(el.name).toLocaleLowerCase()}</span>
+            </button>`
         });
     } else {
         Toast.fire({ icon: "warning", title: response.message })
@@ -178,7 +180,7 @@ async function onBlockLoad() {
     });
 
     let response = await get.json();
-    if (get.status === 200 && response.jammers.length != 0) {
+    if (get.status === 200) {
         markerGroup.clearLayers();
         response.jammers.forEach(el => {
             let marker = L.marker([el.lat, el.lng], { icon: el.status ? onJammer : offJammer, jammerId: el.id })
@@ -200,8 +202,7 @@ async function onBlockLoad() {
                                     <td scope="col" class="px-3 py-1 text-left">${el.ipPort}</td>
                                 </tr>
                             </table>`)
-
-            markerGroup.addLayer(marker)
+            markerGroup.addLayer(marker);
         });
 
         map.addLayer(markerGroup);
@@ -209,15 +210,6 @@ async function onBlockLoad() {
 
         const blocksDivSelector = document.querySelector('#blocks-div');
         blocksDivSelector.innerHTML = "";
-        if (response.jammers.length <= 7) {
-            document.querySelector("#block-title").innerHTML = "JAMMERS"
-            response.jammers.forEach(async (el, idx) => {
-                let bgColor = el.status ? "bg-green-500" : "bg-red-500";
-                blocksDivSelector.innerHTML += `<button class="${bgColor} border text-center font-bold text-xl text-black p-6 rounded" jammerId="${el.id}" block="${el.blockId}" title="${el.name}" ip="${el.ipAddress}" port="${el.ipPort}"
-                 onclick="jammerToggle(this)">J ${idx + 1}</button>`
-            })
-            return;
-        }
 
         const jammers = removeDuplicates(response.jammers);
 
@@ -226,9 +218,9 @@ async function onBlockLoad() {
 
         jammers.forEach((el) => {
             blocksDivSelector.innerHTML += `<button class="${BlockStatus ? "bg-green-500" : "bg-red-500"} border text-center font-bold text-2xl text-black p-6 rounded" onclick="onBlockCLick(this)" blockId="${el.blockId}" title="Jammer Block">B ${el.blockId}</button>`
-        })
+        });
     } else {
-        Toast.fire({ icon: "warning", title: response.message })
+        Toast.fire({ icon: "error", title: response.message })
     }
 }
 
