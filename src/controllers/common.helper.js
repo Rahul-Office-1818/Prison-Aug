@@ -3,8 +3,8 @@ import { createSocket } from 'dgram';
 
 
 
-const checkConnection = async (hosts) => {
-    const promise = hosts.map(host => ping.promise.probe(host))
+const checkConnection = async (jammers) => {
+    const promise = jammers.map(jammer => ping.promise.probe(jammer.ipAddress))
     return (await Promise.all(promise)).map(el => { return { host: el.host, alive: el.alive } })
 }
 

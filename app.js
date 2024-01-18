@@ -12,6 +12,7 @@ import auth from './src/controllers/auth.js';
 import jammer from './src/controllers/jammer.js';
 import toggleJammerRoutes from './src/controllers/toggleJammer.js';
 import logRoutes from './src/controllers/log.js';
+import ping from './src/controllers/ping.js';
 config();
 
 
@@ -35,6 +36,7 @@ app
     .use(router)
     .use('/auth', auth)
     .use('/api/jammer', jammer)
+    .use('/api/ping', ping)
     .use('/api/logs', logRoutes)
     .use("/api/jammer-toggle", toggleJammerRoutes)
 

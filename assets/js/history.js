@@ -10,6 +10,7 @@ async function onLogsLoad() {
     });
 
     const response = await get.json();
+    console.log(response)
     if (get.status === 200) {
         logsTableBodySelector.innerHTML = "";
         response.logs.forEach((el, idx) => {
@@ -22,7 +23,7 @@ async function onLogsLoad() {
                                                     <td scope="col" class="py-2">${el.status ? "Jammer ON" : "Jammer OFF"}</td>
                                                     <td scope="col" class="py-2" datetime="${el.dateTime}">${datetime}</td>
                                                 </tr>`
-        })
+        });
         return;
     }
     Toast.fire({ icon: "warning", title: response.message });

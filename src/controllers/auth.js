@@ -1,5 +1,7 @@
 import { Router } from "express";
 import User from '../models/User.js';
+import isExist from "./createUser.js";
+isExist();
 
 const auth = Router();
 

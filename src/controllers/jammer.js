@@ -1,5 +1,7 @@
 import { Router } from "express";
 import Jammer from '../models/Jammer.js';
+import sequelize from "../database/db.js";
+import { QueryTypes } from 'sequelize';
 
 const jammerApi = Router();
 
@@ -61,4 +63,16 @@ jammerApi.get('/block', async (req, res) => {
     }
 });
 
+// /api/jammer/blocks
+jammerApi.get('/blocks', async (req, res) => {
+    try {
+
+        const blocks = await sequelize.query("SELECT DISTINCT  blockId from Jammers;", { type: QueryTypes.SELECT })
+        if (!blocks) return res.status(404).json({ message: "Block not found!" });
+        return res.status(200).json({ message: "Block found!", payload: blocks });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: "Internal server error!", err });
+    }
+});
 export default jammerApi;
