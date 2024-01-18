@@ -144,60 +144,6 @@ async function onBlockCLick(ev) {
     Toast.fire({ icon: "warning", title: "Something went wrong!" })
 }
 
-// async function onBlockLoad() {
-//     const get = await fetch("/api/jammer", {
-//         method: "GET", headers: {
-//             "Content-Type": "application/json",
-//             "Authorization": `Bearer ${localStorage.getItem("token")}`
-//         }
-//     });
-
-//     let response = await get.json();
-// if (get.status === 200) {
-//     markerGroup.clearLayers();
-//     response.jammers.forEach(el => {
-//         let marker = L.marker([el.lat, el.lng], { icon: el.status ? onJammer : offJammer, jammerId: el.id })
-//             .bindPopup(`<table class="text-lg font-bold text-center">
-//                             <tr>
-//                                 <td scope="col" class="px-3 py-1 text-right">Name</td>
-//                                 <td scope="col" class="px-3 py-1 text-left">${el.name}</td>
-//                             </tr>
-//                             <tr>
-//                                 <td scope="col" class="px-3 py-1 text-right">Block</td>
-//                                 <td scope="col" class="px-3 py-1 text-left">${el.blockId}</td>
-//                             </tr>
-//                             <tr>
-//                                 <td scope="col" class="px-3 py-1 text-right">IP</td>
-//                                 <td scope="col" class="px-3 py-1 text-left">${el.ipAddress}</td>
-//                             </tr>
-//                             <tr>
-//                                 <td scope="col" class="px-3 py-1 text-right">PORT</td>
-//                                 <td scope="col" class="px-3 py-1 text-left">${el.ipPort}</td>
-//                             </tr>
-//                         </table>`)
-//         markerGroup.addLayer(marker);
-//     });
-
-//     map.addLayer(markerGroup);
-//     map.fitBounds(markerGroup.getBounds());
-
-//         const blocksDivSelector = document.querySelector('#blocks-div');
-//         blocksDivSelector.innerHTML = "";
-
-//         const jammers = removeDuplicates(response.jammers);
-
-//         let BlockStatus = true;
-//         response.jammers.forEach((el) => !el.status ? BlockStatus = false : null);
-
-//         jammers.forEach((el) => {
-//             blocksDivSelector.innerHTML += `<button class="${BlockStatus ? "bg-green-500" : "bg-red-500"} border text-center font-bold text-2xl text-black p-6 rounded" onclick="onBlockCLick(this)" blockId="${el.blockId}" title="Jammer Block">B ${el.blockId}</button>`
-//         });
-//     } else {
-//         Toast.fire({ icon: "error", title: response.message })
-//     }
-// }
-
-
 async function onBlockLoad() {
     const blocksAPI = await fetch("/api/jammer/blocks", {
         method: "GET", headers: {
