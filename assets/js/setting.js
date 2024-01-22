@@ -69,7 +69,6 @@ async function onEditJammer(id) {
     const get = await fetch(`/api/jammer?id=${id}`, {
         method: "GET", headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem("token")}`
         }
     });
     const response = await get.json();
@@ -103,7 +102,6 @@ async function onDelJammer(id) {
         const del = await fetch(`/api/jammer/${id}`, {
             method: "DELETE", headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${localStorage.getItem("token")}`
             }
         });
         const response = await del.json();
@@ -124,7 +122,6 @@ async function onJammerLoad() {
     const get = await fetch("/api/jammer", {
         method: "GET", headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem("token")}`
         }
     });
 
@@ -167,7 +164,6 @@ async function onFormSubmit(ev) {
         const post = await fetch("/api/jammer", {
             method: "POST", body: JSON.stringify(formData), headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${localStorage.getItem("token")}`
             }
         });
 
@@ -185,7 +181,6 @@ async function onFormSubmit(ev) {
         const put = await fetch(`/api/jammer/${id}`, {
             method: "PUT", body: JSON.stringify(formData), headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${localStorage.getItem("token")}`
             }
         });
 

@@ -270,7 +270,6 @@ async function onFormSubmit(ev) {
     const port = await fetch("/api/jammer", {
         method: "POST", headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem("token")}`
         },
         body: JSON.stringify(formData)
     });
@@ -308,13 +307,11 @@ async function jammerToggle(ev) {
             let onOffJammer = currentStatus ? await fetch(`/api/jammer-toggle?id=${id}&name=${name}&block=${block}&ip=${ip}&port=${port}&mode=1`, {
                 method: "GET", headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem("token")}`
                 }
             }) :
                 await fetch(`/api/jammer-toggle?id=${id}&name=${name}&block=${block}&ip=${ip}&port=${port}&mode=0`, {
                     method: "GET", headers: {
                         "Content-Type": "application/json",
-                        "Authorization": `Bearer ${localStorage.getItem("token")}`
                     }
                 });
 
