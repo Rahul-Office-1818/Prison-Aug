@@ -11,7 +11,7 @@ class Diagnosys {
             payload.forEach(block => {
                 this.blockContainer.innerHTML += `<button type="button" onclick="blockClick(this)" class="block-btn w-11/12 mx-auto bg-red-500 border text-center font-bold sm:text-base lg:text-xl text-black p-6 rounded hover:bg-gray-400 hover:transition-all delay-75 ease-in-out" blockId="${block.blockId}">Block ${block.blockId}</button>`
             });
-            this.checkAllBlockStatus();
+            await this.checkAllBlockStatus();
         }
     }
 
@@ -41,12 +41,14 @@ class Diagnosys {
         }
     }
 
+    async
+
 }
 
 const init = new Diagnosys("#block-container");
 init.onBlockLoad("/api/jammer/blocks");
 
 
-async function blockClick(ev){
+async function blockClick(ev) {
     console.log(ev)
 }

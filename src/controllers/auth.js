@@ -1,7 +1,7 @@
 import { Router } from "express";
 import User from '../models/User.js';
 import isExist from "./createUser.js";
-isExist();
+setTimeout(isExist, 1000);
 
 const auth = Router();
 
