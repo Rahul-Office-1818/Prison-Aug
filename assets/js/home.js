@@ -282,15 +282,16 @@ async function onFormSubmit(ev) {
         console.error(response.err);
         Toast.fire({ icon: "warning", title: response.message });
     }
+    onJammerLoadOnMap();
     await onBlockLoad();
+    document.querySelectorAll(".block-btn").forEach(block => checkBlockStatusByid(block.getAttribute("blockId")));  
     closeModal();
-    console.log('model close')
 }
 
 async function initial() {
     onJammerLoadOnMap();
     await onBlockLoad();
-    document.querySelectorAll(".block-btn").forEach(block => checkBlockStatusByid(block.getAttribute("blockId")))
+    document.querySelectorAll(".block-btn").forEach(block => checkBlockStatusByid(block.getAttribute("blockId")));
     // setInterval(checkPing, 5000);
 }
 

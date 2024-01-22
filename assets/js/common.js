@@ -1,3 +1,5 @@
+const projectName = "Prison Jammer"
+
 const Toast = Swal.mixin({
     toast: true,
     position: "top",
@@ -11,6 +13,7 @@ const Toast = Swal.mixin({
         toast.onmouseleave = Swal.resumeTimer;
     }
 });
+
 async function onLogoutClick(ev) {
     ev.preventDefault();
     Swal.fire({
@@ -31,6 +34,12 @@ async function onLogoutClick(ev) {
 }
 
 async function onLoad(ev) {
+    let pathname = window.location.pathname.replace('/', "");
+    let title = pathname.replace(pathname.charAt(0), pathname.charAt(0).toUpperCase());
+    if(window.location.pathname != "/"){
+        document.title = title;
+    }
+
     if (!localStorage.getItem("token")) return window.location.href = "/login";
     $("#open-mobile").on('click', () => $("#mobile-menu").toggle(500));
 }
