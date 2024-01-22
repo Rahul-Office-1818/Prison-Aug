@@ -5,6 +5,7 @@ import https from 'https';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
+import cookieParser from 'cookie-parser';
 
 import router from './src/routes/router.js';
 import sequelize from './src/database/db.js';
@@ -28,6 +29,7 @@ const options = {
 const secureApp = https.createServer(options, app)
 
 app
+    .use(cookieParser())
     .use(express.json())
     .use(express.urlencoded({ extended: true }))
     .use('/modules', express.static(path.join(__dirname, 'node_modules')))

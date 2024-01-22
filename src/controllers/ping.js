@@ -2,11 +2,12 @@ import { Router } from "express";
 import Jammer from "../models/Jammer.js";
 import { checkConnection } from "./common.helper.js";
 import { name } from "ejs";
+import middleware from "../../middleware/middleware.js";
 
 // /api/ping
 const route = Router();
 
-route.get("/", async (req, res) => {
+route.get("/", middleware, async (req, res) => {
     try {
         const jammers = await Jammer.findAll();
         let connection = await checkConnection(jammers);

@@ -224,7 +224,7 @@ async function onBlockLoad() {
 async function onJammerLoadOnMap(jammers) {
     const jammerAPI = await fetch("/api/jammer", {
         method: "GET", headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
         }
     });
 
