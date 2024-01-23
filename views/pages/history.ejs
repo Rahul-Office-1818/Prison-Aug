@@ -2,7 +2,7 @@
 
     <div class="w-full">
         <div class="filter-div w-3/4 m-auto mt-2">
-            <div class="flex flex-row gap-4">
+            <div class="flex flex-row items-center gap-4">
                 <label for="startdate" class="text-white font-bold py-1">Start</label>
                 <input name="startdate" id="startdate" class="px-2 py-1 opacity-60 rounded hover:opacity-80 ease-in-out duration-300" type="datetime-local" placeholder="start date" />
                 <label for="enddate" class="text-white font-bold py-1">End</label>
@@ -10,13 +10,22 @@
                 <button type="button" id="date-filter" title="apply filter"><img class="h-8 w-auto invert py-1" src="./assets/icon/filter.png" alt="filter" srcset=""></button>
                 <button type="button" id="logs-reload"><img class="h-8 w-auto invert py-1" src="./assets/icon/reload.png" alt="reload" srcset=""></button>
             </div>
-            <div class="flex flex-row gap-1 mt-2">
-                <label for="status" class="text-white font-bold py-1">Status</label>
-                <select name="status" id="status" class="px-2 py-1 opacity-60 rounded hover:opacity-80 ease-in-out duration-300">
-                    <option value="" selected disabled>select</option>
-                    <option value="1">ON</option>
-                    <option value="0">OFF</option>
-                </select>
+            <div class="flex flex-row gap-4 py-1 mt-2 ">
+                <div>
+                    <label for="statusOptions" class="text-white font-bold py-1 pr-1">Status</label>
+                    <select name="statusOptions" id="statusOptions" class="px-2 py-1 opacity-60 rounded hover:opacity-80 ease-in-out duration-300">
+                        <option value="" selected disabled>select</option>
+                        <option value="1">On</option>
+                        <option value="0">Off</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="blockOptions" class="text-white font-bold py-1 pr-1">Block</label>
+                    <select name="blockOptions" id="blockOptions" class="px-2 py-1 opacity-60 rounded hover:opacity-80 ease-in-out duration-300">
+                        <!-- <option value="" selected disabled>select</option> -->
+                        
+                    </select>
+                </div>
             </div>
 
         </div>

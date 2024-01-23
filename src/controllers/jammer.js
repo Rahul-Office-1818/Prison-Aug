@@ -68,7 +68,7 @@ jammerApi.get('/block', middleware, async (req, res) => {
 jammerApi.get('/blocks', middleware, async (req, res) => {
     try {
 
-        const blocks = await sequelize.query("SELECT DISTINCT  blockId from Jammers;", { type: QueryTypes.SELECT })
+        const blocks = await sequelize.query("SELECT DISTINCT  blockId from Jammers ORDER BY blockId ASC;", { type: QueryTypes.SELECT })
         if (!blocks) return res.status(404).json({ message: "Block not found!" });
         return res.status(200).json({ message: "Block found!", payload: blocks });
     } catch (err) {
