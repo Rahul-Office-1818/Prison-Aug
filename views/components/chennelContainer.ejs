@@ -1,0 +1,60 @@
+<!-- You can open the modal using ID.showModal() method -->
+
+<dialog id="channel-container" class="modal">
+    <div class="modal-box bg-gray-600 text-white w-11/12 md:w-10/12 lg:w-3/6 max-w-5xl">
+        <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-xl">✕</button>
+        </form>
+        <p id="channel-container-title" class="font-bold text-lg text-center">Jammer Channel's</p>
+        <div class="w-full py-5">
+            <div class="w-full mx-auto">
+
+                <!-- CHANNEL CONTAINER HEADER -->
+                <div class="grid grid-cols-2 gap-2 place-items-center border-b border-gray-800 m-3">
+                    <h3 class="text-lg font-bold">Channel's</h3>
+                    <div class="grid grid-cols-3 gap-3 place-items-center">
+                        <h3 class="text-lg font-bold">Voltage</h3>
+                        <h3 class="text-lg font-bold">Status</h3>
+                        <h3 class="text-lg font-bold">VSWR</h3>
+                    </div>
+                </div>
+
+                <!-- ALL CHANNEL'S -->
+                <% for( let index = 1; index <= 7; index++ ) { %>
+                        <% if (index < 7) { %>
+                            <div class="channel grid grid-cols-2 gap-2 place-items-center m-3" channel="<%= index %>">
+                                <button type="button" class="btn btn-success btn-wide hover:text-gray-200" onclick="onChannelClick(this)" channel="<%= index %>">Channel <%= index %></button>
+                                <div class="grid grid-cols-3 gap-10 place-items-center">
+                                    <span class="voltage h-8 w-8 rounded-full bg-green-500 outline-double outline-black" status="0"></span>
+                                    <span class="status h-8 w-8 rounded-full bg-red-500 outline-double outline-black" status="0"></span>
+                                    <span class="vswr h-8 w-8 rounded-full bg-green-500 outline-double outline-black" status="0"></span>
+                                </div>
+                            </div>
+                        <% } else {%>
+                            <div class="channel grid grid-cols-2 gap-2 place-items-center m-3" channel="all">
+                                <button type="button" class="btn btn-success btn-wide hover:text-gray-200" onclick="onChannelClick(this)" channel="all">All Channel</button>
+                                <div class="grid grid-cols-3 gap-10 place-items-center">
+                                    <span class="voltage h-8 w-8 rounded-full bg-green-500 outline-double outline-black" status="0"></span>
+                                    <span class="status h-8 w-8 rounded-full bg-red-500 outline-double outline-black" status="0"></span>
+                                    <span class="vswr h-8 w-8 rounded-full bg-green-500 outline-double outline-black" status="0"></span>
+                                </div>
+                            </div>
+                        
+                        <% } %> 
+                    <% } %>
+
+                <!-- <div class="flex items-center justify-center gap-4"> -->
+                <div class="grid grid-cols-4 gap-2">
+                    <% for( let index = 1; index <= 4; index++ ) { %>
+                        <button type="button" class="btn btn-success hover:text-gray-200" onclick="onSMPSClick(this)" smpsId="<%= index %>">SMPS <%= index %></button>
+                    <% } %>
+                    <!-- <button type="button" class="btn btn-success" onclick="onSMPSClick(this)" smpsId="2">SMPS 2</button>
+                    <button type="button" class="btn btn-success" onclick="onSMPSClick(this)" smpsId="3">SMPS 3</button>
+                    <button type="button" class="btn btn-success" onclick="onSMPSClick(this)" smpsId="4">SMPS 4</button> -->
+                </div>
+                    
+
+            </div>
+        </div>
+    </div>
+</dialog>
