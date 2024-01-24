@@ -4,4 +4,18 @@
 
 #diagnosis {
     height: 93.4vh;
+
+    .headings {
+        @apply sticky top-0 text-white text-3xl font-bold text-center p-2 rounded-b-lg bg-slate-800 bg-opacity-80 hover:bg-opacity-90;
+    }
 }
+
+#history {
+    height: 92.5vh;
+}
+
+#setting {
+    height: 90.9vh;
+}
+
+

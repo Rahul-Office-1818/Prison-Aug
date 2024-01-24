@@ -13,7 +13,7 @@ class Diagnosys {
         this.blocks = await fetch("/api/jammer/blocks", { method: "GET", headers: { "Content-Type": "application/json" } });
         if (this.blocks.status === 200) {
             let { payload } = await this.blocks.json();
-            if(payload.length < localStorage.getItem("blockId")) localStorage.setItem("blockId", 1); 
+            if (payload.length < localStorage.getItem("blockId")) localStorage.setItem("blockId", 1);
             this.blockContainer.innerHTML = "";
             payload.forEach(block => {
                 this.blockContainer.innerHTML += `<button type="button" class="block-btn w-11/12 mx-auto bg-red-500 border text-center font-bold sm:text-base lg:text-xl text-black p-6 rounded hover:bg-gray-400 hover:transition-all delay-75 ease-in-out" blockId="${block.blockId}">Block ${block.blockId}</button>`
@@ -65,7 +65,7 @@ class Diagnosys {
                     block.forEach((jammer, idx) => {
 
                         jammerContainer.innerHTML += (`
-                        <button class="w-11/12 mx-auto p-4 grid grid-rows-2 text-black ${jammer.status ? "bg-green-500" : "bg-red-500"} border rounded-lg">
+                        <button class="w-11/12 mx-auto p-4 grid grid-rows-2 text-black ${jammer.status ? "bg-green-500" : "bg-red-500"} border rounded-lg" onclick="onJammerClick(this)" jammerId="${jammer.id}" blockId="${id}" jammerName="${jammer.name}">
                             <span class="font-bold ">J ${idx + 1}</span>
                             <span class="text-sm shadow rounded-full">${jammer.name}</span>
                         </button>
@@ -92,7 +92,7 @@ class Diagnosys {
                 block.forEach((jammer, idx) => {
 
                     jammerContainer.innerHTML += (`
-                        <button class="w-11/12 mx-auto p-4 grid grid-rows-2 text-black ${jammer.status ? "bg-green-500" : "bg-red-500"} border rounded-lg">
+                        <button class="w-11/12 mx-auto p-4 grid grid-rows-2 text-black ${jammer.status ? "bg-green-500" : "bg-red-500"} border rounded-lg" onclick="onJammerClick(this)" jammerId="${jammer.id}" blockId="${id}" jammerName="${jammer.name}">
                             <span class="font-bold ">J ${idx + 1}</span>
                             <span class="text-sm shadow rounded-full">${jammer.name}</span>
                         </button>
@@ -106,6 +106,33 @@ class Diagnosys {
     }
 }
 
-const init = new Diagnosys(blockSelector = "#block-container");
-init.run();
+const initial = async () => {
+    const init = new Diagnosys(blockSelector = "#block-container").run();
+}
+
+(initial)();
+
+function onJammerClick(ev) {
+    let info = { jId: ev.getAttribute("jammerId"), bId: ev.getAttribute("blockId"), jName: ev.getAttribute("jammerName") }
+
+
+    let container = document.querySelector("#channel-container")
+    Object.keys(info).forEach(key => container.setAttribute(key, info[key]));
+    container.querySelector("#channel-container-title").innerHTML = `${info.jName} Channel's`
+    container.showModal();
+
+}
+
+function onChannelClick(ev) {
+    let info = { cId: ev.getAttribute("channel") };
+    console.log(info)
+}
+
+function onSMPSClick(ev) {
+    let info = { smpsId: ev.getAttribute("smpsId") };
+    console.log(info)
+}
+
+
+
 

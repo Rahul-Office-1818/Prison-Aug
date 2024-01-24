@@ -1,5 +1,5 @@
 
-const Toast = Swal.mixin({
+Toast = Swal.mixin({
     toast: true,
     position: "top",
     showConfirmButton: false,
