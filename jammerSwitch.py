@@ -8,6 +8,7 @@ class Switch:
         self.on_packet = bytearray("module1".encode())
         self.off_packet = bytearray("module2".encode())
         self.voltage_packet = bytearray("module3".encode())
+        self.on_module_packet = bytearray("01".encode())
         self.sock = socket(AF_INET, SOCK_DGRAM)
 
     
@@ -18,6 +19,10 @@ class Switch:
     def off(self):
         try: self.sock.sendto(self.off_packet, self.address)
         except Exception as e: print(f"[+] SOMETHING WENT WRONG : {e}")
+
+    def on_module(self):
+        try: self.sock.sendto(self.on_module_packet, self.address)
+        except Exception as e: print(f"[-] ERROR ON MODULE SWITCHING : {e}")
     
     def log(self):
         try:
@@ -29,12 +34,15 @@ class Switch:
 
     def run(self):
         while True:
-            user = int(input("\n\nPress command \n [+] 1 --> on \n [+] 2 --> off \n [!] press any key for exit \n\n"))
+            user = int(input("\n\nPress command \n [+] 1 --> on \n [+] 2 --> off \n [+] 3 --> Module on  \n [!] press any key for exit \n\n"))
             if user == 1:
                 self.on()
                 self.log()
             elif user == 2:
                 self.off()
+                self.log()
+            elif user == 3:
+                self.on_module()
                 self.log()
             else:
                 exit()

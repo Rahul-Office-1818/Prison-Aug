@@ -13,6 +13,9 @@ Toast = Swal.mixin({
     }
 });
 
+jammerToast = Swal.mixin({toast: true, position: "top-end", timer: 3000, timerProgressBar: true, showConfirmButton: false});
+
+
 async function onLogoutClick(ev) {
     ev.preventDefault();
     const { isConfirmed } = await Swal.fire({
@@ -31,14 +34,6 @@ async function onLogoutClick(ev) {
             window.location.href = "/login";
         }
     }
-
-    // .then((res) => {
-    //     if (res.isConfirmed) {
-    //         fetch("/api/logout").then()
-    //         window.location.href = "/login";
-    //         return;
-    //     }
-    // })
 }
 
 async function onLoad(ev) {
