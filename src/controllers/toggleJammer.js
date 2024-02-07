@@ -2,11 +2,12 @@ import { Router } from 'express';
 import { toggleJammer } from './common.helper.js';
 import Jammer from '../models/Jammer.js';
 import Log from '../models/Log.js';
+import middleware from '../../middleware/middleware.js';
 
 // api/jammer-toggle
 const toggleJammerRoutes = Router();
 
-toggleJammerRoutes.get("/", (req, res) => {
+toggleJammerRoutes.get("/", middleware, (req, res) => {
     try {
         let { id, name, block, ip, port, mode } = req.query;
         mode = Number(mode) ? "module1" : "module2";

@@ -33,7 +33,6 @@ async function onLoginUser(ev) {
             showConfirmButton: false,
             timer: 1000
         });
-        localStorage.setItem("token", JSON.stringify(response.user));
         window.location.href = "/";
         return;
     } else {

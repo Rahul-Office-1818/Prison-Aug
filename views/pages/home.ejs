@@ -3,96 +3,8 @@
         <!-- MAP DIV -->
         <div id="map" class="absolute top-0 left-0 md:w-3/4 w-1/2 text-white rounded">
 
-            <!-- Main modal -->
-            <div id="static-modal"
-                class="hidden absolute w-full h-full transition-all ease-in-out duration-1000 delay-500" style="z-index: 500;">
-                <div
-                    class="flex flex-col items-center justify-center backdrop-blur px-6 py-8 mx-auto md:h-screen lg:py-0">
-                    <span class="flex items-center mb-6 text-2xl font-semibold text-white">
-                        <img class="w-8 h-8 mr-2 invert" src="./assets/icon/project-icon.png" alt="logo">
-                        <span id="model-title">Add Jammer</span>
-                    </span>
-                    <div class="w-full bg-gray-100 bg-opacity-50 rounded-lg shadow  md:mt-0 sm:max-w-md xl:p-0">
-                        <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-                            <button type="button" id="modalClose"
-                                class="text-gray-900 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto float-right"
-                                title="Close" data-modal-hide="static-modal">
-                                <i class="fa-solid fa-xmark text-lg"></i>
-                            </button>
-
-                            <form id="jammer-form" class="space-y-4 md:space-y-6" autocomplete="off">
-                                <input class="hidden" id="jammerId" />
-                                <div>
-                                    <label for="name" class="block mb-2 text-sm font-medium text-gray-900">Name</label>
-                                    <input type="text" name="name" id="name"
-                                        class="bg-gray-50 bg-opacity-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder:text-gray-600"
-                                        placeholder="jammer name..." required>
-                                </div>
-                                <div>
-                                    <label for="blockId"
-                                        class="block mb-2 text-sm font-medium text-gray-900">Block</label>
-                                    <select id="blockId"
-                                        class="bg-gray-50 bg-opacity-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder:text-gray-600"
-                                        name="blockId">
-                                        <option class="font-bold" selected>Choose a block</option>
-                                        <% for (let i=1; i <=10; i++ ) { %>
-                                            <option class="font-bold" value="<%= i%>">Block <%= i%>
-                                            </option>
-                                            <% } %>
-                                    </select>
-                                </div>
-
-
-                                <div class="grid gap-6 mb-6 md:grid-cols-2">
-                                    <div>
-                                        <label for="address" class="block mb-2 text-sm font-medium text-gray-900">IP
-                                            Address</label>
-                                        <input type="text" name="ipAddress" id="ipAddress"
-                                            class="bg-gray-50 bg-opacity-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder:text-gray-600"
-                                            placeholder="ip address..." required>
-                                        <p class="hidden text-sm text-red-700 text-center" id="ipError">Enter validate
-                                            IP
-                                            Address.</p>
-                                    </div>
-                                    <div>
-                                        <label for="ipPort"
-                                            class="block mb-2 text-sm font-medium text-gray-900">Port</label>
-                                        <input type="text" name="ipPort" id="ipPort"
-                                            class="bg-gray-50 bg-opacity-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder:text-gray-600"
-                                            placeholder="ip port..." required>
-                                        <p class="hidden text-sm text-red-700 text-center" id="portError">Enter validate
-                                            IP
-                                            Port.</p>
-                                    </div>
-                                    <div>
-                                        <label for="lat"
-                                            class="block mb-2 text-sm font-medium text-gray-900">Latitude</label>
-                                        <input type="text" name="lat" id="lat"
-                                            class="bg-gray-50 bg-opacity-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder:text-gray-600"
-                                            placeholder="latitude..." required>
-                                        <p class="hidden text-sm text-red-700 text-center" id="latError">Enter validate
-                                            latitude.</p>
-                                    </div>
-                                    <div>
-                                        <label for="lng"
-                                            class="block mb-2 text-sm font-medium text-gray-900">Longitude</label>
-                                        <input type="text" name="lng" id="lng"
-                                            class="bg-gray-50 bg-opacity-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder:text-gray-600"
-                                            placeholder="longitude..." required>
-                                        <p class="hidden text-sm text-red-700 text-center" id="lngError">Enter validate
-                                            longitude.</p>
-                                    </div>
-                                </div>
-
-
-                                <button type="submit"
-                                    class="w-full text-black bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Save</button>
-
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!-- Add Jammer Modal -->
+            <%- include('../components/addJammer') %>
         </div>
 
         <!-- JAMMER INFORMARION DIV -->
@@ -105,22 +17,23 @@
                 class="hidden absolute top-0 right-0 z-40 p-4 overflow-y-auto transition-transform bg-slate-800 bg-opacity-90 w-full h-full">
 
                 <div class="w-full flex items-center justify-center">
+                    
+
+                    <button type="button" id="drawer-close"
+                        class="text-white bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto"
+                        title="Close" data-modal-hide="static-modal">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
                     <span
                         class="w-full text-2xl text-center font-bold p-2 bg-slate-800 bg-opacity-80 hover:bg-opacity-90"
                         id="drawerTitle"></span>
-
-                    <button type="button" id="drawer-close"
-                        class="float-right text-white bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto"
-                        title="Close" data-modal-hide="static-modal">
-                        <i class="fa-solid fa-xmark text-lg"></i>
-                    </button>
                 </div>
 
                 <div class="overflow-y-auto">
                     <div id="jammers-div" class="grid grid-cols-3 gap-3 mt-4">
-                        <button
-                            class="bg-green-500 border text-center font-bold text-2xl text-black p-6 rounded hover:bg-yellow-200">J
-                            2</button>
+                        <!-- <button
+                            class="bg-yellow-500 border text-center font-bold text-2xl text-black p-6 rounded hover:bg-yellow-200">J
+                            2</button> -->
                     </div>
                 </div>
             </div>
@@ -153,90 +66,6 @@
                 <button class="bg-green-500 border text-center font-bold text-2xl text-black p-6 rounded hover:bg-yellow-200" onclick="onBlockCLick(this)" blockId="1">B 19</button>
                 <button class="bg-green-500 border text-center font-bold text-2xl text-black p-6 rounded hover:bg-yellow-200" onclick="onBlockCLick(this)" blockId="1">B 20</button>
                 <button class="bg-green-500 border text-center font-bold text-2xl text-black p-6 rounded hover:bg-yellow-200" onclick="onBlockCLick(this)" blockId="1">B 21</button> -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Main modal -->
-    <div id="static-modal"
-        class="hidden absolute top-0 botton-0 w-full transition-all ease-in-out duration-1000 delay-500 ">
-        <div class="flex flex-col items-center justify-center backdrop-blur px-6 py-8 mx-auto md:h-screen lg:py-0">
-            <span class="flex items-center mb-6 text-2xl font-semibold text-white">
-                <img class="w-8 h-8 mr-2 invert" src="./assets/icon/project-icon.png" alt="logo">
-                <span id="model-title">Add Jammer</span>
-            </span>
-            <div class="w-full bg-gray-100 bg-opacity-50 rounded-lg shadow  md:mt-0 sm:max-w-md xl:p-0">
-                <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-                    <button type="button" id="modalClose"
-                        class="text-gray-900 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto float-right"
-                        title="Close" data-modal-hide="static-modal">
-                        <i class="fa-solid fa-xmark text-lg"></i>
-                    </button>
-
-                    <form id="jammer-form" class="space-y-4 md:space-y-6" autocomplete="off">
-                        <input class="hidden" id="jammerId" />
-                        <div>
-                            <label for="name" class="block mb-2 text-sm font-medium text-gray-900">Name</label>
-                            <input type="text" name="name" id="name"
-                                class="bg-gray-50 bg-opacity-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder:text-gray-600"
-                                placeholder="jammer name..." required>
-                        </div>
-                        <div>
-                            <label for="blockId" class="block mb-2 text-sm font-medium text-gray-900">Block</label>
-                            <select id="blockId"
-                                class="bg-gray-50 bg-opacity-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder:text-gray-600"
-                                name="blockId">
-                                <option class="font-bold" selected>Choose a block</option>
-                                <% for (let i=1; i <=10; i++ ) { %>
-                                    <option class="font-bold" value="<%= i%>">Block <%= i%>
-                                    </option>
-                                    <% } %>
-                            </select>
-                        </div>
-
-
-                        <div class="grid gap-6 mb-6 md:grid-cols-2">
-                            <div>
-                                <label for="address" class="block mb-2 text-sm font-medium text-gray-900">IP
-                                    Address</label>
-                                <input type="text" name="ipAddress" id="ipAddress"
-                                    class="bg-gray-50 bg-opacity-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder:text-gray-600"
-                                    placeholder="ip address..." required>
-                                <p class="hidden text-sm text-red-700 text-center" id="ipError">Enter validate IP
-                                    Address.</p>
-                            </div>
-                            <div>
-                                <label for="ipPort" class="block mb-2 text-sm font-medium text-gray-900">Port</label>
-                                <input type="text" name="ipPort" id="ipPort"
-                                    class="bg-gray-50 bg-opacity-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder:text-gray-600"
-                                    placeholder="ip port..." required>
-                                <p class="hidden text-sm text-red-700 text-center" id="portError">Enter validate IP
-                                    Port.</p>
-                            </div>
-                            <div>
-                                <label for="lat" class="block mb-2 text-sm font-medium text-gray-900">Latitude</label>
-                                <input type="text" name="lat" id="lat"
-                                    class="bg-gray-50 bg-opacity-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder:text-gray-600"
-                                    placeholder="latitude..." required>
-                                <p class="hidden text-sm text-red-700 text-center" id="latError">Enter validate
-                                    latitude.</p>
-                            </div>
-                            <div>
-                                <label for="lng" class="block mb-2 text-sm font-medium text-gray-900">Longitude</label>
-                                <input type="text" name="lng" id="lng"
-                                    class="bg-gray-50 bg-opacity-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder:text-gray-600"
-                                    placeholder="longitude..." required>
-                                <p class="hidden text-sm text-red-700 text-center" id="lngError">Enter validate
-                                    longitude.</p>
-                            </div>
-                        </div>
-
-
-                        <button type="submit"
-                            class="w-full text-black bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Save</button>
-
-                    </form>
-                </div>
             </div>
         </div>
     </div>

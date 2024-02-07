@@ -138,11 +138,68 @@ async function onBlockCLick(ev) {
             </button>`
         });
 
+        jammersDivSelector.querySelectorAll("button")
+        .forEach(btn => console.log(btn));
+
         toggleDrawer();
         return;
     }
     Toast.fire({ icon: "warning", title: "Something went wrong!" })
 }
+
+// async function onBlockLoad() {
+//     const get = await fetch("/api/jammer", {
+//         method: "GET", headers: {
+//             "Content-Type": "application/json",
+//             "Authorization": `Bearer ${localStorage.getItem("token")}`
+//         }
+//     });
+
+//     let response = await get.json();
+// if (get.status === 200) {
+//     markerGroup.clearLayers();
+//     response.jammers.forEach(el => {
+//         let marker = L.marker([el.lat, el.lng], { icon: el.status ? onJammer : offJammer, jammerId: el.id })
+//             .bindPopup(`<table class="text-lg font-bold text-center">
+//                             <tr>
+//                                 <td scope="col" class="px-3 py-1 text-right">Name</td>
+//                                 <td scope="col" class="px-3 py-1 text-left">${el.name}</td>
+//                             </tr>
+//                             <tr>
+//                                 <td scope="col" class="px-3 py-1 text-right">Block</td>
+//                                 <td scope="col" class="px-3 py-1 text-left">${el.blockId}</td>
+//                             </tr>
+//                             <tr>
+//                                 <td scope="col" class="px-3 py-1 text-right">IP</td>
+//                                 <td scope="col" class="px-3 py-1 text-left">${el.ipAddress}</td>
+//                             </tr>
+//                             <tr>
+//                                 <td scope="col" class="px-3 py-1 text-right">PORT</td>
+//                                 <td scope="col" class="px-3 py-1 text-left">${el.ipPort}</td>
+//                             </tr>
+//                         </table>`)
+//         markerGroup.addLayer(marker);
+//     });
+
+//     map.addLayer(markerGroup);
+//     map.fitBounds(markerGroup.getBounds());
+
+//         const blocksDivSelector = document.querySelector('#blocks-div');
+//         blocksDivSelector.innerHTML = "";
+
+//         const jammers = removeDuplicates(response.jammers);
+
+//         let BlockStatus = true;
+//         response.jammers.forEach((el) => !el.status ? BlockStatus = false : null);
+
+//         jammers.forEach((el) => {
+//             blocksDivSelector.innerHTML += `<button class="${BlockStatus ? "bg-green-500" : "bg-red-500"} border text-center font-bold text-2xl text-black p-6 rounded" onclick="onBlockCLick(this)" blockId="${el.blockId}" title="Jammer Block">B ${el.blockId}</button>`
+//         });
+//     } else {
+//         Toast.fire({ icon: "error", title: response.message })
+//     }
+// }
+
 
 async function onBlockLoad() {
     const blocksAPI = await fetch("/api/jammer/blocks", {
@@ -156,10 +213,10 @@ async function onBlockLoad() {
 
         const blocksDivSelector = document.querySelector('#blocks-div');
         blocksDivSelector.innerHTML = "";
-        let BlockStatus = false
+        let BlockStatus = false;
 
         payload.forEach((block, i) => {
-            blocksDivSelector.innerHTML += `<button class="block-btn ${BlockStatus ? "bg-green-500" : "bg-red-500"} border text-center font-bold text-2xl text-black p-6 rounded" onclick="onBlockCLick(this)" blockId="${block.blockId}" title="Jammer Block">B ${block.blockId}</button>`
+            blocksDivSelector.innerHTML += `<button class="block-btn relative ${BlockStatus ? "bg-green-500" : "bg-red-500"} border text-center font-bold text-2xl text-black p-6 rounded" onclick="onBlockCLick(this)" blockId="${block.blockId}" title="Jammer Block">B ${block.blockId}</button>`
         });
         return;
     }
@@ -170,7 +227,7 @@ async function onBlockLoad() {
 async function onJammerLoadOnMap(jammers) {
     const jammerAPI = await fetch("/api/jammer", {
         method: "GET", headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
         }
     });
 
@@ -216,7 +273,6 @@ async function onFormSubmit(ev) {
     const port = await fetch("/api/jammer", {
         method: "POST", headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem("token")}`
         },
         body: JSON.stringify(formData)
     });
@@ -230,7 +286,7 @@ async function onFormSubmit(ev) {
     }
     onJammerLoadOnMap();
     await onBlockLoad();
-    document.querySelectorAll(".block-btn").forEach(block => checkBlockStatusByid(block.getAttribute("blockId")));  
+    document.querySelectorAll(".block-btn").forEach(block => checkBlockStatusByid(block.getAttribute("blockId")));
     closeModal();
 }
 
@@ -238,7 +294,13 @@ async function initial() {
     onJammerLoadOnMap();
     await onBlockLoad();
     document.querySelectorAll(".block-btn").forEach(block => checkBlockStatusByid(block.getAttribute("blockId")));
-    // setInterval(checkPing, 5000);
+    setInterval(checkPingConnection, 5000);
+}
+
+async function checkAllBlockStatus() {
+    document.querySelectorAll(".block-btn")
+        .forEach(async (item) => await checkBlockStatusByid(item.getAttribute("blockId")));
+    return;
 }
 
 async function jammerToggle(ev) {
@@ -254,25 +316,24 @@ async function jammerToggle(ev) {
             let onOffJammer = currentStatus ? await fetch(`/api/jammer-toggle?id=${id}&name=${name}&block=${block}&ip=${ip}&port=${port}&mode=1`, {
                 method: "GET", headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem("token")}`
                 }
             }) :
                 await fetch(`/api/jammer-toggle?id=${id}&name=${name}&block=${block}&ip=${ip}&port=${port}&mode=0`, {
                     method: "GET", headers: {
                         "Content-Type": "application/json",
-                        "Authorization": `Bearer ${localStorage.getItem("token")}`
                     }
                 });
 
+            let response = await onOffJammer.json();
             if (onOffJammer.status === 200) {
-                let response = await onOffJammer.json();
                 if (response.status) {
                     marker.setIcon(onJammer);
-                    ev.classList.replace("bg-red-500", "bg-green-500")
+                    ev.classList.replace("bg-red-500", "bg-green-500");
                 } else {
                     marker.setIcon(offJammer);
-                    ev.classList.replace("bg-green-500", "bg-red-500")
+                    ev.classList.replace("bg-green-500", "bg-red-500");
                 }
+                jammerToast.fire({ icon: "success", title: `Jammer ${response.status ? "on" : "off"}` })
                 checkBlockStatusByid(block);
 
 
@@ -283,6 +344,10 @@ async function jammerToggle(ev) {
     })
 
 
+}
+
+function removeAllClasses(domSelector, prefix) {
+    [...domSelector.classList].forEach(value => value.startsWith(prefix) ? domSelector.classList.remove(value) : null);
 }
 
 async function checkBlockStatusByid(id) {
@@ -300,22 +365,58 @@ async function checkBlockStatusByid(id) {
     if (get.status === 200) {
         let { block } = await get.json();
         block.forEach(jammer => (!jammer.status) ? info.change(false) : null);
-        document.querySelectorAll('.block-btn').forEach(block => (block.getAttribute('blockid') === id) ? (info.current) ? block.classList.replace("bg-red-500", "bg-green-500") : block.classList.replace("bg-green-500", "bg-red-500") : null);
+        document.querySelectorAll('.block-btn')
+            .forEach(item => {
+                if (item.getAttribute('blockId') === id) {
+                    removeAllClasses(item, "bg-");
+                    (info.current) ? item.classList.add('bg-green-500') : item.classList.add("bg-red-500");
+                }
+            })
+        // .forEach(block => (block.getAttribute('blockid') === id) ? (info.current) ? block.classList.replace("bg-red-500", "bg-green-500") : block.classList.replace("bg-green-500", "bg-red-500") : null);
         return;
     }
 }
 
-async function checkPing() {
-    const API = await fetch("/api/ping", {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json"
-        }
-    });
-    if (API.status === 200) {
-        const response = await API.json();
-        console.log(response.payload)
+async function checkPingConnection() {
+    const service = await fetch("/api/ping/all");
+
+    if (service.status === 200) {
+        const { payload } = await service.json();
+
+        document.querySelectorAll(".block-btn").forEach(async (blockSelector) => {
+            let blockId = blockSelector.getAttribute('blockId');
+            let isDivExists = blockSelector.querySelector("div");
+
+            let info = payload.filter(item => String(item.blockId) === blockId);
+            let isConnection = info.some(item => item.alive === false);
+
+            if (!!isDivExists) blockSelector.removeChild(isDivExists);
+
+            if (isConnection) {
+                let cout = 0;
+                const badge = document.createElement('div');
+
+                [...blockSelector.classList].forEach(el => el.startsWith('bg-') ? blockSelector.classList.remove(el) : null);
+
+                info.forEach(item => item.alive ? null : cout++);
+                blockSelector.classList.add('bg-yellow-500');
+                badge.classList.add('upper-badge');
+                badge.innerText = cout;
+                blockSelector.appendChild(badge);
+                jammerToast.fire({ icon: "error", title: 'Jammer connection lost!' });
+                return;
+            }
+            await checkBlockStatusByid(blockId);
+            return;
+        });
     }
+
+}
+
+function removeDublicateBlocks(value) {
+    let valueInSet = new Set(value);
+    return [...valueInSet].sort();
+
 }
 
 initial();

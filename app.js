@@ -5,6 +5,7 @@ import https from 'https';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
+import cookieParser from 'cookie-parser';
 
 import router from './src/routes/router.js';
 import sequelize from './src/database/db.js';
@@ -12,7 +13,7 @@ import auth from './src/controllers/auth.js';
 import jammer from './src/controllers/jammer.js';
 import toggleJammerRoutes from './src/controllers/toggleJammer.js';
 import logRoutes from './src/controllers/log.js';
-import ping from './src/controllers/ping.js';
+import pingServices from './src/controllers/pingservices.js';
 config();
 
 
@@ -28,6 +29,7 @@ const options = {
 const secureApp = https.createServer(options, app)
 
 app
+    .use(cookieParser())
     .use(express.json())
     .use(express.urlencoded({ extended: true }))
     .use('/modules', express.static(path.join(__dirname, 'node_modules')))
@@ -36,7 +38,7 @@ app
     .use(router)
     .use('/auth', auth)
     .use('/api/jammer', jammer)
-    .use('/api/ping', ping)
+    .use('/api/ping', pingServices)
     .use('/api/logs', logRoutes)
     .use("/api/jammer-toggle", toggleJammerRoutes)
 

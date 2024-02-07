@@ -2,12 +2,13 @@ import { Router } from "express";
 import Jammer from '../models/Jammer.js';
 import sequelize from "../database/db.js";
 import { QueryTypes } from 'sequelize';
+import middleware from "../../middleware/middleware.js";
 
 const jammerApi = Router();
 
 // J A M M E R O N L Y 
 // /api/jammer
-jammerApi.get("/", async (req, res) => {
+jammerApi.get("/", middleware, async (req, res) => {
     try {
         if (req.query.id) {
             const jammer = await Jammer.findOne({ where: { id: req.query.id } })
@@ -20,7 +21,7 @@ jammerApi.get("/", async (req, res) => {
         console.log(err);
         return res.status(500).json({ message: "Internal server error!", err });
     }
-}).post("/", async (req, res) => {
+}).post("/", middleware, async (req, res) => {
     try {
         const jammer = await Jammer.create(req.body);
         return res.status(201).json({ message: "Jammer created successfully!", jammer });
@@ -28,7 +29,7 @@ jammerApi.get("/", async (req, res) => {
         console.log(err);
         return res.status(500).json({ message: "Internal server error!", err });
     }
-}).put("/:id", async (req, res) => {
+}).put("/:id", middleware, async (req, res) => {
     try {
         if (!req.params.id) return res.status(404).json({ message: "Jammer id not found!" });
         const jammer = await Jammer.update(req.body, { where: { id: req.params.id } });
@@ -37,7 +38,7 @@ jammerApi.get("/", async (req, res) => {
         console.log(err);
         return res.status(500).json({ message: "Internal server error!", err });
     }
-}).delete("/:id", async (req, res) => {
+}).delete("/:id", middleware, async (req, res) => {
     try {
         if (!req.params.id) return res.status(404).json({ message: "Jammer id not found!" });
         const jammer = await Jammer.destroy({ where: { id: req.params.id } });
@@ -50,7 +51,7 @@ jammerApi.get("/", async (req, res) => {
 
 // B L O C K - O N L Y
 // /api/jammer/block
-jammerApi.get('/block', async (req, res) => {
+jammerApi.get('/block', middleware, async (req, res) => {
     try {
         if (req.query.id) {
             const block = await Jammer.findAll({ where: { blockId: req.query.id } });
@@ -64,10 +65,10 @@ jammerApi.get('/block', async (req, res) => {
 });
 
 // /api/jammer/blocks
-jammerApi.get('/blocks', async (req, res) => {
+jammerApi.get('/blocks', middleware, async (req, res) => {
     try {
 
-        const blocks = await sequelize.query("SELECT DISTINCT  blockId from Jammers;", { type: QueryTypes.SELECT })
+        const blocks = await sequelize.query("SELECT DISTINCT  blockId from Jammers ORDER BY blockId ASC;", { type: QueryTypes.SELECT })
         if (!blocks) return res.status(404).json({ message: "Block not found!" });
         return res.status(200).json({ message: "Block found!", payload: blocks });
     } catch (err) {
