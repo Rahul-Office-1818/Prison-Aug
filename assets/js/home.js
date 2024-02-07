@@ -377,6 +377,3 @@ addJammerFormSelector.ipAddress.addEventListener("input", ipValidation)
 addJammerFormSelector.ipPort.addEventListener("input", portValidation)
 addJammerFormSelector.lat.addEventListener("input", latValidation)
 addJammerFormSelector.lng.addEventListener("input", lngValidation)
-
-
-
