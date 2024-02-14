@@ -61,11 +61,10 @@ class Diagnosys {
                     let jammerTitle = document.querySelector("#jammer-title");
                     jammerTitle.innerHTML = `Block ${id} - Jammers`
                     jammerContainer.innerHTML = "";
-
                     block.forEach((jammer, idx) => {
 
                         jammerContainer.innerHTML += (`
-                        <button class="w-11/12 mx-auto p-4 grid grid-rows-2 text-black ${jammer.status ? "bg-green-500" : "bg-red-500"} border rounded-lg" onclick="onJammerClick(this)" jammerId="${jammer.id}" blockId="${id}" jammerName="${jammer.name}">
+                        <button class="w-11/12 mx-auto p-4 grid grid-rows-2 text-black ${jammer.status ? "bg-green-500" : "bg-red-500"} border rounded-lg" onclick="onJammerClick(this)" jammerId="${jammer.id}" blockId="${id}" jammerName="${jammer.name}" data-address='${jammer.ipAddress}' data-port='${jammer.ipPort}'>
                             <span class="font-bold ">J ${idx + 1}</span>
                             <span class="text-sm shadow rounded-full">${jammer.name}</span>
                         </button>
@@ -92,10 +91,10 @@ class Diagnosys {
                 block.forEach((jammer, idx) => {
 
                     jammerContainer.innerHTML += (`
-                        <button class="w-11/12 mx-auto p-4 grid grid-rows-2 text-black ${jammer.status ? "bg-green-500" : "bg-red-500"} border rounded-lg" onclick="onJammerClick(this)" jammerId="${jammer.id}" blockId="${id}" jammerName="${jammer.name}">
-                            <span class="font-bold ">J ${idx + 1}</span>
-                            <span class="text-sm shadow rounded-full">${jammer.name}</span>
-                        </button>
+                    <button class="w-11/12 mx-auto p-4 grid grid-rows-2 text-black ${jammer.status ? "bg-green-500" : "bg-red-500"} border rounded-lg" onclick="onJammerClick(this)" jammerId="${jammer.id}" blockId="${id}" jammerName="${jammer.name}" data-address='${jammer.ipAddress}' data-port='${jammer.ipPort}'>
+                    <span class="font-bold ">J ${idx + 1}</span>
+                    <span class="text-sm shadow rounded-full">${jammer.name}</span>
+                </button>
                         `)
                 })
                 return;
@@ -112,20 +111,145 @@ const initial = async () => {
 
 (initial)();
 
-function onJammerClick(ev) {
-    let info = { jId: ev.getAttribute("jammerId"), bId: ev.getAttribute("blockId"), jName: ev.getAttribute("jammerName") }
+async function onJammerClick(ev) {
+    let info = { jammerid: ev.getAttribute("jammerId"), blockid: ev.getAttribute("blockId"), jammername: ev.getAttribute("jammerName"), address: ev.getAttribute('data-address'), port: ev.getAttribute('data-port') };
+    const query = new URLSearchParams({ address: info.address, port: info.port });
+    const service = await fetch('/api/automation/status?' + query, { method: 'GET', headers: { 'Content-Type': 'application/json' } });
+
+    const voltageQuery = new URLSearchParams({ address: info.address, port: info.port });
+    const voltageService = await fetch('/api/automation/smpsvoltage?' + voltageQuery, { method: "GET", headers: { 'Content-Type': 'application/json' } });
 
 
-    let container = document.querySelector("#channel-container")
-    Object.keys(info).forEach(key => container.setAttribute(key, info[key]));
-    container.querySelector("#channel-container-title").innerHTML = `${info.jName} Channel's`
-    container.showModal();
+    if (service.status === 200 && voltageService.status === 200) {
+        const { payload } = await service.json();
+        const isAll = payload.every((ele) => ele === true);
+
+        document.querySelectorAll('.channel').forEach((channel, i) => {
+            const button = channel.querySelector('button');
+
+            button.classList.remove('btn-success', 'btn-error');
+
+            if (button.getAttribute('data-channel') === 'all') {
+                button.classList.add(isAll ? 'btn-success' : 'btn-error');
+                button.setAttribute('data-status', isAll);
+                return;
+            }
+            button.classList.add(payload[i] ? 'btn-success' : 'btn-error');
+            button.setAttribute('data-status', payload[i]);
+
+            const indicator = channel.querySelector('span.status');
+            indicator.classList.remove('bg-green-500', 'bg-red-500');
+            indicator.classList.add(payload[i] ? 'bg-green-500' : 'bg-red-500');
+            indicator.setAttribute('data-status', payload[i]);
+        });
+
+        const response = await voltageService.json();
+        document.querySelectorAll('.smps > button > span')
+            .forEach((indicator, i) => {
+                indicator.classList.remove('bg-green-600', 'bg-red-600');
+                (response.payload[i] >= 25 && response.payload[i] <= 28) ?
+                    indicator.classList.add('bg-green-600') :
+                    indicator.classList.add('bg-red-600');
+
+                indicator.innerHTML = `${response.payload[i].toFixed(1)}v`;
+
+            });
+
+        let container = document.querySelector("#channel-container")
+        Object.keys(info).forEach(key => container.setAttribute("data-" + key, info[key]));
+        container.querySelector("#channel-container-title").innerHTML = `${info.jammername} Channel's`.toUpperCase()
+        container.showModal();
+    } else {
+        Toast.fire({ icon: "error", title: "Connection Lost" })
+    }
+
 
 }
 
-function onChannelClick(ev) {
-    let info = { cId: ev.getAttribute("channel") };
-    console.log(info)
+async function onChannelClick(ev) {
+    let info = {
+        channelId: ev.getAttribute("data-channel"),
+        jammerId: document.querySelector('#channel-container').getAttribute('data-jammerid'),
+        address: document.querySelector('#channel-container').getAttribute('data-address'),
+        port: document.querySelector('#channel-container').getAttribute('data-port'),
+        status: ev.getAttribute('data-status')
+    };
+
+    if (info.channelId === 'all') {
+        const query = new URLSearchParams({
+            currentstatus: info.status,
+            address: info.address,
+            port: info.port
+        });
+
+        const service = await fetch('/api/automation/allchannel?' + query, { method: 'GET', headers: { 'Content-Type': 'application/json' } });
+        if (service.status === 200) {
+            const { payload } = await service.json();
+            const isAllActive = payload.every(ele => ele === true);
+
+            document.querySelectorAll('.channel').forEach((channel, i) => {
+                const button = channel.querySelector('button');
+                button.classList.remove('btn-success', 'btn-error');
+
+                if (button.getAttribute('data-channel') === 'all') {
+                    button.classList.add(isAllActive ? 'btn-success' : 'btn-error');
+                    button.setAttribute('data-status', isAllActive);
+                    return;
+                }
+                button.classList.add(payload[i] ? 'btn-success' : 'btn-error');
+                button.setAttribute('data-status', payload[i]);
+
+                const indicator = channel.querySelector('span.status');
+                indicator.classList.remove('bg-green-500', 'bg-red-500');
+                indicator.classList.add(payload[i] ? 'bg-green-500' : 'bg-red-500');
+                indicator.setAttribute('data-status', payload[i]);
+            })
+
+        } else {
+            const { payload } = await service.json();
+            Toast.fire({ icon: "error", title: payload.message })
+        }
+    } else {
+        const query = new URLSearchParams({
+            channel: info.channelId,
+            address: info.address,
+            port: info.port,
+            currentstatus: info.status
+        });
+
+        const service = await fetch('/api/automation/channel?' + query, { method: 'GET', headers: { 'Content-Type': 'application/json' } });
+        if (service.status === 200) {
+            const { payload } = await service.json();
+            ev.classList.remove('btn-success', 'btn-error');
+            ev.setAttribute('data-status', payload.status);
+            payload.status ?
+                ev.classList.add('btn-success') :
+                ev.classList.add('btn-error');
+
+            const indicator = document.querySelectorAll('span.status');
+            indicator[info.channelId - 1].classList.remove('bg-green-500', 'bg-red-500');
+            indicator[info.channelId - 1].classList.add(payload.status ? 'bg-green-500' : 'bg-red-500');
+            indicator[info.channelId - 1].setAttribute('data-status', payload.status);
+
+            //check all module / channel.
+            const statusState = new Array();
+            document.querySelectorAll('.channel').forEach(el =>
+                (el.getAttribute('data-channel') !== 'all') ?
+                    statusState.push(el.querySelector('button').getAttribute('data-status')) :
+                    null
+            )
+
+            const isAll = statusState.every(ele => ele === "true")
+            document.querySelector('[data-channel="all"] > button').classList.remove('btn-success', 'btn-error');
+            document.querySelector('[data-channel="all"] > button').classList.add(isAll ? 'btn-success' : 'btn-error');
+            document.querySelector('[data-channel="all"] > button').setAttribute('data-status', isAll);
+
+        } else {
+            const { payload } = await service.json();
+            Toast.fire({ icon: 'error', title: payload.message })
+        }
+
+    }
 }
 
 function onSMPSClick(ev) {

@@ -28,7 +28,7 @@ const checkConnection = async (jammers) => {
             }
         })
     });
-    
+
     return result
 }
 
@@ -47,5 +47,19 @@ const toggleJammer = (params) => {
     });
 }
 
+function ardiunoCommunication(command, { address, port }) {
+    return new Promise(function (resolve, reject) {
+        const client = createSocket({ type: "udp4" });
+        const message = Buffer.from(command);
+        client.send(message, port, address, (err) => (err)? reject(err) : null);
+        let timer = setTimeout(() => reject({payload: "Automation connection lost"}), 1000 * 5);
+        client.on("message", (m, info) => {
+            client.close();
+            clearTimeout(timer);
+            let res = m.toString();
+            resolve({ payload: res });
+        })
+    })
+}
 
-export { checkConnection, toggleJammer };
+export { checkConnection, toggleJammer, ardiunoCommunication };

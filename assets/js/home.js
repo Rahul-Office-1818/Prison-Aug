@@ -138,7 +138,24 @@ async function onBlockCLick(ev) {
             </button>`
         });
 
+        jammersDivSelector.querySelectorAll("button")
+        .forEach(btn => console.log(btn));
+
         toggleDrawer();
+
+        const pingInfo = localStorage.getItem("ping");
+        if (pingInfo) {
+            const payload = JSON.parse(pingInfo);
+            document.querySelector('#jammers-div')
+                .querySelectorAll('button')
+                .forEach(item => {
+                    const jammerId = item.getAttribute("jammerid");
+                    const info = payload.find(el => String(el.jammerId) === jammerId);
+                    if (info.alive) return;
+                    removeAllClasses(item, "bg-");
+                    if (!info.alive) item.classList.add('bg-yellow-500');
+                })
+        }
         return;
     }
     Toast.fire({ icon: "warning", title: "Something went wrong!" })
@@ -237,7 +254,7 @@ async function initial() {
     onJammerLoadOnMap();
     await onBlockLoad();
     document.querySelectorAll(".block-btn").forEach(block => checkBlockStatusByid(block.getAttribute("blockId")));
-    setInterval(checkPingConnection, 5000);
+    setInterval(checkPingConnection, 4000);
 }
 
 async function checkAllBlockStatus() {
@@ -325,6 +342,7 @@ async function checkPingConnection() {
 
     if (service.status === 200) {
         const { payload } = await service.json();
+        localStorage.setItem("ping", JSON.stringify(payload));
 
         document.querySelectorAll(".block-btn").forEach(async (blockSelector) => {
             let blockId = blockSelector.getAttribute('blockId');
@@ -352,6 +370,7 @@ async function checkPingConnection() {
             await checkBlockStatusByid(blockId);
             return;
         });
+
     }
 
 }
