@@ -1,6 +1,6 @@
 from socket import *
  
-address = ( '192.168.88.19', 5066) #Defind who you are talking to (must match server IP and port)
+address = ( '192.168.88.85', 5020) #Defind who you are talking to (must match server IP and port)
 client_socket = socket(AF_INET, SOCK_DGRAM) #Set Up the Socket
 
 

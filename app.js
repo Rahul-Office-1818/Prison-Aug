@@ -14,6 +14,7 @@ import jammer from './src/controllers/jammer.js';
 import toggleJammerRoutes from './src/controllers/toggleJammer.js';
 import logRoutes from './src/controllers/log.js';
 import pingServices from './src/controllers/pingservices.js';
+import { automationService } from './src/controllers/index.js';
 config();
 
 
@@ -41,6 +42,7 @@ app
     .use('/api/ping', pingServices)
     .use('/api/logs', logRoutes)
     .use("/api/jammer-toggle", toggleJammerRoutes)
+    .use("/api/automation", automationService)
 
 sequelize.sync()
     .then(() => {

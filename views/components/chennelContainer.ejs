@@ -1,7 +1,7 @@
 <!-- You can open the modal using ID.showModal() method -->
 
 <dialog id="channel-container" class="modal">
-    <div class="modal-box bg-gray-600 text-white w-11/12 md:w-10/12 lg:w-3/6 max-w-5xl">
+    <div class="modal-box bg-gray-600 text-white w-11/12 md:w-10/12 lg:w-3/6 max-w-5xl overflow-hidden">
         <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-xl">✕</button>
         </form>
@@ -22,35 +22,32 @@
                 <!-- ALL CHANNEL'S -->
                 <% for( let index = 1; index <= 7; index++ ) { %>
                         <% if (index < 7) { %>
-                            <div class="channel grid grid-cols-2 gap-2 place-items-center m-3" channel="<%= index %>">
-                                <button type="button" class="btn btn-success btn-wide hover:text-gray-200" onclick="onChannelClick(this)" channel="<%= index %>">Channel <%= index %></button>
+                            <div class="channel grid grid-cols-2 gap-2 place-items-center m-3" data-channel="<%= index %>">
+                                <button type="button" class="btn btn-error btn-wide hover:text-gray-200 outline outline-black hover:outline-white outline-1 duration-200" onclick="onChannelClick(this)" data-channel="<%= index %>">Channel <%= index %></button>
                                 <div class="grid grid-cols-3 gap-10 place-items-center">
-                                    <span class="voltage h-8 w-8 rounded-full bg-green-500 outline-double outline-black" status="0"></span>
-                                    <span class="status h-8 w-8 rounded-full bg-red-500 outline-double outline-black" status="0"></span>
-                                    <span class="vswr h-8 w-8 rounded-full bg-green-500 outline-double outline-black" status="0"></span>
+                                    <span class="voltage h-8 w-8 rounded-full bg-gray-600 outline-double outline-black"></span>
+                                    <span class="status h-8 w-8 rounded-full outline-double outline-black duration-500"></span>
+                                    <span class="vswr h-8 w-8 rounded-full bg-gray-600 outline-double outline-black"></span>
                                 </div>
                             </div>
                         <% } else {%>
-                            <div class="channel grid grid-cols-2 gap-2 place-items-center m-3" channel="all">
-                                <button type="button" class="btn btn-success btn-wide hover:text-gray-200" onclick="onChannelClick(this)" channel="all">All Channel</button>
-                                <div class="grid grid-cols-3 gap-10 place-items-center">
+                            <div class="channel flex items-center justify-center my-2" data-channel="all">
+                                <button type="button" class="sm:w-[92%] lg:w-[30rem] xl:w-[37rem] 2xl:w-[44rem] btn hover:text-gray-200 outline outline-black hover:outline-white outline-1 duration-200" onclick="onChannelClick(this)" data-channel="all">All Channel</button>
+                                <!-- <div class="grid grid-cols-3 gap-10 place-items-center">
                                     <span class="voltage h-8 w-8 rounded-full bg-green-500 outline-double outline-black" status="0"></span>
                                     <span class="status h-8 w-8 rounded-full bg-red-500 outline-double outline-black" status="0"></span>
                                     <span class="vswr h-8 w-8 rounded-full bg-green-500 outline-double outline-black" status="0"></span>
-                                </div>
+                                </div> -->
                             </div>
                         
                         <% } %> 
                     <% } %>
 
                 <!-- <div class="flex items-center justify-center gap-4"> -->
-                <div class="grid grid-cols-4 gap-2">
+                <div class="smps grid grid-cols-4 gap-2 ">
                     <% for( let index = 1; index <= 4; index++ ) { %>
-                        <button type="button" class="btn btn-success hover:text-gray-200" onclick="onSMPSClick(this)" smpsId="<%= index %>">SMPS <%= index %></button>
+                        <button type="button" class="smps-btn btn btn-info hover:text-gray-200 outline outline-black hover:outline-white outline-1 no-animation" onclick="onSMPSClick(this)" smpsId="<%= index %>">SMPS <%= index %> <span title="smps voltage" class="smps-voltage text-black p-1 bg-green-600 rounded-full outline-double outline-1 shadow-lg outline-black">28.5v</span></button>
                     <% } %>
-                    <!-- <button type="button" class="btn btn-success" onclick="onSMPSClick(this)" smpsId="2">SMPS 2</button>
-                    <button type="button" class="btn btn-success" onclick="onSMPSClick(this)" smpsId="3">SMPS 3</button>
-                    <button type="button" class="btn btn-success" onclick="onSMPSClick(this)" smpsId="4">SMPS 4</button> -->
                 </div>
                     
 

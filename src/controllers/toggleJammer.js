@@ -3,6 +3,7 @@ import { toggleJammer } from './common.helper.js';
 import Jammer from '../models/Jammer.js';
 import Log from '../models/Log.js';
 import middleware from '../../middleware/middleware.js';
+import { deviceToggleConf } from '../configuration/index.js';
 
 // api/jammer-toggle
 const toggleJammerRoutes = Router();
@@ -10,7 +11,7 @@ const toggleJammerRoutes = Router();
 toggleJammerRoutes.get("/", middleware, (req, res) => {
     try {
         let { id, name, block, ip, port, mode } = req.query;
-        mode = Number(mode) ? "module1" : "module2";
+        mode = Number(mode) ? deviceToggleConf.PCU_BOX.ON : deviceToggleConf.PCU_BOX.OFF;
         toggleJammer({ ip: ip, port: port, mode })
             .then(toggleRes => {
                 let status = String(toggleRes).includes("OFF") ? 0 : 1;
