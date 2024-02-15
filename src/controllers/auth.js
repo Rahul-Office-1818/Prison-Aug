@@ -3,6 +3,7 @@ import User from '../models/User.js';
 import isExist from "./createUser.js";
 import jwt from 'jsonwebtoken';
 import { config } from "dotenv";
+import { authConf } from "../configuration/index.js";
 setTimeout(isExist, 1000);
 
 const auth = Router();
@@ -31,18 +32,30 @@ auth.get('/logout', (req, res) => {
     return res.status(200).json({ message: "Logged out successfully" });
 });
 
-// /auth/register
-auth.post('/register', async (req, res) => {
+// /auth/signup
+auth.post('/signup', async (req, res) => {
     const { username, password, type } = req.body;
     try {
         const user = await User.findOne({ where: { username: username } });
-        if (user) return res.status(401).json({ message: "User already exists!" });
+        if (user) return res.status(401).json({ payload: { message: "User already exists!" } });
 
         const create = await User.create({ username: username, password: password, type: type || "user" });
-        res.status(200).json({ message: "Registration successful!", user: create });
+        res.status(201).json({ payload: { message: "Sign up successful!", user: create } });
     } catch (err) {
         console.log(err);
-        res.status(500).json({ message: "Internal server error!", error: err });
+        res.status(500).json({ payload: { message: "Internal server error!", error: err } });
+    }
+});
+
+auth.get('/checkpass', (req, res) => {
+    try {
+        const { password } = req.query;
+        if (!password) return res.status(401).json({ payload: { message: "Password not found!" } });
+        if (password !== authConf.ADMIN_PASSWORD) return res.status(401).json({ payload: { message: "Invalid password!" } });
+        return res.status(200).json({ payload: { message: "Password matched!" } });
+    } catch (e) {
+        console.log(err);
+        res.status(500).json({ payload: { message: "Internal server error!", error: err } });
     }
 })
 

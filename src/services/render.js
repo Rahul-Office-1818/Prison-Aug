@@ -3,3 +3,4 @@ export const setting = (req, res) => res.render("./pages/setting");
 export const history = (req, res) => res.render("./pages/history");
 export const diagnosis = (req, res) => res.render("./pages/diagnosis");
 export const login = (req, res) => res.render('./pages/login');
+export const signup = (req, res) => res.render('./pages/signup');
