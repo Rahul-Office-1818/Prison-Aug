@@ -42,7 +42,6 @@ const toggleJammer = (params) => {
                 client.close();
                 resolve(message.toString());
             });
-
         });
     });
 }

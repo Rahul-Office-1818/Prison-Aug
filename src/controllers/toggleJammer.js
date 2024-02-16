@@ -11,9 +11,11 @@ const toggleJammerRoutes = Router();
 toggleJammerRoutes.get("/", middleware, (req, res) => {
     try {
         let { id, name, block, ip, port, mode } = req.query;
-        mode = Number(mode) ? deviceToggleConf.PCU_BOX.ON : deviceToggleConf.PCU_BOX.OFF;
+        mode = Number(mode) ? deviceToggleConf.PMCU_BOX.OFF : deviceToggleConf.PMCU_BOX.ON;
+        console.log(mode)
         toggleJammer({ ip: ip, port: port, mode })
             .then(toggleRes => {
+                console.log(toggleRes)
                 let status = String(toggleRes).includes("OFF") ? 0 : 1;
                 Jammer.update({ status: status }, { where: { id: id } })
                     .then(() => {

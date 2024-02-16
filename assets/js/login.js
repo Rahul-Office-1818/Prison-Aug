@@ -19,24 +19,27 @@ async function onLoginUser(ev) {
     ev.preventDefault();
     const username = document.querySelector("#username").value;
     const password = document.querySelector("#password").value;
-    const API = await fetch(`/auth/login?username=${username}&password=${password}`, {
+    const query = new URLSearchParams({ username, password });
+    const API = await fetch(`/auth/login?${query}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
         }
     });
-    const response = await API.json();
     if (API.status === 200) {
+        const { user } = await API.json();
         await Swal.fire({
             icon: "success",
-            title: response.message,
+            title: `Welcome ${user.username}!`,
             showConfirmButton: false,
-            timer: 1000
+            timer: 1500,
+            background: "#565656",
+            color: "#fff",
         });
         window.location.href = "/";
-        return;
     } else {
-        Toast.fire({ icon: "warning", title: response.message })
+        const response = await API.json();
+        Toast.fire({ icon: "info", title: response.message })
     }
 }
 
