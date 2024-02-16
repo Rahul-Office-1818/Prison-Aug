@@ -1,14 +1,14 @@
 <%- include('../partial/header'); %>
     <div id="home-page" class="relative">
         <!-- MAP DIV -->
-        <div id="map" class="absolute top-0 left-0 md:w-3/4 w-1/2 text-white rounded">
+        <div id="map" class="absolute top-0 left-0 md:w-[79%] w-1/2 text-white rounded">
 
             <!-- Add Jammer Modal -->
             <%- include('../components/addJammer') %>
         </div>
 
         <!-- JAMMER INFORMARION DIV -->
-        <div id="jammer-info" class="absolute top-0 right-0 md:w-1/4 w-1/2 text-white bg-black bg-opacity-90">
+        <div id="jammer-info" class="absolute top-0 right-0 md:w-[21%] w-1/2 text-white bg-black bg-opacity-90">
             <p class="w-full text-3xl text-center font-bold p-2 bg-slate-800 bg-opacity-80 hover:bg-opacity-90" id="block-title">BLOCKS
             </p>
 
@@ -30,7 +30,7 @@
                 </div>
 
                 <div class="overflow-y-auto">
-                    <div id="jammers-div" class="grid grid-cols-3 gap-3 mt-4">
+                    <div id="jammers-div" class="grid grid-cols-2 gap-3 mt-4">
                         <!-- <button
                             class="bg-red-500 border text-center font-bold text-2xl text-black p-6 rounded hover:bg-yellow-200">J
                             2</button> -->
@@ -38,7 +38,7 @@
                 </div>
             </div>
 
-            <div id="blocks-div" class="grid grid-cols-3 gap-3 p-5 mt-2">
+            <div id="blocks-div" class="grid grid-cols-2 gap-3 p-5 mt-2">
 
                 <!-- <button class="relative w-full bg-green-500 border text-center font-bold text-2xl text-black p-6 rounded hover:bg-yellow-200">B 1
                     <span class="sr-only">Notifications</span>

@@ -1,6 +1,8 @@
 import { Router } from "express";
-import { chennalConf, deviceToggleConf, voltage } from "../configuration/index.js";
+import { chennalConf, deviceToggleConf, jammerConf, voltageConf } from "../configuration/index.js";
 import { ardiunoCommunication } from "./common.helper.js";
+import Jammer from "../models/Jammer.js";
+import Log from "../models/Log.js";
 
 export class AutomationService {
     routes
@@ -16,6 +18,7 @@ export class AutomationService {
             .get('/channel', this.channel)
             .get('/allchannel', this.allChannel)
             .get('/status', this.channelStatus)
+            .get('/jammer', this.jammer)
     }
 
     health(req, res) {
@@ -80,12 +83,32 @@ export class AutomationService {
         try {
             const { port, address } = req.query;
             if (!port || !address) res.status(400).json({ payload: { message: "Port or Address is missing" } });
-            const promise = await ardiunoCommunication(voltage.SMPS_VOLTAGE, { address: address, port: port });
-            const response = String(promise.payload).match(/\d+\.\d+/g).map(item=> Number(item));
+            const promise = await ardiunoCommunication(voltageConf.SMPS_VOLTAGE, { address: address, port: port });
+            const response = String(promise.payload).match(/\d+\.\d+/g).map(item => Number(item));
             res.status(200).json({ payload: response });
         } catch (err) {
             console.log('Error in automation service || automation/vsmpsvoltage', err);
-            res.status(500).json({ error: 'Invalid request' });
+            res.status(500).json({ payload: { message: 'Invalid request', err } });
+        }
+    }
+
+    async jammer(req, res) {
+        try {
+            const { id, block, name, currentstatus, address, port } = req.query;
+            let command = (currentstatus === '1') ?
+                jammerConf.PMCU_BOX.OFF :
+                jammerConf.PMCU_BOX.ON;
+
+            if (!id || !block || !currentstatus || !address || !port) return res.status(400).json({ payload: { message: "ID or Block or Status or Port or Address is missing" } });
+            const promise = await ardiunoCommunication(command, { address: address, port: port });
+            const response = String(promise.payload).trim().includes('ON') ? 1 : 0;
+            
+            await Jammer.update({ status: response }, { where: { id: id } });
+            await Log.create({ jammerId: id, jammerName: name, ipAddress: address, ipPort: port, blockId: block, status: response })
+            return res.status(200).json({ payload: response });
+        } catch (e) {
+            console.log('Error in automation service || automation/jammer', e);
+            res.status(500).json({ payload: { message: 'Invalid request', e } });
         }
     }
 
