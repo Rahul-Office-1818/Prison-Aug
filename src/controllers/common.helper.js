@@ -61,4 +61,10 @@ function ardiunoCommunication(command, { address, port }) {
     })
 }
 
+
+
+
+
+
+
 export { checkConnection, toggleJammer, ardiunoCommunication };
