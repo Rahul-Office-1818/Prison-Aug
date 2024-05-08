@@ -3,7 +3,6 @@ import { diagnosis, history, home, login, signup, setting } from '../services/re
 import middleware from '../../middleware/middleware.js';
 
 import TileserverPage from '../TileServer/tileServer.js';
-console.log(TileserverPage,"HHHHHHHHHHHHHHHHHHHHHHHHH");
 
 const router = Router();
 

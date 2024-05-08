@@ -213,7 +213,7 @@ async function onBlockLoad() {
     map.fitBounds(markerGroup.getBounds());
 
 
-    if (await jammers.length < 12) {
+    if (await jammers.length < 1) {
         document.getElementById('drawer-close').style.display = "none";
         // onJammerLoadOnMap();
         if (jammerAPI.status === 200) {
