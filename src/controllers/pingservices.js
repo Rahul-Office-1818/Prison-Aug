@@ -20,7 +20,6 @@ export class PingServices {
         try {
             const jammers = await Jammer.findAll();
             const all = await checkConnection(jammers);
-            console.log(all,"Asasdasfsdf",all.length);
             res.json({ payload: all, status: 200 });
         } catch (error) {
             console.log(error);

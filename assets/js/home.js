@@ -150,7 +150,7 @@ async function onBlockCLick(ev) {
 
         block.forEach((el, idx) => {
             
-            jammersDivSelector.innerHTML += `<button class="Block_Jammer_Btn h-[11vh] p-4 grid grid-rows-2 text-black ${el.status ? "bg-green-500" : "bg-red-500"} border rounded" onclick="jammerToggle(this)" data-id='${el.id}' data-block-id='${el.blockId}' data-address='${el.ipAddress}' data-port='${el.ipPort}' title='${el.name}' data-name='${el.name}'  data-status='${el.status}'>
+            jammersDivSelector.innerHTML += `<button class="Block_Jammer_Btn h-[100px] p-4 grid grid-rows-2 text-black ${el.status ? "bg-green-500" : "bg-red-500"} border rounded" onclick="jammerToggle(this)" data-id='${el.id}' data-block-id='${el.blockId}' data-address='${el.ipAddress}' data-port='${el.ipPort}' title='${el.name}' data-name='${el.name}'  data-status='${el.status}'>
             <span class="font-bold ">J ${idx + 1}</span>
             <span class="text-sm shadow rounded-full">${String(el.name)}</span>
             </button>`
@@ -213,7 +213,7 @@ async function onBlockLoad() {
     map.fitBounds(markerGroup.getBounds());
 
 
-    if (await jammers.length > 12) {
+    if (await jammers.length <= 14) {
         document.getElementById('drawer-close').style.display = "none";
         // onJammerLoadOnMap();
         if (jammerAPI.status === 200) {
@@ -224,7 +224,7 @@ async function onBlockLoad() {
             const jammersDivSelector = document.querySelector("#jammers-div");
             jammersDivSelector.innerHTML = '';
             jammers.forEach((el, idx) => {
-                jammersDivSelector.innerHTML += `<button class="Jammer-btn h-[11vh] p-4 grid grid-rows-2 text-black ${el.status ? "bg-green-500" : "bg-red-500"} border rounded" onclick="jammerToggle(this)" data-id='${el.id}' data-block-id='${el.blockId}' data-address='${el.ipAddress}' data-port='${el.ipPort}' title='${el.name}' data-name='${el.name}'  data-status='${el.status}'>
+                jammersDivSelector.innerHTML += `<button class="Jammer-btn h-[100px] p-4 grid grid-rows-2 text-black ${el.status ? "bg-green-500" : "bg-red-500"} border rounded" onclick="jammerToggle(this)" data-id='${el.id}' data-block-id='${el.blockId}' data-address='${el.ipAddress}' data-port='${el.ipPort}' title='${el.name}' data-name='${el.name}'  data-status='${el.status}'>
             <span class="font-bold ">J ${idx + 1}</span>
             <span class="text-sm shadow rounded-full">${String(el.name)}</span>
             </button>`
@@ -244,10 +244,7 @@ async function onBlockLoad() {
                         if (info.alive) return;
                         removeAllClasses(item, "bg-");
                         if (!info.alive){
-
-                            console.log("IIIIIIIIIIIIIIIIIIIIIIIIIII");
                         item.classList.add('bg-yellow-500');}
-                            
                     })
             }
             return;
@@ -268,7 +265,7 @@ async function onBlockLoad() {
             blocksDivSelector.innerHTML = "";
             let BlockStatus = false;
             payload.forEach((block, i) => {
-                blocksDivSelector.innerHTML += `<button class="block-btn relative ${BlockStatus ? "bg-green-500" : "bg-red-500"} border text-center font-bold text-2xl text-black p-6 h-[11vh] rounded" onclick="onBlockCLick(this)" blockId="${block.blockId}" data-status='${BlockStatus}' title="Jammer Block">B ${block.blockId}</button>`
+                blocksDivSelector.innerHTML += `<button class="block-btn relative ${BlockStatus ? "bg-green-500" : "bg-red-500"} border text-center font-bold text-2xl text-black p-6 h-[100px] rounded" onclick="onBlockCLick(this)" blockId="${block.blockId}" data-status='${BlockStatus}' title="Jammer Block">B ${block.blockId}</button>`
             });
             return;
         }

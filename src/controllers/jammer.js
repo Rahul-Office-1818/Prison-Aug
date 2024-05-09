@@ -26,8 +26,8 @@ jammerApi.get("/", middleware, async (req, res) => {
         const jammer = await Jammer.create(req.body);
         return res.status(201).json({ message: "Jammer created successfully!", jammer });
     } catch (err) {
-        console.log(err);
-        return res.status(500).json({ message: "Internal server error!", err });
+        console.log(err,"EEREfdfdffedfdfedf");
+        return res.status(500).json({ message: "IP Already Exist!", err });
     }
 }).put("/:id", middleware, async (req, res) => {
     try {
