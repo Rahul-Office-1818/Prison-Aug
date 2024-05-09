@@ -121,5 +121,7 @@ initial();
 
 document.querySelector("#date-filter").addEventListener("click", filterByDateTime);
 document.querySelector("#logs-reload").addEventListener("click", onLogsReload);
+document.querySelector("#all").addEventListener("click", onLogsReload);
+
 document.querySelector("#statusOptions").addEventListener("change", onStatusChange);
 document.querySelector("#blockOptions").addEventListener("change", onBlockOptionChange)
