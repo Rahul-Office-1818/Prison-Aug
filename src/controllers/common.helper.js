@@ -13,6 +13,7 @@ const checkConnection = async (jammers) => {
             return { host: item.host, alive: item.alive };
         });
 
+        console.log(jammers,"Resssolveeeeee",jammers.length);
     const result = new Array();
 
     resolve.forEach((item) => {
@@ -24,10 +25,12 @@ const checkConnection = async (jammers) => {
                     jammerName: ele.name,
                     blockId: ele.blockId,
                     alive: item.alive
-                })
+                });
             }
+            return;
         })
     });
+    console.log(result,"Resultttttttttt");
 
     return result
 }

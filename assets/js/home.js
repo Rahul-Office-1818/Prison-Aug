@@ -150,7 +150,7 @@ async function onBlockCLick(ev) {
 
         block.forEach((el, idx) => {
             
-            jammersDivSelector.innerHTML += `<button class="h-[11vh] p-4 grid grid-rows-2 text-black ${el.status ? "bg-green-500" : "bg-red-500"} border rounded" onclick="jammerToggle(this)" data-id='${el.id}' data-block-id='${el.blockId}' data-address='${el.ipAddress}' data-port='${el.ipPort}' title='${el.name}' data-name='${el.name}'  data-status='${el.status}'>
+            jammersDivSelector.innerHTML += `<button class="Block_Jammer_Btn h-[11vh] p-4 grid grid-rows-2 text-black ${el.status ? "bg-green-500" : "bg-red-500"} border rounded" onclick="jammerToggle(this)" data-id='${el.id}' data-block-id='${el.blockId}' data-address='${el.ipAddress}' data-port='${el.ipPort}' title='${el.name}' data-name='${el.name}'  data-status='${el.status}'>
             <span class="font-bold ">J ${idx + 1}</span>
             <span class="text-sm shadow rounded-full">${String(el.name)}</span>
             </button>`
@@ -213,7 +213,7 @@ async function onBlockLoad() {
     map.fitBounds(markerGroup.getBounds());
 
 
-    if (await jammers.length < 1) {
+    if (await jammers.length > 12) {
         document.getElementById('drawer-close').style.display = "none";
         // onJammerLoadOnMap();
         if (jammerAPI.status === 200) {
@@ -223,7 +223,6 @@ async function onBlockLoad() {
 
             const jammersDivSelector = document.querySelector("#jammers-div");
             jammersDivSelector.innerHTML = '';
-            console.log(jammers,"LLLLLLLLLLLLLLLLLLl");
             jammers.forEach((el, idx) => {
                 jammersDivSelector.innerHTML += `<button class="Jammer-btn h-[11vh] p-4 grid grid-rows-2 text-black ${el.status ? "bg-green-500" : "bg-red-500"} border rounded" onclick="jammerToggle(this)" data-id='${el.id}' data-block-id='${el.blockId}' data-address='${el.ipAddress}' data-port='${el.ipPort}' title='${el.name}' data-name='${el.name}'  data-status='${el.status}'>
             <span class="font-bold ">J ${idx + 1}</span>
@@ -281,80 +280,6 @@ async function onBlockLoad() {
 
 }
 
-// async function onJammerLoadOnMap(jammers) {
-//     const jammerAPI = await fetch("/api/jammer", {
-//         method: "GET", headers: {
-//             'Content-Type': 'application/json',
-//         }
-//     });
-
-//     if (jammerAPI.status === 200) {
-//         console.log();
-//         let { jammers } = await jammerAPI.json();
-//         console.log(jammers,"jammersssssss");
-//         markerGroup.clearLayers();
-//         jammers.forEach((el, i) => {
-//             markerGroup.addLayer(L.marker([el.lat, el.lng], { icon: el.status ? onJammer : offJammer, id: el.id, status: el.status })
-//                 .bindPopup(`<table class="text-lg font-bold text-center">
-//                             <tr>
-//                                 <td scope="col" class="px-3 py-1 text-right">Name</td>
-//                                 <td scope="col" class="px-3 py-1 text-left">${el.name}</td>
-//                             </tr>
-//                             <tr>
-//                                 <td scope="col" class="px-3 py-1 text-right">Block</td>
-//                                 <td scope="col" class="px-3 py-1 text-left">${el.blockId}</td>
-//                             </tr>
-//                             <tr>
-//                                 <td scope="col" class="px-3 py-1 text-right">IP</td>
-//                                 <td scope="col" class="px-3 py-1 text-left">${el.ipAddress}</td>
-//                             </tr>
-//                             <tr>
-//                                 <td scope="col" class="px-3 py-1 text-right">PORT</td>
-//                                 <td scope="col" class="px-3 py-1 text-left">${el.ipPort}</td>
-//                             </tr>
-//                         </table>`));
-//         });
-//         map.addLayer(markerGroup);
-//         map.fitBounds(markerGroup.getBounds());
-//         return;
-//     }
-//     // if (jammerAPI.status === 200) {
-//     //     let { jammers } = await get.json();
-
-//     //     const jammersDivSelector = document.querySelector("#jammers-div");
-//     //     jammersDivSelector.innerHTML = '';
-
-//     //     jammers.forEach((el, idx) => {
-//     //         jammersDivSelector.innerHTML += `<button class="h-[11vh] p-4 grid grid-rows-2 text-black ${el.status ? "bg-green-500" : "bg-red-500"} border rounded" onclick="jammerToggle(this)" data-id='${el.id}' data-block-id='${el.blockId}' data-address='${el.ipAddress}' data-port='${el.ipPort}' title='${el.name}' data-name='${el.name}'  data-status='${el.status}'>
-//     //         <span class="font-bold ">J ${idx + 1}</span>
-//     //         <span class="text-sm shadow rounded-full">${String(el.name).toLocaleLowerCase()}</span>
-//     //         </button>`
-//     //     });
-
-//     //     jammersDivSelector.querySelectorAll("button")
-//     //         .forEach(btn => console.log(btn));
-
-//     //     toggleDrawer();
-
-//     //     const pingInfo = localStorage.getItem("ping");
-//     //     if (pingInfo) {
-//     //         const payload = JSON.parse(pingInfo);
-//     //         document.querySelector('#jammers-div')
-//     //             .querySelectorAll('button')
-//     //             .forEach(item => {
-//     //                 const jammerId = item.getAttribute("data-id");
-//     //                 const info = payload.find(el => String(el.jammerId) === jammerId);
-//     //                 if (info.alive) return;
-//     //                 removeAllClasses(item, "bg-");
-//     //                 if (!info.alive) item.classList.add('bg-yellow-500');
-//     //             })
-//     //     }
-//     //     return;
-//     // }
-
-
-//     Toast.fire({ icon: "error", title: "Something went wrong!" })
-// }
 
 async function closeModal() {
     addJammerModalSelector.classList.add("hidden");
@@ -459,12 +384,10 @@ async function checkBlockStatusByid(id) {
 
 async function checkPingConnection() {
 
-    console.log("Hellooooo");
     const service = await fetch("/api/ping/all");
 
     if (service.status === 200) {
         const { payload } = await service.json();
-        console.log(payload, "Paaaaaaaayload");
         localStorage.setItem("ping", JSON.stringify(payload));
         try {
             if (document.querySelectorAll(".block-btn").length > 0) {
@@ -473,24 +396,34 @@ async function checkPingConnection() {
                     let isDivExists = blockSelector.querySelector("div");
 
                     let info = payload.filter(item => String(item.blockId) === blockId);
+
                     let isConnection = info.some(item => item.alive === false);
                     console.log(isConnection,"Isssssssss");
 
                     if (!!isDivExists) blockSelector.removeChild(isDivExists);
-
+                    console.log(document.querySelectorAll('.Block_Jammer_Btn'),"JAmmers Div");
+                    
                     if (isConnection) {
                         let cout = 0;
                         const badge = document.createElement('div');
-
+                        
                         [...blockSelector.classList].forEach(el => el.startsWith('bg-') ? blockSelector.classList.remove(el) : null);
-
+                        
                         info.forEach(item => item.alive ? null : cout++);
                         blockSelector.classList.add('bg-yellow-500');
                         badge.classList.add('upper-badge');
                         badge.innerText = cout;
                         blockSelector.appendChild(badge);
-                        jammerToast.fire({ icon: "error", title: 'Jammeer connection lost!' });
+                        cout = 0;
+                        jammerToast.fire({ icon: "error", title: 'Jammer connection lost!' });
                         return;
+                    }
+                    else{
+                        console.log("DDDDDDDDDDDDDDD");
+                        
+                        Number(item.dataset.status)?item.classList.add('bg-green-500'):item.classList.add('bg-red-500');
+                        item.classList.remove('bg-yellow-500');
+
                     }
                     await checkBlockStatusByid(blockId);
                     return;
@@ -500,31 +433,27 @@ async function checkPingConnection() {
             else {
                 const JammerBtnDiv = document.querySelectorAll(".Jammer-btn");
                 JammerBtnDiv.forEach(async (item)=>{
-                console.log(item.dataset.status,"DDDDDDDDDDDDDDDDDDDDDD",item.dataset.address,typeof item.dataset.status);
                     let info = payload.filter(item1 => String(item1.host) === item.dataset.address);
                     let isConnection = info.some(item2 => item2.alive === false);
 
                     if (isConnection)
                         {
 
-                        jammerToast.fire({ icon: "error", title: 'Jammeer connection lost!' });
+                        jammerToast.fire({ icon: "error", title: 'Jammer connection lost!' });
                         item.classList.remove('bg-green-500', 'bg-red-500');
                         item.classList.add('bg-yellow-500');
 
                         }
                     else{
+
+                        console.log(document.querySelector('#jammers-div'),"JAmmers Div");
                         Number(item.dataset.status)?item.classList.add('bg-green-500'):item.classList.add('bg-red-500');
                         item.classList.remove('bg-yellow-500');
 
-                        // item.classList.remove('bg-green-500', 'bg-red-500','bg-yellow-500');
-                        // item.classList.add('bg-green-500');
                     }
 
                     
-                    // elseif() {
-                    //     // await onBlockLoad();
-                        
-                    // }
+                    
                 })
 
 
