@@ -28,11 +28,19 @@ const Log = sequelize.define("Log", {
         type: Datatypes.INTEGER,
         allowNull: false
     },
-    status: {
-        type: Datatypes.INTEGER,
+    jammer_on: {
+        type: Datatypes.STRING,
         allowNull: false
     },
-    dateTime :{
+    jammer_off: {
+        type: Datatypes.STRING,
+        allowNull: true,
+    },
+    diffrence: {
+        type: Datatypes.STRING,
+        allowNull: true,
+    },
+    dateTime: {
         type: Datatypes.STRING,
         defaultValue: new Date().toString(),
         allowNull: false
@@ -40,3 +48,31 @@ const Log = sequelize.define("Log", {
 }, { timestamps: true });
 
 export default Log;
+
+
+
+// // Define the Sequelize model for thor_logs table
+// const ThorLog = sequelize.define('thor_logs', {
+//   datime: {
+//     type: DataTypes.STRING,
+//     allowNull: false
+//   },
+//   jammer_on: {
+//     type: DataTypes.STRING,
+//     allowNull: false
+//   },
+//   jammer_off: {
+//     type: DataTypes.STRING,
+//     allowNull: false
+//   },
+//   voltage: {
+//     type: DataTypes.STRING,
+//     allowNull: false
+//   },
+//   diff: {
+//     type: DataTypes.STRING,
+//     allowNull: false
+//   }
+// });
+
+// Function using Sequelize for database operations

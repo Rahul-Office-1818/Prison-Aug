@@ -1,4 +1,7 @@
 import { Router } from "express";
+import moment from "moment";
+import 'moment-precise-range-plugin';
+
 import { chennalConf, deviceToggleConf, jammerConf, voltageConf } from "../configuration/index.js";
 import { ardiunoCommunication } from "./common.helper.js";
 import Jammer from "../models/Jammer.js";
@@ -92,25 +95,94 @@ export class AutomationService {
         }
     }
 
+ 
+
+
     async jammer(req, res) {
         try {
             const { id, block, name, currentstatus, address, port } = req.query;
-            let command = (currentstatus === '1') ?
-                jammerConf.PMCU_BOX.OFF :
-                jammerConf.PMCU_BOX.ON;
-
+            console.log(id, block, name, currentstatus, address, port);
+            let command = (currentstatus === '1') ? jammerConf.PMCU_BOX.OFF : jammerConf.PMCU_BOX.ON;
+            console.log(command, "need to know");
             if (!id || !block || !currentstatus || !address || !port) return res.status(400).json({ payload: { message: "ID or Block or Status or Port or Address is missing" } });
             const promise = await ardiunoCommunication(command, { address: address, port: port });
+
+            console.log(promise.payload);
             const response = String(promise.payload).trim().includes('ON') ? 1 : 0;
-            
-            await Jammer.update({ status: response }, { where: { id: id } });
-            await Log.create({ jammerId: id, jammerName: name, ipAddress: address, ipPort: port, blockId: block, status: response })
+            console.log(response, 'response ');
+
+            if (response === 1) {
+                let date_ob = new Date();
+                let date = ("0" + date_ob.getDate()).slice(-2);
+                let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+                let year = date_ob.getFullYear();
+                let hours = ("0" + date_ob.getHours()).slice(-2);
+                let minutes = ("0" + date_ob.getMinutes()).slice(-2);
+                let seconds = ("0" + date_ob.getSeconds()).slice(-2);
+                let datestring =
+                    year +
+                    "-" +
+                    month +
+                    "-" +
+                    date +
+                    " " +
+                    hours +
+                    ":" +
+                    minutes +
+                    ":" +
+                    seconds;
+
+                let timeDuration ="0";
+                await Log.create({ jammerId: id, jammerName: name, ipAddress: address, ipPort: port, blockId: block, jammer_on: datestring, jammer_off: "Jammer is currently ON", diffrence: timeDuration });
+            } else {
+                let date_ob = new Date();
+                let date = ("0" + date_ob.getDate()).slice(-2);
+                let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+                let year = date_ob.getFullYear();
+                let hours = ("0" + date_ob.getHours()).slice(-2);
+                let minutes = ("0" + date_ob.getMinutes()).slice(-2);
+                let seconds = ("0" + date_ob.getSeconds()).slice(-2);
+                let datestring =
+                    year +
+                    "-" +
+                    month +
+                    "-" +
+                    date +
+                    " " +
+                    hours +
+                    ":" +
+                    minutes +
+                    ":" +
+                    seconds;
+                const lastThorLog = await Log.findOne({ where: { jammerId: id },order: [["id", "DESC"]], limit: 1 });
+                console.log(lastThorLog.dataValues.jammer_on, "last logs");
+                if (lastThorLog) {
+                    var abc = moment((lastThorLog.dataValues.jammer_on).slice(0, 19));
+                    console.log(abc);
+                    var efg = moment(datestring.slice(0, 19));
+                    console.log(efg);
+                    let diff = moment.preciseDiff(abc, efg, true);
+                    let timeDuration = ''
+                    for (const key in diff) {
+                        if (diff[key] !== 0 && diff[key] != false) {
+                            timeDuration = timeDuration + " " + diff[key] + " " + key
+                        }
+                    }
+                    console.log(timeDuration, "tddddi");
+                    await lastThorLog.update({ jammer_off: datestring, diffrence: timeDuration });
+                    console.log("Record updated successfully");
+                }
+            }
+
             return res.status(200).json({ payload: response });
         } catch (e) {
             console.log('Error in automation service || automation/jammer', e);
             res.status(500).json({ payload: { message: 'Invalid request', e } });
         }
     }
+
+
+
 
 }
 

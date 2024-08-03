@@ -13,7 +13,9 @@ import auth from './src/controllers/auth.js';
 import jammer from './src/controllers/jammer.js';
 import toggleJammerRoutes from './src/controllers/toggleJammer.js';
 import logRoutes from './src/controllers/log.js';
+import pflogRoutes from './src/controllers/pflogs.js';
 import pingServices from './src/controllers/pingservices.js';
+import cpulogs from './src/controllers/cpulogs.js';
 import { automationService } from './src/controllers/index.js';
 config();
 
@@ -27,7 +29,7 @@ const options = {
     key: fs.readFileSync(process.env.KEY),
     cert: fs.readFileSync(process.env.CERT)
 }
-const secureApp = https.createServer(options, app)
+// const secureApp = https.createServer(options, app)
 
 app
     .use(cookieParser())
@@ -41,8 +43,10 @@ app
     .use('/api/jammer', jammer)
     .use('/api/ping', pingServices)
     .use('/api/logs', logRoutes)
+    .use('/api/pflogs', pflogRoutes)
     .use("/api/jammer-toggle", toggleJammerRoutes)
     .use("/api/automation", automationService)
+    .use("/api/cpulogs", cpulogs)
 
 sequelize.sync()
     .then(() => {

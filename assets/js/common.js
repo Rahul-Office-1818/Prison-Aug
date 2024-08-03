@@ -13,7 +13,7 @@ Toast = Swal.mixin({
     }
 });
 
-jammerToast = Swal.mixin({toast: true, position: "top-end", timer: 3000, timerProgressBar: true, showConfirmButton: false});
+jammerToast = Swal.mixin({ toast: true, position: "top-end", timer: 3000, timerProgressBar: true, showConfirmButton: false });
 
 
 async function onLogoutClick(ev) {
@@ -45,8 +45,31 @@ async function onLoad(ev) {
 
     $("#open-mobile").on('click', () => $("#mobile-menu").toggle(500));
 }
+function downloadTableAsExcel(tableName) {
+    var currentdate = new Date();
+    var datetime =
+        currentdate.getDate() +
+        "/" +
+        (currentdate.getMonth() + 1) +
+        "/" +
+        currentdate.getFullYear()+
+        " " +
+        currentdate.getHours() +
+        ":" +
+        currentdate.getMinutes() +
+        ":" +
+        currentdate.getSeconds();
 
-
-
+    console.log(datetime);
+    var filename = "Jammer_LoGs" +"-"+ datetime + ".xlsx";
+    TableToExcel.convert(document.getElementById(`${tableName}`), {
+        name: filename,
+        sheet: {
+            name: "sheet 1",
+            content: "BHARAT AERO"
+        },
+    });
+}
+// document.querySelector("#logs-download").addEventListener("click", downloadTableAsExcel);
 document.querySelector("#logout-btn").addEventListener("click", onLogoutClick);
 window.addEventListener("load", onLoad);
