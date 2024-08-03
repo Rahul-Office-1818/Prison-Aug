@@ -464,6 +464,7 @@ async function checkPingConnection() {
           .querySelectorAll(".block-btn")
           .forEach(async (blockSelector) => {
             let blockId = blockSelector.getAttribute("blockId");
+
             let isDivExists = blockSelector.querySelector("div");
 
             let info = payload.filter(
@@ -499,12 +500,15 @@ async function checkPingConnection() {
               // jammerToast.fire({ icon: "error", title: 'Jammer connection lost!' });
               return;
             } else {
-              console.log("DDDDDDDDDDDDDDD");
-
-              Number(item.dataset.status)
+              const item = blockSelector.querySelector("div");
+              if(item){
+                Number(item.dataset.status)
                 ? item.classList.add("bg-green-500")
                 : item.classList.add("bg-red-500");
               item.classList.remove("bg-yellow-500");
+              }
+
+              
             }
             await checkBlockStatusByid(blockId);
             return;
