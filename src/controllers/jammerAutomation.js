@@ -62,8 +62,6 @@ export class AutomationService {
         }
     }
 
-    // B0 = channel / module off
-    // A1 = channel / module on
     async channel(req, res) {
         try {
             const { channel, port, address, currentstatus } = req.query;
@@ -101,15 +99,11 @@ export class AutomationService {
     async jammer(req, res) {
         try {
             const { id, block, name, currentstatus, address, port } = req.query;
-            console.log(id, block, name, currentstatus, address, port);
-            let command = (currentstatus === '1') ? jammerConf.PMCU_BOX.OFF : jammerConf.PMCU_BOX.ON;
+            let command = (currentstatus === '1') ? jammerConf.PCU_BOX.OFF : jammerConf.PCU_BOX.ON;
             console.log(command, "need to know");
             if (!id || !block || !currentstatus || !address || !port) return res.status(400).json({ payload: { message: "ID or Block or Status or Port or Address is missing" } });
             const promise = await ardiunoCommunication(command, { address: address, port: port });
-
-            console.log(promise.payload);
             const response = String(promise.payload).trim().includes('ON') ? 1 : 0;
-            console.log(response, 'response ');
 
             if (response === 1) {
                 let date_ob = new Date();
@@ -155,7 +149,6 @@ export class AutomationService {
                     ":" +
                     seconds;
                 const lastThorLog = await Log.findOne({ where: { jammerId: id },order: [["id", "DESC"]], limit: 1 });
-                console.log(lastThorLog.dataValues.jammer_on, "last logs");
                 if (lastThorLog) {
                     var abc = moment((lastThorLog.dataValues.jammer_on).slice(0, 19));
                     console.log(abc);
@@ -168,12 +161,10 @@ export class AutomationService {
                             timeDuration = timeDuration + " " + diff[key] + " " + key
                         }
                     }
-                    console.log(timeDuration, "tddddi");
                     await lastThorLog.update({ jammer_off: datestring, diffrence: timeDuration });
                     console.log("Record updated successfully");
                 }
             }
-
             return res.status(200).json({ payload: response });
         } catch (e) {
             console.log('Error in automation service || automation/jammer', e);

@@ -35,17 +35,10 @@ const checkConnection = async (jammers) => {
     });
   });
 
-  
+
   const filteredResult = Object.values(result).filter(
     (item) => item.jammerId !== ""
   );
-
-  console.log(
-    filteredResult,
-    "ressult hhai bhaiiiiiiiiiii",
-    filteredResult.length
-  );
-
   return filteredResult;
 };
 
@@ -74,16 +67,21 @@ function ardiunoCommunication(command, { address, port }) {
     const message = Buffer.from(command);
     client.send(message, port, address, (err) => (err ? reject(err) : null));
     let timer = setTimeout(
-      () => reject({ payload: "Automation connection lost" }),
+      () => reject({ payload: "PCU box didnt responded" }),
       1000 * 5
     );
     client.on("message", (m, info) => {
       client.close();
       clearTimeout(timer);
       let res = m.toString();
-      resolve({ payload: res });
+      resolve({ payload: res, deviceInfo: info });
     });
   });
 }
+// function CheckJammerstate(jammers){
+
+//   return new Promise((resolve, reject) => {
+//   })
+// }
 
 export { checkConnection, toggleJammer, ardiunoCommunication };

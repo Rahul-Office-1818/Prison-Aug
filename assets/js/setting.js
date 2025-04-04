@@ -130,7 +130,7 @@ async function onJammerLoad() {
         jammerTableBodySelector.innerHTML = '';
         response.jammers.forEach((el, idx) => {
             jammerTableBodySelector.innerHTML += `
-            <tr class="divide-x text-center hover:bg-sky-600 hover:divide-y">
+            <tr class=" text-center ">
                 <td scope="col" class="text-lg py-2">${idx + 1}</td>
                 <td scope="col" class="text-lg py-2">${el.name}</td>
                 <td scope="col" class="text-lg py-2">Block ${el.blockId}</td>
@@ -139,11 +139,13 @@ async function onJammerLoad() {
                 <td scope="col" class="text-lg py-2">${Number(el.lat).toFixed(6)}</td>
                 <td scope="col" class="text-lg py-2">${Number(el.lng).toFixed(6)}</td>
                 <td scope="col" class="text-lg py-2 flex justify-center ">
-                    <button type="button" name="edit-jammer-btn" title="edit jammer" class="bg-green-700 py-2 px-3 me-1 rounded-md hover:bg-gray-700 edit-jammer" onclick="onEditJammer('${el.id}')">
-                        <i class="fa-solid fa-pen-to-square"></i>
-                    </button>
-                    <button type="button" name="delete-jammer-btn" title="Delete jammer" class="bg-red-700 py-2 px-3 ml-1 rounded-md hover:bg-gray-700 delete-jammer" onclick="onDelJammer('${el.id}')"> 
+                  
+                    <button type="button" name="delete-jammer-btn" title="Delete jammer" class=" py-2 px-3 mr-1 r delete-jammer" onclick="onDelJammer('${el.id}')"> 
                         <i class="fa-solid fa-trash"></i>
+                    </button>
+
+                      <button type="button" name="edit-jammer-btn" title="edit jammer" class="py-2  px-3 ml-1 hover:scale-110 transition-transform duration-200 edit-jammer"  onclick="onEditJammer('${el.id}')">
+                        <i class="fa-solid fa-pen-to-square"></i>
                     </button>
                 </td>
             </tr>`

@@ -15,8 +15,10 @@ import toggleJammerRoutes from './src/controllers/toggleJammer.js';
 import logRoutes from './src/controllers/log.js';
 import pflogRoutes from './src/controllers/pflogs.js';
 import pingServices from './src/controllers/pingservices.js';
+import VoltageAndTemp from './src/controllers/voltageandtemp.js';
 import cpulogs from './src/controllers/cpulogs.js';
 import { automationService } from './src/controllers/index.js';
+import AllJammerData from './src/controllers/jammerData.js';
 config();
 
 
@@ -47,6 +49,9 @@ app
     .use("/api/jammer-toggle", toggleJammerRoutes)
     .use("/api/automation", automationService)
     .use("/api/cpulogs", cpulogs)
+    .use("/api/voltageandtemp", VoltageAndTemp)
+    .use("/api/alljammer", AllJammerData)
+
 
 sequelize.sync()
     .then(() => {

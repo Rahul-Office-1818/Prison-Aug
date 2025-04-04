@@ -1,46 +1,60 @@
 <%- include('../partial/header'); %>
-    <div id="home-page" class="relative">
-        <!-- MAP DIV -->
-        <div id="map" class="absolute top-0 left-0 md:w-[79%] w-1/2 text-white rounded">
 
-            <!-- Add Jammer Modal -->
-            <%- include('../components/addJammer') %>
-        </div>
+<!-- DEVELOPER >> VISHAL RAWAT >> IF JAMMER CONNATION LOST THEN PLAY AUDIO -->
+<audio controls id="jammer-alarm" class="hidden" loop allow="autoplay">
+  <source src="./assets/audio/drone_alarm.mp3" type="audio/mpeg" />
+</audio>
 
-        <!-- JAMMER INFORMARION DIV -->
-        <div id="jammer-info" class="absolute top-0 right-0 md:w-[21%] w-1/2 text-white bg-black bg-opacity-90">
-            <p class="w-full text-3xl text-center font-bold p-2 bg-slate-800 bg-opacity-80 hover:bg-opacity-90" id="block-title">BLOCK
-            </p>
-            <!-- Drawer -->
-            <div id="drawer"
-                class="hidden absolute top-0 right-0 z-40 p-4 overflow-y-auto transition-transform bg-slate-800 bg-opacity-90 w-full h-full">
+<div id="home-page" class="relative">
+  <!-- MAP DIV -->
+  <div
+    id="map"
+    class="absolute top-0 left-0 md:w-[79%] w-1/2 text-white rounded"
+  >
+    <!-- Add Jammer Modal -->
+    <%- include('../components/addJammer') %>
+  </div>
 
-                <div class="w-full flex items-center justify-center">
-                    
+  <!-- JAMMER INFORMARION DIV -->
+  <div
+    id="jammer-info"
+    class="absolute top-0 right-0 md:w-[21%] w-1/2 text-white bg-black bg-opacity-90"
+  >
+    <p
+      class="w-full text-3xl text-center font-bold p-2 bg-slate-800 bg-opacity-80 hover:bg-opacity-90"
+      id="block-title"
+    ></p>
+    <!-- Drawer -->
+    <div
+      id="drawer"
+      class="hidden absolute top-0 right-0 z-40 p-4 overflow-y-auto transition-transform bg-slate-800 bg-opacity-90 w-full h-full"
+    >
+      <div class="w-full flex items-center justify-center">
+        <button
+          type="button"
+          id="drawer-close"
+          class="text-white bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto"
+          title="Close"
+          data-modal-hide="static-modal"
+        >
+          <i class="fa-solid fa-arrow-left"></i>
+        </button>
+        <span
+          class="w-full text-2xl text-center font-bold p-2 bg-slate-800 bg-opacity-80 hover:bg-opacity-90"
+          id="drawerTitle"
+        ></span>
+      </div>
 
-                    <button type="button" id="drawer-close"
-                        class="text-white bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto"
-                        title="Close" data-modal-hide="static-modal">
-                        <i class="fa-solid fa-arrow-left"></i>
-                    </button>
-                    <span
-                        class="w-full text-2xl text-center font-bold p-2 bg-slate-800 bg-opacity-80 hover:bg-opacity-90"
-                        id="drawerTitle"></span>
-                </div>
-
-                <div class="overflow-y-auto">
-                    <div id="jammers-div" class="grid grid-cols-2 gap-3 mt-4">
-                        
-                    </div>
-                </div>
-            </div>
-
-            <div id="blocks-div" class="grid grid-cols-2 gap-3 p-5 mt-2">
-
-                
-            </div>
-        </div>
+      <div class="overflow-y-auto">
+        <div id="jammers-div" class="grid grid-cols-2 gap-3 mt-4"></div>
+      </div>
     </div>
 
-    <script defer src="./assets/js/home.js"></script>
-    <%- include('../partial/footer'); %>
+    <div id="blocks-div" class="grid grid-cols-2 gap-3 p-5 mt-2"></div>
+  </div>
+</div>
+
+
+
+<script defer src="./assets/js/home.js"></script>
+<%- include('../partial/footer'); %>

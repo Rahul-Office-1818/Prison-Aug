@@ -1,67 +1,10 @@
-// import { Router } from "express";
-
-// import { exec } from 'child_process';
-// import os from 'os';
-
-
-
-
-
-
-
-
-
-
-// const cpulogsApi = Router();
-
-// cpulogsApi.get("/", async (req, res) => {
-
-
-
-//     exec('last', (error, stdout, stderr) => {
-//         if (error) {
-//             console.log(`error: ${error.message}`);
-//             return;
-//         }
-//         if (stderr) {
-//             console.log(`stderr: ${stderr}`);
-//             return;
-//         }
-//         console.log(`stdout: ${stdout}`);
-
-//         const responses = [];
-//         const user = os.userInfo().username;
-//         const output = stdout;
-//         const lines = output.split('\n');
-//         let currentReason = '';
-//         lines.forEach(line => {
-//             if (line.startsWith(os.userInfo().username)) {
-//                 const parts = line.split(/\s+/);
-//                 currentReason = parts.slice(5).join(' ');
-//             } else if (line.startsWith('reboot')) {
-//                 const parts = line.split(/\s+/);
-//                 const timing = parts[parts.length - 2] + ' ' + parts[parts.length - 1];
-//                 console.log(`Reboot timing: ${timing}, Reason: ${currentReason}`);
-//                 responses.push({ timing, reason: currentReason });
-//             }
-//         });
-//         console.log(os.userInfo().username);
-
-
-//         return res.status(200).json({ message: "Cpu logs retrieved successfully!", payload: responses, user: user });
-//     })
-// })
-
-
-// export default cpulogsApi;
-
-
-
 import { Router } from 'express';
 import { exec } from 'child_process';
 import os from 'os';
 import PDFDocument from "pdfkit-table";
 import fs from 'fs';
+import path from 'path';
+
 
 const cpulogsApi = Router();
 
@@ -75,21 +18,38 @@ cpulogsApi.get("/", async (req, res) => {
             console.log(`stderr: ${stderr}`);
             return;
         }
-        console.log(`stdout: ${stdout}`);
+        // console.log(`stdout: ${stdout}`);
+        console.log(stdout);
 
         const responses = [];
         const user = os.userInfo().username;
         const output = stdout;
         const lines = output.split('\n');
+        const regex = /([A-Za-z]{3} [A-Za-z]{3} \d{1,2}) (\d{2}:\d{2}) - (down|crash)/;
+        let lastDayDate = '';
+        let lastTime = '';
+        let lastStatus = '';
         let currentReason = '';
         lines.forEach(line => {
             if (line.startsWith(os.userInfo().username)) {
                 const parts = line.split(/\s+/);
                 currentReason = parts.slice(3).join(' ');
+                const match = line.match(regex);
+                if (match) {
+                    lastDayDate = match[1];
+                    lastTime = match[2];
+                    lastStatus = match[3];
+                }
             } else if (line.startsWith('reboot')) {
                 const parts = line.split(/\s+/);
                 const timing = parts[parts.length - 3] + ' ' + parts[parts.length - 2] + ' ' + parts[parts.length - 1];
-                responses.push({ timing, reason: currentReason });
+                responses.push({
+                    day_date: lastDayDate,
+                    time: lastTime,
+                    status: lastStatus,
+                    timing,
+                    reason: currentReason
+                });
             }
         });
         let date_ob = new Date();
@@ -110,30 +70,40 @@ cpulogsApi.get("/", async (req, res) => {
             k = [i + 1, value1];
 
 
-            console.log(value1);
+            // console.log(value1);
             a_list.push(k);
         }
-
+        // console.log(a_list, "a_list");
 
         const table = {
             title: "\n                                             System_Logs",
             headers: ["S.no", "Date/Time"],
             rows: a_list,
         };
+
+        const downloadPath = path.join(process.env.HOME, 'Downloads', 'cpulogs+' + datetime + '.pdf');
+
+        // console.log(table, "table");
+
         doc.table(table, { width: 450 });
-        doc.pipe(fs.createWriteStream('./Cpulogs/' + 'cpulogs+' + datetime + '.pdf'));
+        // doc.pipe(fs.createWriteStream('./Cpulogs/' + 'cpulogs+' + datetime + '.pdf'));
+        // doc.pipe(fs.createWriteStream(downloadPath));
+
         doc.text('Cpu logs');
         doc.end();
-
         res.json({ message: "Cpu logs retrieved successfully!", payload: responses, user: user });
-
-
-
-
-
-
-
     })
 })
-
+// Add CORS headers
+cpulogsApi.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 export default cpulogsApi;
+
+
+
+
+
+

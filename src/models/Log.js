@@ -49,30 +49,3 @@ const Log = sequelize.define("Log", {
 
 export default Log;
 
-
-
-// // Define the Sequelize model for thor_logs table
-// const ThorLog = sequelize.define('thor_logs', {
-//   datime: {
-//     type: DataTypes.STRING,
-//     allowNull: false
-//   },
-//   jammer_on: {
-//     type: DataTypes.STRING,
-//     allowNull: false
-//   },
-//   jammer_off: {
-//     type: DataTypes.STRING,
-//     allowNull: false
-//   },
-//   voltage: {
-//     type: DataTypes.STRING,
-//     allowNull: false
-//   },
-//   diff: {
-//     type: DataTypes.STRING,
-//     allowNull: false
-//   }
-// });
-
-// Function using Sequelize for database operations

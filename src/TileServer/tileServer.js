@@ -16,7 +16,7 @@ const TileserverPage = async (req, res) => {
         const z = req.query.z;
         let imagePath = `${path.join(path.resolve(process.cwd()),'..')}/Tile_map/tile/${z}/${x}/${y}`
 
-        console.log(imagePath,"Datraaaaaaa");
+        // console.log(imagePath,"Datraaaaaaa");
         fs.readFile(imagePath, function(err, data) {
             // console.log(data,"Datraaaaaaa");
               res.writeHead(200, {'Content-Type': 'image/jpeg'})

@@ -1,18 +1,25 @@
 const options = {
-  maxZoom: 22,
+  maxZoom: 18,
   minZoom: 2,
+  doubleClickZoom: false,
+  zoomControl: false,
 };
 const map = L.map("map", options).setView(
-  [30.290276810492884, 74.98112098094168],
+  [30.95258895138585, 76.50578061482715],
   14
 );
+
+const jammerAlarm = new Audio("./assets/audio/drone_alarm.mp3");
+
 // const map = L.map("map", options).setView([30.290276810492884,74.98112098094168], 17);
 
 // Offline Map
 // const layer = new L.TileLayer('http://127.0.0.1:8000/tileserver?z={z}&x={x}&y={y}.jpeg');
 // map.addLayer(layer);
-// const googleHybrid = L.tileLayer(`http://127.0.0.1:8000/tileserver/{z}/{x}/{y}.jpeg`, { maxZoom: 17, attribution: 'Prison Jammer' });
+// const googleHybrid = L.tileLayer(`http://127.0.0.1:8000/tileserver/{z}/{x}/{y}.jpeg`, { maxZoom: 18, attribution: 'Prison Jammer' });
 // map.addLayer(googleHybrid);
+
+// Offline Map
 
 // Online Map
 const googleHybrid = L.tileLayer(
@@ -30,7 +37,7 @@ const markerGroup = L.markerClusterGroup({
 });
 
 const onJammer = L.icon({
-  iconUrl: "./assets/icon/on.png",
+  iconUrl: "./assets/icon/antenna.png",
   iconSize: [60, 60],
   iconAnchor: [50, 60],
   className: "jammer-icon",
@@ -38,7 +45,7 @@ const onJammer = L.icon({
 });
 
 const offJammer = L.icon({
-  iconUrl: "./assets/icon/off.png",
+  iconUrl: "./assets/icon/antenna.png",
   iconSize: [60, 60],
   iconAnchor: [50, 60],
   className: "jammer-icon",
@@ -50,6 +57,7 @@ const drawerSelector = document.querySelector("#drawer");
 const addJammerModalSelector = document.querySelector("#static-modal");
 const closeJammerSelector = document.querySelector("#modalClose");
 const addJammerFormSelector = document.querySelector("#jammer-form");
+const jammerAlarmSelector = document.querySelector("#jammer-alarm");
 
 const toggleDrawer = () => drawerSelector.classList.toggle("hidden");
 
@@ -165,24 +173,16 @@ async function onBlockCLick(ev) {
     jammersDivSelector.innerHTML = "";
 
     block.forEach((el, idx) => {
-      jammersDivSelector.innerHTML += `<button class="Block_Jammer_Btn h-[100px] cursor-pointer p-4 grid grid-rows-2 text-black ${
-        el.status ? "bg-green-500" : "bg-red-500"
-      } border rounded" onclick="jammerToggle(this)" data-id='${
-        el.id
-      }' data-block-id='${el.blockId}' data-address='${
-        el.ipAddress
-      }' data-port='${el.ipPort}' title='${el.name}' data-name='${
-        el.name
-      }'  data-status='${el.status}'>
+      jammersDivSelector.innerHTML += `<button class="Block_Jammer_Btn h-[100px] cursor-pointer p-4 grid grid-rows-2 text-black ${el.status ? "bg-green-500" : "bg-red-500"
+        } border rounded" onclick="jammerToggle(this)" data-id='${el.id
+        }' data-block-id='${el.blockId}' data-address='${el.ipAddress
+        }' data-port='${el.ipPort}' title='${el.name}' data-name='${el.name
+        }'  data-status='${el.status}'>
             <span class="font-bold ">J ${idx + 1}</span>
             <span class="text-sm shadow border rounded-full size-4"></span>
             <span class="text-sm shadow  rounded-full">${String(el.name)}</span>
             </button>`;
     });
-
-    jammersDivSelector
-      .querySelectorAll("button")
-      .forEach((btn) => console.log(btn));
 
     toggleDrawer();
 
@@ -204,6 +204,7 @@ async function onBlockCLick(ev) {
   }
   Toast.fire({ icon: "warning", title: "Something went wrong!" });
 }
+const voltageColor = "red";
 
 async function onBlockLoad() {
   const jammerAPI = await fetch("/api/jammer", {
@@ -244,34 +245,128 @@ async function onBlockLoad() {
   map.addLayer(markerGroup);
   map.fitBounds(markerGroup.getBounds());
 
-  if ((await jammers.length) <= 14) {
+  if ((await jammers.length) <= 10) {
     document.getElementById("drawer-close").style.display = "none";
-    // onJammerLoadOnMap();
     if (jammerAPI.status === 200) {
-      // let { jammers } = await jammerAPI.json();
       document.querySelector("#drawerTitle").innerHTML = `JAMMERS`;
-
       const jammersDivSelector = document.querySelector("#jammers-div");
       jammersDivSelector.innerHTML = "";
       jammers.forEach((el, idx) => {
-        console.log(el, "homejs 257");
         jammersDivSelector.innerHTML += `
-                <button class="Jammer-btn h-[100px] p-4 grid grid-rows-2 cursor-pointer text-black ${
-                  el.status ? "bg-green-500" : "bg-red-500"
-                } border rounded" onclick="jammerToggle(this)" data-id='${
-          el.id
-        }' data-block-id='${el.blockId}' data-address='${
-          el.ipAddress
-        }' data-port='${el.ipPort}' title='${el.name}' data-name='${
-          el.name
-        }'  data-status='${el.status}'>
+                <button class="Jammer-btn h-[100px] p-4 grid grid-rows-2 cursor-pointer text-black ${el.status ? "bg-green-500" : "bg-red-500"
+          } border rounded" onclick="jammerToggle(this)" data-id='${el.id
+          }' data-block-id='${el.blockId}' data-address='${el.ipAddress
+          }' data-port='${el.ipPort}' title='${el.name}' data-name='${el.name
+          }'  data-status='${el.status}'>
             <span class="font-bold ">J ${idx + 1}</span>
-            <span class="text-sm shadow border-4  border-double rounded-full size-4 bg-red-500" connection="f" host="${
-              el.ipAddress
-            }" id="jammer-connection"></span>
+            <span disabled class="text-sm shadow border-4  border-double rounded-full size-4 bg-red-500" connection="f" host="${el.ipAddress
+          }" id="jammer-connection"></span>
 
-            <span class="text-sm shadow rounded-full">${String(el.name)}</span>
+            <span disabled class="text-sm shadow rounded-full">${String(
+            el.name
+          )}</span>
             </button>`;
+
+        jammersDivSelector.querySelectorAll("*").forEach((btn) => {
+          btn.addEventListener("contextmenu", (e) => {
+            e.preventDefault();
+            let pcuIp = e.target.getAttribute("data-address");
+            let pcuPort = e.target.getAttribute("data-port");
+            fetch(
+              "/api/voltageandtemp?pcuIp=" + pcuIp + "&pcuPort=" + pcuPort + "",
+              { method: "GET" }
+            )
+              .then((response) => response.json())
+              .then((data) => {
+                let item = document.querySelector("#voltage-span");
+                let span = document.querySelector("#temp-span");
+                const voltage = data.payload.voltage.split(":")[1];
+                const temperature = data.payload.temperature.split(":")[1];
+                console.log(`Voltage: ${voltage}`);
+                if (voltage > 220.0) {
+                  removeAllClasses(item, "bg-");
+                  item.classList.add("bg-green-500");
+                } else if (voltage >= 200.0 && voltage < 100.0) {
+                  removeAllClasses(item, "bg-");
+                  item.classList.add("bg-yellow-500");
+                } else {
+                  console.log("Red: else is called");
+
+                  removeAllClasses(item, "bg-");
+                  item.classList.add("bg-red-500");
+                }
+                if (temperature < 60.0) {
+                  removeAllClasses(span, "bg-");
+                  span.classList.add("bg-green-500");
+                } else if (temperature <= 65.0 && temperature > 60.0) {
+                  removeAllClasses(span, "bg-");
+                  span.classList.add("bg-yellow-500");
+                } else {
+                  console.log("Red: else is called");
+                  removeAllClasses(span, "bg-");
+                  span.classList.add("bg-red-500");
+                }
+                console.log(` ${temperature}`);
+              });
+
+            // // res.json();
+            // const  payload = res.json();
+            // console.log("need this data", payload.payload);
+
+            // if (res.status === 200) {
+            //   removeAllClasses(item, "bg-");
+            //   removeAllClasses(span, "bg-");
+            //   item.classList.add("bg-green-500")
+            //   span.classList.add("bg-green-500")
+            // } else {
+            //   if (item) {
+            //     item.classList.add("bg-red-500");
+            //     span.classList.add("bg-red-500")
+            //   }
+            // }
+            // })
+            if (!e.target.getAttribute("data-status")) return;
+            const jammerName = e.target.getAttribute("data-name");
+            const popup = document.createElement("div");
+            popup.id = "popup";
+            popup.innerHTML = `
+                            <table>
+                                <tr>
+                                <td scope="col" class="px-3 py-1 text-right font-bold text-black">Name</td>
+                                <td scope="col" class="px-3 py-1 text-left font-bold text-black">${jammerName}</td>
+                                </tr>
+                                <tr>
+                                <td scope="col" class="px-3 py-1 text-right font-bold text-black">Temp :</td>
+                                <td class="px-3 py-1 text-left" ><span id ="temp-span" class=" flex text-sm shadow border-4   border-double rounded-full size-4 bg-red-500" connection="f" " id="jammer-connection"></span></td>
+                                </tr>
+                                <tr>
+                                <td scope="col" class="px-3 py-1 text-right font-bold text-black">Volt :</td>
+                                <td scope="col" class="px-3 py-1 text-left"><span id ="voltage-span" class=' flex text-sm shadow border-4   border-double rounded-full size-4 bg-red-500' connection="f" " id="jammer-connection"></span></td>
+                                </tr>
+                            </table>
+              `;
+            popup.style.position = "absolute";
+            popup.style.zIndex = "9999";
+            popup.style.padding = "10px";
+            popup.style.border = "1px solid black";
+            popup.style.background = "white";
+            popup.style.top = e.clientY + "px";
+            popup.style.left = e.clientX + "px";
+            const mouseX = e.clientX;
+            const mouseY = e.clientY;
+            const rect = e.target.getBoundingClientRect();
+            popup.style.top = `${rect.top + rect.height}px`;
+            popup.style.left = `${rect.left}px`;
+            popup.addEventListener("click", () => {
+              popup.remove();
+            });
+            if (document.getElementById("popup")) {
+              document.getElementById("popup").remove();
+              document.body.appendChild(popup);
+            }
+            document.body.appendChild(popup);
+          });
+        });
       });
 
       jammersDivSelector.querySelectorAll("button");
@@ -306,7 +401,6 @@ async function onBlockLoad() {
         "Content-Type": "application/json",
       },
     });
-
     if (blocksAPI.status === 200) {
       const { payload } = await blocksAPI.json();
 
@@ -314,13 +408,10 @@ async function onBlockLoad() {
       blocksDivSelector.innerHTML = "";
       let BlockStatus = false;
       payload.forEach((block, i) => {
-        blocksDivSelector.innerHTML += `<button class="block-btn relative cursor-pointer ${
-          BlockStatus ? "bg-green-500" : "bg-red-500"
-        } border text-center font-bold text-2xl text-black p-6 h-[100px] rounded" onclick="onBlockCLick(this)" blockId="${
-          block.blockId
-        }" data-status='${BlockStatus}' title="Jammer Block">B ${
-          block.blockId
-        }</button>`;
+        blocksDivSelector.innerHTML += `< button class="block-btn relative cursor-pointer ${BlockStatus ? "bg - green - 500" : "bg - red - 500"
+          } border text - center font - bold text - 2xl text - black p - 6 h - [100px] rounded" onclick="onBlockCLick(this)" blockId="${block.blockId
+          }" data-status='${BlockStatus}' title="Jammer Block">B ${block.blockId
+          }</button > `;
       });
       return;
     }
@@ -361,6 +452,10 @@ async function onFormSubmit(ev) {
 }
 
 async function initial() {
+  const homePage = document.querySelector("#home-page");
+  if (homePage) {
+    console.log("home : ", homePage);
+  }
   // onJammerLoadOnMap();
   await onBlockLoad();
   setInterval(checkPingConnection, 2000);
@@ -427,7 +522,7 @@ async function checkBlockStatusByid(id) {
     },
   };
 
-  const get = await fetch(`/api/jammer/block?id=${id}`, {
+  const get = await fetch(`/ api / jammer / block ? id = ${id}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -455,7 +550,35 @@ async function checkPingConnection() {
   if (service.status === 200) {
     const { payload } = await service.json();
 
-    console.log(payload, "payload");
+    const isJammersConnectionLost = payload.filter((item) => !item.alive);
+    if (isJammersConnectionLost.length) {
+      Toastify({
+        text: `<div>
+                <strong>Jammer Connection Lost!!!</strong>
+                <p style="margin: 0;" class="text-base">Jammer Name: ${isJammersConnectionLost.map(item => item.jammerName).join(",")}</p>
+              </div>`,
+        duration: 10000,
+        newWindow: true,
+        position: "center",
+        gravity: "top",
+        stopOnFocus: true,
+        close: false,
+        escapeMarkup: false,
+        style: {
+          color: "black",
+          fontWeight: "bold",
+          fontSize: "32px",
+          border: "1px solid #FEEC6F",
+          borderRadius: "10px",
+          background: "rgb(255, 77, 77)",
+        },
+      }).showToast();
+      jammerAlarm.play().catch((error) => {
+        console.log("Error while play jammer alarm");
+      });
+    } else {
+      jammerAlarm.pause();
+    }
 
     localStorage.setItem("ping", JSON.stringify(payload));
     try {
@@ -473,15 +596,7 @@ async function checkPingConnection() {
 
             let isConnection = info.some((item) => item.alive === false);
 
-            console.log(isConnection, "always");
-
-            console.log(info, "Infoo");
-
             if (!!isDivExists) blockSelector.removeChild(isDivExists);
-            console.log(
-              document.querySelectorAll(".Block_Jammer_Btn"),
-              "JAmmers Div"
-            );
 
             if (isConnection) {
               let cout = 0;
@@ -501,14 +616,12 @@ async function checkPingConnection() {
               return;
             } else {
               const item = blockSelector.querySelector("div");
-              if(item){
+              if (item) {
                 Number(item.dataset.status)
-                ? item.classList.add("bg-green-500")
-                : item.classList.add("bg-red-500");
-              item.classList.remove("bg-yellow-500");
+                  ? item.classList.add("bg-green-500")
+                  : item.classList.add("bg-red-500");
+                item.classList.remove("bg-yellow-500");
               }
-
-              
             }
             await checkBlockStatusByid(blockId);
             return;

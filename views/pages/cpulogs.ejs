@@ -1,0 +1,60 @@
+<%- include('../partial/header'); %>
+
+<div class="filter-div w-3/4 m-auto mt-2">
+  <button
+    type="button"
+    id="logs-download"
+    onclick="downloadTableAsExcel('logs-table')"
+  >
+    <img
+      class="h-8 w-auto invert py-1"
+      src="./assets/icon/download.png"
+      alt="reload"
+      srcset=""
+    />
+  </button>
+</div>
+
+<div class="w-3/4 m-auto mt-6 overflow-auto h-[91vh]">
+  <table
+    id="logs-table"
+    class="w-full text-white border-slate-500 divide-y divide-gray-300 bg-sky-700 text-xl"
+  >
+    <thead class="sticky top-0 bg-sky-800">
+      <tr class="divide-x divide-gray-200">
+        <th scope="col" class="py-2 text-yellow-50">S.no</th>
+        <th scope="col" class="py-2 text-yellow-50">Date/Time</th>
+      </tr>
+    </thead>
+    <tbody id="logs-table-body" class="divide-y overflow-y-auto w-full"></tbody>
+  </table>
+</div>
+
+<script>
+  fetch("/api/cpulogs")
+    .then((response) => response.json())
+    .then((data) => {
+      
+      // console.log(data);
+
+      const logsTableBody = document.getElementById("logs-table-body");
+      logsTableBody.innerHTML = "";
+      data.payload.forEach((log, index) => {
+        const row = document.createElement("tr");
+        row.classList.add(
+          "text-center",
+          "text-xl",
+          "divide-x",
+          "divide-gray-200"
+        );
+
+        row.innerHTML = `
+        <td scope="col" class="py-2">${index + 1}</td>
+        <td scope="col" class="py-2">${log.timing}${log.reason}</td>
+      `;
+        logsTableBody.appendChild(row);
+      });
+    })
+    .catch((error) => console.error(error));
+</script>
+<%- include('../partial/footer'); %>

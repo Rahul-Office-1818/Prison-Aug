@@ -1,140 +1,208 @@
 <%- include('../partial/header'); %>
 
-    <div id="setting">
-        <div class="w-full">
-            <div class="w-full m-auto mt-6 rounded">
-                <div id="setting-div" class="w-3/4 m-auto mt-6 overflow-auto">
-                    <table id="jammer-table"
-                        class="w-full border-slate-500 divide-y divide-gray-300 text-white bg-sky-700">
-                        <thead class="sticky top-0 bg-sky-800">
-                            <tr class="divide-x divide-gray-200 bg-sky-800 p-3">
-                                <th scope="col">S.N.</th>
-                                <th scope="col">JAMMER NAME</th>
-                                <th scope="col">Block Id</th>
-                                <th scope="col">IP ADDRESS </th>
-                                <th scope="col">PORT</th>
-                                <th scope="col">Latitude</th>
-                                <th scope="col">Longitude</th>
-                                <th scope="col">
-                                    <button type="button" name="add-jammer-btn" title="Add jammer" id="add-jammer"
-                                        class="bg-gray-900 py-1 px-9 m-2 rounded-md hover:bg-gray-700">
-                                        <i class="fa-solid fa-plus"></i>
-                                    </button>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y overflow-y-auto  w-full">
-
-                            <!-- Table row dummy row data -->
-                            <!-- <tr class="divide-x text-center hover:bg-sky-600 hover:divide-y">
-                                    <td scope="col" class="text-lg py-2">${idx + 1}</td>
-                                    <td scope="col" class="text-lg py-2">${el.name}</td>
-                                    <td scope="col" class="text-lg py-2">${el.ip}</td>
-                                    <td scope="col" class="text-lg py-2">${el.port}</td>
-                                    <td scope="col" class="text-lg py-2 flex justify-center ">
-                                        <button type="button" name="edit-jammer-btn" title="edit jammer" class="bg-green-700 py-2 px-3 me-1 rounded-md hover:bg-gray-700 edit-jammer" onclick="onEditJammerClick('edit,${el._id}')">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </button>
-                                        <button type="button" name="delete-jammer-btn" title="Delete jammer" class="bg-red-700 py-2 px-3 ml-1 rounded-md hover:bg-gray-700 delete-jammer" onclick="onDelJammerClick('del,${el._id}')"> 
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr> -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-
-        </div>
-        <!-- Main modal -->
-        <div id="static-modal"
-            class="hidden absolute top-0 botton-0 w-full transition-all ease-in-out duration-1000 delay-500 ">
-            <div class="flex flex-col items-center justify-center backdrop-blur px-6 py-8 mx-auto md:h-screen lg:py-0">
-                <span class="flex items-center mb-6 text-2xl font-semibold text-white">
-                    <img class="w-8 h-8 mr-2 invert" src="./assets/icon/project-icon.png" alt="logo">
-                    <span id="model-title"></span>
-                </span>
-                <div class="w-full bg-gray-100 bg-opacity-50 rounded-lg shadow  md:mt-0 sm:max-w-md xl:p-0">
-                    <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-                        <button type="button" id="modalClose"
-                            class="text-gray-900 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto float-right"
-                            title="Close" data-modal-hide="static-modal">
-                            <i class="fa-solid fa-xmark text-lg"></i>
-                        </button>
-
-                        <form id="jammer-form" class="space-y-4 md:space-y-6" autocomplete="off">
-                            <input class="hidden" id="jammerId" />
-                            <div>
-                                <label for="name" class="block mb-2 text-sm font-medium text-gray-900">Name</label>
-                                <input type="text" name="name" id="name"
-                                    class="bg-gray-50 bg-opacity-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder:text-gray-600"
-                                    placeholder="jammer name..." autocomplete="" required>
-                            </div>
-                            <div>
-                                <label for="blockId" class="block mb-2 text-sm font-medium text-gray-900">Block</label>
-                                <select id="blockId"
-                                    class="bg-gray-50 bg-opacity-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder:text-gray-600"
-                                    name="blockId">
-                                    <option class="font-bold" selected>Choose a block</option>
-                                    <% for (let i=1; i <=10; i++ ) { %>
-                                        <option class="font-bold" value="<%= i%>">Block <%= i%>
-                                        </option>
-                                        <% } %>
-                                </select>
-                            </div>
-
-
-                            <div class="grid gap-6 mb-6 md:grid-cols-2">
-                                <div>
-                                    <label for="address" class="block mb-2 text-sm font-medium text-gray-900">IP
-                                        Address</label>
-                                    <input type="text" name="ipAddress" id="ipAddress"
-                                        class="bg-gray-50 bg-opacity-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder:text-gray-600"
-                                        placeholder="ip address..." required>
-                                    <p class="hidden text-sm text-red-700 text-center" id="ipError">Enter validate IP
-                                        Address.</p>
-                                </div>
-                                <div>
-                                    <label for="ipPort"
-                                        class="block mb-2 text-sm font-medium text-gray-900">Port</label>
-                                    <input type="text" name="ipPort" id="ipPort"
-                                        class="bg-gray-50 bg-opacity-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder:text-gray-600"
-                                        placeholder="ip port..." required>
-                                    <p class="hidden text-sm text-red-700 text-center" id="portError">Enter validate IP
-                                        Port.</p>
-                                </div>
-                                <div>
-                                    <label for="lat"
-                                        class="block mb-2 text-sm font-medium text-gray-900">Latitude</label>
-                                    <input type="text" name="lat" id="lat"
-                                        class="bg-gray-50 bg-opacity-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder:text-gray-600"
-                                        placeholder="latitude..." required>
-                                    <p class="hidden text-sm text-red-700 text-center" id="latError">Enter validate
-                                        latitude.</p>
-                                </div>
-                                <div>
-                                    <label for="lng"
-                                        class="block mb-2 text-sm font-medium text-gray-900">Longitude</label>
-                                    <input type="text" name="lng" id="lng"
-                                        class="bg-gray-50 bg-opacity-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder:text-gray-600"
-                                        placeholder="longitude..." required>
-                                    <p class="hidden text-sm text-red-700 text-center" id="lngError">Enter validate
-                                        longitude.</p>
-                                </div>
-                            </div>
-
-
-                            <button type="submit"
-                                class="w-full text-black bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Save</button>
-
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div id="setting">
+  <div class="w-full">
+    <div class="w-full m-auto mt-6 rounded">
+      <div id="setting-div" class="m-auto overflow-auto">
+        <table
+          id="jammer-table"
+          class="w-full border-slate-500 divide-y divide-gray-300 text-white"
+        >
+          <thead class="sticky top-0">
+            <tr class="p-3">
+              <th scope="col">S.N.</th>
+              <th scope="col">JAMMER NAME</th>
+              <th scope="col">Block Id</th>
+              <th scope="col">IP ADDRESS</th>
+              <th scope="col">PORT</th>
+              <th scope="col">Latitude</th>
+              <th scope="col">Longitude</th>
+              <th scope="col">
+                <button
+                  type="button"
+                  name="add-jammer-btn"
+                  title="Add jammer"
+                  id="add-jammer"
+                  class="bg-gray-900 py-1 px-9 m-2 rounded-md"
+                >
+                  <i class="fa-solid fa-plus"></i>
+                </button>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="divide-y overflow-y-auto w-full"></tbody>
+        </table>
+      </div>
     </div>
+  </div>
+  <!-- Main modal -->
 
-    <script src="./assets/js/setting.js"></script>
+  <div
+    id="static-modal"
+    class="hidden absolute top-0 botton-0 w-full transition-all ease-in-out duration-1000 delay-500"
+  >
+    <div
+      class="flex flex-col items-center justify-center backdrop-blur px-6 py-8 mx-auto md:h-screen lg:py-0"
+    >
+      <span class="flex items-center mb-6 text-2xl font-semibold text-white">
+        <img
+          class="w-8 h-8 mr-2 invert"
+          src="./assets/icon/project-icon.png"
+          alt="logo"
+        />
+        <span id="model-title"></span>
+      </span>
+      <div
+        class="w-full bg-gray-100 bg-opacity-50 rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0"
+      >
+        <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+          <button
+            type="button"
+            id="modalClose"
+            class="text-gray-900 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto float-right"
+            title="Close"
+            data-modal-hide="static-modal"
+          >
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
 
-    <%- include('../partial/footer'); %>
+          <form
+            id="jammer-form"
+            class="space-y-4 md:space-y-6"
+            autocomplete="off"
+          >
+            <input class="hidden" id="jammerId" />
+            <div>
+              <label
+                for="name"
+                class="block mb-2 text-sm font-medium text-gray-900"
+                >Name</label
+              >
+              <input
+                type="text"
+                name="name"
+                id="name"
+                class="bg-gray-50 bg-opacity-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder:text-gray-600"
+                placeholder="jammer name..."
+                autocomplete=""
+                required
+              />
+            </div>
+            <div>
+              <label
+                for="blockId"
+                class="block mb-2 text-sm font-medium text-gray-900"
+                >Block</label
+              >
+              <select
+                id="blockId"
+                class="bg-gray-50 bg-opacity-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder:text-gray-600"
+                name="blockId"
+              >
+                <option class="font-bold" selected>Choose a block</option>
+                <% for (let i=1; i <=10; i++ ) { %>
+                <option class="font-bold" value="<%= i%>">Block <%= i%></option>
+                <% } %>
+              </select>
+            </div>
+
+            <div class="grid gap-6 mb-6 md:grid-cols-2">
+              <div>
+                <label
+                  for="address"
+                  class="block mb-2 text-sm font-medium text-gray-900"
+                  >IP Address</label
+                >
+                <input
+                  type="text"
+                  name="ipAddress"
+                  id="ipAddress"
+                  class="bg-gray-50 bg-opacity-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder:text-gray-600"
+                  placeholder="ip address..."
+                  required
+                />
+                <p class="hidden text-sm text-red-700 text-center" id="ipError">
+                  Enter validate IP Address.
+                </p>
+              </div>
+              <div>
+                <label
+                  for="ipPort"
+                  class="block mb-2 text-sm font-medium text-gray-900"
+                  >Port</label
+                >
+                <input
+                  type="text"
+                  name="ipPort"
+                  id="ipPort"
+                  class="bg-gray-50 bg-opacity-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder:text-gray-600"
+                  placeholder="ip port..."
+                  required
+                />
+                <p
+                  class="hidden text-sm text-red-700 text-center"
+                  id="portError"
+                >
+                  Enter validate IP Port.
+                </p>
+              </div>
+              <div>
+                <label
+                  for="lat"
+                  class="block mb-2 text-sm font-medium text-gray-900"
+                  >Latitude</label
+                >
+                <input
+                  type="text"
+                  name="lat"
+                  id="lat"
+                  class="bg-gray-50 bg-opacity-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder:text-gray-600"
+                  placeholder="latitude..."
+                  required
+                />
+                <p
+                  class="hidden text-sm text-red-700 text-center"
+                  id="latError"
+                >
+                  Enter validate latitude.
+                </p>
+              </div>
+              <div>
+                <label
+                  for="lng"
+                  class="block mb-2 text-sm font-medium text-gray-900"
+                  >Longitude</label
+                >
+                <input
+                  type="text"
+                  name="lng"
+                  id="lng"
+                  class="bg-gray-50 bg-opacity-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder:text-gray-600"
+                  placeholder="longitude..."
+                  required
+                />
+                <p
+                  class="hidden text-sm text-red-700 text-center"
+                  id="lngError"
+                >
+                  Enter validate longitude.
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              class="w-full text-black bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            >
+              Save
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="./assets/js/setting.js"></script>
+
+<%- include('../partial/footer'); %>
