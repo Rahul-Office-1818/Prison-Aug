@@ -25,28 +25,17 @@ cpulogsApi.get("/", async (req, res) => {
         const user = os.userInfo().username;
         const output = stdout;
         const lines = output.split('\n');
-        const regex = /([A-Za-z]{3} [A-Za-z]{3} \d{1,2}) (\d{2}:\d{2}) - (down|crash)/;
-        let lastDayDate = '';
-        let lastTime = '';
-        let lastStatus = '';
+
         let currentReason = '';
         lines.forEach(line => {
             if (line.startsWith(os.userInfo().username)) {
                 const parts = line.split(/\s+/);
                 currentReason = parts.slice(3).join(' ');
-                const match = line.match(regex);
-                if (match) {
-                    lastDayDate = match[1];
-                    lastTime = match[2];
-                    lastStatus = match[3];
-                }
+
             } else if (line.startsWith('reboot')) {
                 const parts = line.split(/\s+/);
                 const timing = parts[parts.length - 3] + ' ' + parts[parts.length - 2] + ' ' + parts[parts.length - 1];
                 responses.push({
-                    day_date: lastDayDate,
-                    time: lastTime,
-                    status: lastStatus,
                     timing,
                     reason: currentReason
                 });

@@ -1,48 +1,3 @@
-<%- include('../partial/header'); %>
-
-<div class="filter-div w-11/12 m-auto mt-2">
-  <button
-    type="button"
-    id="logs-download"
-    onclick="downloadTableAsExcel('logs-table')"
-  >
-    <div class="flex justify-center items-center gap-3 px-2">
-      <p>Download</p>
-      <img
-        class="h-8 w-auto invert py-1"
-        src="./assets/icon/download.png"
-        alt="reload"
-        srcset=""
-      />
-    </div>
-  </button>
-</div>
-
-<div class="w-full h-dvh" id="cpulogs">
-  <div class="cpulogs m-auto mt-6 overflow-auto">
-    <table
-      id="logs-table"
-      class="w-full text-white border-slate-500 divide-y divide-gray-300 text-xl"
-    >
-      <thead class="sticky top-0 bg-black">
-        <tr class="divide-gray-200">
-          <th scope="col" class="py-2 text-yellow-50">S.no</th>
-          <!-- <th scope="col" class="py-2 text-yellow-50">Date/Time</th> -->
-          <th scope="col" class="py-2 text-yellow-50">Start Time</th>
-          <th scope="col" class="py-2 text-yellow-50">End Time</th>
-          <th scope="col" class="py-2 text-yellow-50">Date</th>
-          <th scope="col" class="py-2 text-yellow-50">Total Time</th>
-          <th scope="col" class="py-2 text-yellow-50">Reason</th>
-        </tr>
-      </thead>
-      <tbody id="logs-table-body" class="divide-y "></tbody>
-    </table>
-  </div>
-</div>
-
-<!--  - 13:13 (2+03:01), screen Thu Sep 19 10:12 - 10:12 (00:00)
-        - 11:31 (12+22:17), screen Sat Sep 21 13:13 - down (12+22:17)
-        - 10:38 (00:41), screen Wed Nov 20 09:56 - down (00:41) -->
 <script>
   fetch("/api/cpulogs")
     .then((response) => response.json())
@@ -67,17 +22,12 @@
       }
 
       data.payload.forEach((log, index) => {
-        // Extract data using regex for the timing format
+        // Extract data using regex
         const timingMatch = log.timing.match(
           /- (\d{2}:\d{2}) \(([\d\+:\d{2}]+)\)/ // Match time like "18:08" and total_running_time
         );
-
-        // Regex to match the 3 types of reason formats
-        const reasonMatch1 = log.reason.match(
-          /screen (.*) (\d{2}:\d{2}) - (down|crash) \(([\d\+:\d{2}]+)\)/ // Match "down" or "crash"
-        );
-        const reasonMatch2 = log.reason.match(
-          /screen (.*) (\d{2}:\d{2}) - (\d{2}:\d{2}) \(([\d\+:\d{2}]+)\)/ // Match same start and end time
+        const reasonMatch = log.reason.match(
+          /screen (\w{3} \w{3} \d{2}) (\d{2}:\d{2}) - (\d{2}:\d{2}) \(([\d\+:\d{2}]+)\)/ // Match the new reason format "screen Tue Nov 12 14:26 - 14:26 (00:00)"
         );
 
         let end_time = "";
@@ -101,30 +51,34 @@
           }
           end_time = "still running"; // For "still running" entries
           total_running_time = "still running"; // For "still running" entries
-        } else if (timingMatch && reasonMatch1) {
-          // If it's the first type of reason (down/crash)
+        } else if (timingMatch && reasonMatch) {
+          // If it's not "still running", extract data as usual
           end_time = timingMatch[1]; // Extracted end_time
           total_running_time = convertDuration(timingMatch[2]); // Convert "1+08:26" or "00:15" etc.
-          date = reasonMatch1[1]; // Extracted date
-          start_time = reasonMatch1[2]; // Extracted start_time
-          reason = reasonMatch1[3]; // Extracted reason ("down" or "crash")
-        } else if (timingMatch && reasonMatch2) {
-          // If it's the second type of reason (same start and end time)
-          end_time = reasonMatch2[2]; // Extracted same end time
-          total_running_time = convertDuration(timingMatch[2]); // Convert "00:00" time
-          date = reasonMatch2[1]; // Extracted date
-          start_time = reasonMatch2[2]; // Extracted start time (same as end time)
-          reason = " Not Sure"; // Indicating the times are the same
+          date = reasonMatch[1]; // Extracted date
+          start_time = reasonMatch[2]; // Extracted start_time
+          reason = reasonMatch[3]; // Extracted reason
+
+          console.log("end_time:", end_time);
+          console.log("total_running_time:", total_running_time);
+          console.log("date:", date);
+          console.log("start_time:", start_time);
+          console.log("reason:", reason);
         }
 
         // Create a new table row and populate it with data
         const row = document.createElement("tr");
-        row.classList.add("text-center", "text-xl", "divide-gray-200");
+        row.classList.add(
+          "text-center",
+          "text-xl",
+          "divide-x",
+          "divide-gray-200"
+        );
 
         // Populate the row with data
-        // <td scope="col" class="py-2">${log.timing}, ${log.reason}</td>
         row.innerHTML = `
                   <td scope="col" class="py-2">${index + 1}</td>
+                  <td scope="col" class="py-2">${log.timing}, ${log.reason}</td>
                   <td scope="col" class="py-2">${start_time}</td>
                   <td scope="col" class="py-2">${end_time}</td>
                   <td scope="col" class="py-2">${date}</td>
@@ -138,5 +92,3 @@
     })
     .catch((error) => console.error(error));
 </script>
-
-<%- include('../partial/footer'); %>

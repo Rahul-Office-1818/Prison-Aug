@@ -38,6 +38,27 @@ body {
     width: 90%;
 }
 
+#logs-download{
+    color: #fff;
+    border: 1px solid #fff;
+    margin-left: 90%;
+}
+#cpulogs{
+    height:100vh;
+}
+
+.cpulogs{
+    height:80vh;
+    margin-top: 50px;
+    background-color: rgba(0, 0, 0, 0.6);
+    width: 90%;
+}
+
+
+tbody{
+width: 90% !important;
+
+}
 
 .leaflet-control-attribution{
     a{
