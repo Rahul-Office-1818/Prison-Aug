@@ -1,11 +1,8 @@
 <%- include('../partial/header'); %>
 
 <div class="filter-div w-11/12 m-auto mt-2">
-  <button
-    type="button"
-    id="logs-download"
-    onclick="downloadTableAsExcel('logs-table')"
-  >
+  <!-- <button type="button" id="logs-download" onclick="downloadTableAsExcel('logs-table')"> -->
+    <button type="button" id="logs-download" onclick="download_toggle()">
     <div class="flex justify-center items-center gap-3 px-2">
       <p>Download</p>
       <img
@@ -15,7 +12,25 @@
         srcset=""
       />
     </div>
+    
   </button>
+</div>
+<div id="selectOption" class="disable-bg" onclick="download_toggle();">
+  <div class="downlaod_choice">
+      <div class="content">
+          <div class="divimg">
+              <button id="excel_button" onclick='downloadTableAsExcel("RADAR History","table_data",)'>
+                  <i class="fa dicon">&#xf1c3;</i>
+              </button>
+
+              <button id="pdf_button" onclick='downloadTableAsPDF("RADAR History","table_data",10);'>
+                  <i class="fa dicon">&#xf1c1;</i>
+              </button>
+              <!-- <div id="cr" onclick="download_toggle();" class="fa" style="cursor: pointer;">&#xf00d;</div> -->
+          </div>
+      </div>
+  </div>
+
 </div>
 
 <div class="w-full h-dvh" id="cpulogs">
@@ -29,8 +44,9 @@
           <th scope="col" class="py-2 text-yellow-50">S.no</th>
           <!-- <th scope="col" class="py-2 text-yellow-50">Date/Time</th> -->
           <th scope="col" class="py-2 text-yellow-50">Start Time</th>
+          <th scope="col" class="py-2 text-yellow-50">Start Date</th>
           <th scope="col" class="py-2 text-yellow-50">End Time</th>
-          <th scope="col" class="py-2 text-yellow-50">Date</th>
+          <th scope="col" class="py-2 text-yellow-50">End Date</th>
           <th scope="col" class="py-2 text-yellow-50">Total Time</th>
           <th scope="col" class="py-2 text-yellow-50">Reason</th>
         </tr>
@@ -82,7 +98,7 @@
 
         let end_time = "";
         let total_running_time = "";
-        let date = "";
+        let date = "";  
         let start_time = "";
         let reason = "";
 
@@ -117,6 +133,33 @@
           reason = " Not Sure"; // Indicating the times are the same
         }
 
+        // Calculate end date
+        let end_date = date; // Default in case calculation fails
+
+        if (start_time && date && total_running_time !== "still running") {
+          const [dayName, month, day] = date.split(" ");
+          const currentYear = new Date().getFullYear(); // You can hardcode the year if needed
+          const startDateTime = new Date(`${month} ${day} ${currentYear} ${start_time}`);
+
+          const timeParts = total_running_time.match(/(?:(\d+) D, )?(\d+) H, (\d+) M/);
+          if (timeParts) {
+            const days = parseInt(timeParts[1]) || 0;
+            const hours = parseInt(timeParts[2]);
+            const minutes = parseInt(timeParts[3]);
+
+            // Add time to the start date
+            startDateTime.setMinutes(startDateTime.getMinutes() + minutes);
+            startDateTime.setHours(startDateTime.getHours() + hours);
+            startDateTime.setDate(startDateTime.getDate() + days);
+
+            // Format the new end date
+            const endDayName = startDateTime.toLocaleString('en-US', { weekday: 'short' });
+            const endMonth = startDateTime.toLocaleString('en-US', { month: 'short' });
+            const endDay = String(startDateTime.getDate()).padStart(2, '0');
+            end_date = `${endDayName} ${endMonth} ${endDay}`;
+          }
+        }
+
         // Create a new table row and populate it with data
         const row = document.createElement("tr");
         row.classList.add("text-center", "text-xl", "divide-gray-200");
@@ -126,8 +169,9 @@
         row.innerHTML = `
                   <td scope="col" class="py-2">${index + 1}</td>
                   <td scope="col" class="py-2">${start_time}</td>
-                  <td scope="col" class="py-2">${end_time}</td>
                   <td scope="col" class="py-2">${date}</td>
+                  <td scope="col" class="py-2">${end_time}</td>
+                  <td scope="col" class="py-2">${end_date}</td>
                   <td scope="col" class="py-2">${total_running_time}</td>
                   <td scope="col" class="py-2">${reason}</td>
                 `;
@@ -137,6 +181,12 @@
       });
     })
     .catch((error) => console.error(error));
+</script>
+<script>
+  function download_toggle() {
+      $("#selectOption").toggle();
+  }
+
 </script>
 
 <%- include('../partial/footer'); %>

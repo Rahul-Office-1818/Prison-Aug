@@ -245,7 +245,9 @@ async function onBlockLoad() {
   map.addLayer(markerGroup);
   map.fitBounds(markerGroup.getBounds());
 
-  if ((await jammers.length) <= 10) {
+  
+  // if ((await jammers.length) <= 10) { this is chnaged by Rahul at 9th April
+  if ((await jammers.length) <= 150) {
     document.getElementById("drawer-close").style.display = "none";
     if (jammerAPI.status === 200) {
       document.querySelector("#drawerTitle").innerHTML = `JAMMERS`;
@@ -307,7 +309,7 @@ async function onBlockLoad() {
                   span.classList.add("bg-red-500");
                 }
                 console.log(` ${temperature}`);
-              });
+              }); 
 
             // // res.json();
             // const  payload = res.json();

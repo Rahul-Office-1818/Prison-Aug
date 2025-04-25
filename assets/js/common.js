@@ -87,31 +87,61 @@ async function onLoad(ev) {
 
 
 }
+
+
+// Rahul - Update this code to change the format of the Excel 
+
 function downloadTableAsExcel(tableName) {
     var currentdate = new Date();
     var datetime =
-        currentdate.getDate() +
+        String(currentdate.getDate()).padStart(2, '0') +
         "/" +
-        (currentdate.getMonth() + 1) +
+        String(currentdate.getMonth() + 1).padStart(2, '0') +
         "/" +
         currentdate.getFullYear() +
         " " +
-        currentdate.getHours() +
+        String(currentdate.getHours()).padStart(2, '0') +
         ":" +
-        currentdate.getMinutes() +
+        String(currentdate.getMinutes()).padStart(2, '0') +
         ":" +
-        currentdate.getSeconds();
+        String(currentdate.getSeconds()).padStart(2, '0');
 
-    console.log(datetime);
     var filename = "Jammer_LoGs" + "-" + datetime + ".xlsx";
-    TableToExcel.convert(document.getElementById(`${tableName}`), {
+
+    const table = document.getElementById(tableName);
+
+    // Create a new thead section with custom info
+    const infoHeader = document.createElement("thead");
+    infoHeader.innerHTML = `
+        <tr><th colspan="7" style="text-align:left;"><strong>COMPANY:- BHARAT AERO</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Date - ${datetime}</strong></th></tr>
+        <tr><th colspan="7">******************************************************************************************************************</th></tr>
+        <tr><th colspan="7" style="text-align:left;"><strong>Disclaimer-</strong></th></tr>
+        <tr><th colspan="7" style="text-align:left;">* During the Jamming Operations, The Radar will not be in a Functional State.</th></tr>
+        <tr><th colspan="7" style="text-align:left;">* Due to technological limitations, passive radars only show the directional data with an accuracy up to 3 degrees and the Passive Radar also cannot tell the accurate height and distance of the detected object.</th></tr>
+        <tr><th colspan="7" style="text-align:left;">* Can detect drones only if their signature is pre-fed and available in the system software. It also has a permanent Blind Spot up-to 200 meters radius from the Radar, so it should not be tested under 200 meters range.</th></tr>
+        <tr><th colspan="7" style="text-align:left;">* The Radar System should follow 0-Degree Alignment/North Alignment by using an arrow pointing towards North.</th></tr>
+        <tr><th colspan="7">******************************************************************************************************************</th></tr>
+    `;
+
+    // Insert it before the actual <thead>
+    const originalThead = table.querySelector("thead");
+    table.insertBefore(infoHeader, originalThead);
+
+    // Export the table
+    TableToExcel.convert(table, {
         name: filename,
         sheet: {
-            name: "sheet 1",
+            name: "Jammer Logs",
             content: "BHARAT AERO"
         },
     });
+
+    // Clean up: remove the inserted custom thead
+    infoHeader.remove();
 }
+
 // document.querySelector("#logs-download").addEventListener("click", downloadTableAsExcel);
 document.querySelector("#logout-btn").addEventListener("click", onLogoutClick);
 window.addEventListener("load", onLoad);
+
+

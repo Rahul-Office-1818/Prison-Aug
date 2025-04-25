@@ -24,13 +24,129 @@ body {
 }
 
 
+.block-option{
+    height: 35px ;
+    margin-top: 20px;
+}
 
+/* This style for History Page  */
+.all_option{
+    height: 60px;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1%;
+}
+.filter-section ,.download_Powerfail{
+  
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.download_Powerfail{
+    display: flex;
+    justify-content: center;
+}
+
+.button-width{
+    width: 30px ;
+    height: 35px ;
+
+}
+
+.block-status{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 5%;
+    width: 200px;
+   
+}
+
+
+/* Here close the Style of the History Page  */
+
+/* Download popup code  start */
+.disable-bg {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5);
+    height: 100%;
+    width: 100%;
+    z-index: 1000;
+  }
+  .downlaod_choice {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #1b1a1a;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    z-index: 1500;
+    height: 15%;
+    width: 20%;
+  }
+  .divimg {
+  padding: 10px 10px;
+  background-color: transparent;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-around;  
+  column-gap: 20px;  
+  align-items: center;
+}
+
+
+
+#excel_button {
+    float: left;
+    background: none;
+    color: inherit;
+    border: none;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+    width: 110px;
+    padding: 10px 0px;
+    background-color: rgba(0, 0, 0, 0.9);
+    border-radius: 5px;
+  }
+  .dicon{
+      font-size: 75px;
+      color: green;
+  }
+
+  #pdf_button {
+    background: none;
+    color: inherit;
+    border: none;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+    width: 110px;
+    padding: 10px 0px;
+    background-color: rgba(0, 0, 0, 0.9);
+    border-radius: 5px;
+    
+  }
+  
+
+/* Download Popup code end  */
 
 #logs-div {
     height: 70vh;
 }
 
-#setting-div {
+#setting-div{
     height:85vh;
     margin-top: 50px;
     background-color: rgba(0, 0, 0, 0.6);
@@ -38,10 +154,14 @@ body {
     width: 90%;
 }
 
+#logs-table{
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
 #logs-download{
     color: #fff;
     border: 1px solid #fff;
-    margin-left: 90%;
+    
 }
 #cpulogs{
     height:100vh;

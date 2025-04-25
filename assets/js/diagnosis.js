@@ -120,7 +120,8 @@ async function onJammerClick(ev) {
     const voltageService = await fetch('/api/automation/smpsvoltage?' + voltageQuery, { method: "GET", headers: { 'Content-Type': 'application/json' } });
 
 
-    if (service.status === 200 && voltageService.status === 200) {
+    // if (service.status === 200 && voltageService.status === 200) {
+        if (service.status === 500 && voltageService.status === 500) {
         const { payload } = await service.json();
         const isAll = payload.every((ele) => ele === true);
 
