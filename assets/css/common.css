@@ -65,7 +65,6 @@ body {
    
 }
 
-
 /* Here close the Style of the History Page  */
 
 /* Download popup code  start */
@@ -142,6 +141,17 @@ body {
 
 /* Download Popup code end  */
 
+
+/* Diagnosis Page style start */
+
+.volt-temp{
+    bottom: 0px;
+    height: 100px;
+}
+
+
+/* Diagnosis Page style End  */
+
 #logs-div {
     height: 70vh;
 }
@@ -155,6 +165,11 @@ body {
 }
 
 #logs-table{
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+#powerfailure-logs-table{
+     height: 90vh;
     background-color: rgba(0, 0, 0, 0.6);
 }
 

@@ -116,11 +116,11 @@
             <div class="downlaod_choice">
                 <div class="content">
                     <div class="divimg">
-                        <button id="excel_button" onclick='downloadTableAsExcel("RADAR History","table_data",)'>
+                        <button id="excel_button" onclick="downloadTableAsExcel('logs-table')">
                             <i class="fa dicon">&#xf1c3;</i>
                         </button>
     
-                        <button id="pdf_button" onclick='downloadTableAsPDF("RADAR History","table_data",10);'>
+                        <button id="pdf_button" onclick='downloadTableAsPDF("Jammer History","logs-table",10);'>
                             <i class="fa dicon">&#xf1c1;</i>
                         </button>
                         <!-- <div id="cr" onclick="download_toggle();" class="fa" style="cursor: pointer;">&#xf00d;</div> -->
@@ -144,7 +144,7 @@
                         <th scope="col" class="py-2 text-yellow-50">DURATION</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y overflow-y-auto  w-full">
+                <tbody class="divide-y overflow-y-auto  w-full" style="height: 10px !important;">
                 </tbody>
             </table>
         </div>
@@ -152,6 +152,7 @@
     </div>
     <script src="./assets/js/history.js"></script>
     <script src="./assets/js/tableToExcel.js"></script>
+    
     <script>
         function download_toggle() {
             $("#selectOption").toggle();
@@ -162,5 +163,9 @@
             var b = document.getElementById("end_date").value;
             window.location.href = `/featherLogs?start=${a}&end=${b}`;
         }
+        
     </script>
     <%- include('../partial/footer'); %>
+
+     <script type="text/javascript" src="./../../assets/js/jspdf.min.js" ></script>
+        <script type="text/javascript" src="./../../assets/js/jspdf.plugin.autotable.min.js"></script>

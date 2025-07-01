@@ -167,8 +167,10 @@ export class AutomationService {
             }
             return res.status(200).json({ payload: response });
         } catch (e) {
+            const ers='Invalid request'
             console.log('Error in automation service || automation/jammer', e);
-            res.status(500).json({ payload: { message: 'Invalid request', e } });
+            // res.status(500).json({ payload: { message: 'Invalid request', e } }); Code Change by Rahul 30 June
+            res.status(500).json({ payload: { message: e.payload, ers} }); // here Direclty print the error like PCU box didn't responce 
         }
     }
 

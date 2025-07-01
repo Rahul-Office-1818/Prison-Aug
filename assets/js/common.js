@@ -89,7 +89,50 @@ async function onLoad(ev) {
 }
 
 
+
+
 // Rahul - Update this code to change the format of the Excel 
+
+
+//  And this code fro date and time 
+
+var datestring;
+function dateTime() {
+  let date_ob = new Date();
+  let date = ("0" + date_ob.getDate()).slice(-2);
+  let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+  let year = date_ob.getFullYear();
+  let hours = ("0" + date_ob.getHours()).slice(-2);
+  let minutes = ("0" + date_ob.getMinutes()).slice(-2);
+  let seconds = ("0" + date_ob.getSeconds()).slice(-2);
+  datestring =
+    year +
+    "-" +
+    month +
+    "-" +
+    date +
+    " " +
+    hours +
+    ":" +
+    minutes +
+    ":" +
+    seconds;
+  return datestring;
+}
+/////////////////////////////////////////////////
+
+
+
+function addWaterMark(doc) {
+  var totalPages = doc.internal.getNumberOfPages();
+  for (i = 1; i <= totalPages; i++) {
+    doc.setPage(i);
+    doc.setTextColor(220);
+    doc.setFontSize(22);
+    doc.text(70, doc.internal.pageSize.height- 10, "BHARAT AERO");
+  }
+  return doc;
+}
 
 function downloadTableAsExcel(tableName) {
     var currentdate = new Date();
@@ -139,6 +182,264 @@ function downloadTableAsExcel(tableName) {
     // Clean up: remove the inserted custom thead
     infoHeader.remove();
 }
+
+function downloadTableAsPDF(filename, tablename, noOfLogs) {
+  const dateString = dateTime()
+  console.log(noOfLogs, "JJJJJJJJJJJJJJj", typeof noOfLogs);  
+  if (noOfLogs < 10) {
+    var doc = new jsPDF("portrait", "pt", "A4");
+  } else {
+    var doc = new jsPDF("l", "pt", "A4");
+  }
+  var pageHeight = 0;
+  var filename = filename
+  // filename = filename ? filename + ".pdf" : "pdf_data.pdf";
+  pageHeight = doc.internal.pageSize.height;
+  specialElementHandlers = {
+    // element with id of "bypass" - jQuery style selector
+    "#bypassme": function (element, renderer) {
+      // true = "handled elsewhere, bypass text extraction"
+      return true;
+    },
+  };
+  var y = -40;
+  doc.setFontSize(16);
+  doc.setFontStyle("bold");
+  doc.setTextColor("#000000");
+  doc.text(20, (y), `\n\n\n\n\n\t\t\t\t\t\t\t\t\t\t ${filename}`);
+  doc.setFontSize(13);
+  doc.setFontStyle("bold"); 
+  doc.setFont("times");
+  doc.setTextColor("#000000");
+  switch (noOfLogs) {
+    case 6:
+      doc.autoTable({
+        html: `#${tablename}`,
+        startY: 70,
+        theme: "striped",
+        headStyles: {
+          fillColor: "#1b1a1a",
+        },
+
+        columnStyles: {
+           0: {
+            cellWidth: 35,
+            fontStyle: "bold",
+          },
+          1: {
+            cellWidth: 100,
+            fontSize: 10,
+            fontStyle: "bold",
+          },
+          2: {
+            cellWidth: 60,
+            fontSize: 10,
+            fontStyle: "bold",
+          },
+          3: {
+            cellWidth: 160,
+            fontSize: 10,
+            fontStyle: "bold",
+          },
+          4: {
+            cellWidth: 160,
+            fontSize: 10,
+            fontStyle: "bold",
+          },
+          5: {
+            cellWidth:210,
+            fontSize: 10,
+            fontStyle: "bold",
+          },
+          6: {
+            cellWidth: 110,
+            fontSize: 10,
+            fontStyle: "bold",
+          },
+
+
+        },
+        styles: {
+          minCellHeight: 1,
+        },
+      });
+      break;
+    case 7:
+      doc.autoTable({
+        html: `#${tablename}`,
+        startY: 70,
+        theme: "striped",
+        headStyles: {
+          fillColor: "#1b1a1a",
+        },
+        columnStyles: {
+          0: {
+            cellWidth: 35,
+            fontStyle: "bold",
+          },
+          1: {
+            cellWidth: 35,
+            fontSize: 10,
+            fontStyle: "bold",
+          },
+          2: {
+            cellWidth: 100,
+            fontSize: 10,
+            fontStyle: "bold",
+          },
+          3: {
+            cellWidth: 160,
+            fontSize: 10,
+            fontStyle: "bold",
+          },
+          4: {
+            cellWidth: 150,
+            fontSize: 10,
+            fontStyle: "bold",
+          },
+          5: {
+            cellWidth:150,
+            fontSize: 10,
+            fontStyle: "bold",
+          },
+          6: {
+            cellWidth: 140,
+            fontSize: 10,
+            fontStyle: "bold",
+          },
+          7: {
+            cellWidth: 110,
+            fontSize: 10,
+            fontStyle: "bold",
+          },
+          8: {
+            cellWidth: 70,
+            fontSize: 10,
+            fontStyle: "bold",
+          },
+          9: {
+            cellWidth: 80,
+            fontSize: 10,
+            fontStyle: "bold",
+          },
+          10: {
+            cellWidth: 60,
+            fontSize: 10,
+            fontStyle: "bold",
+          },
+        },
+        styles: {
+          minCellHeight: 1,
+        },
+      });
+      break;
+    case 11:
+      doc.autoTable({
+        html: `#${tablename}`,
+        startY: 70,
+        theme: "striped",
+        headStyles: {
+          fillColor: "#1b1a1a",
+        },
+        columnStyles: {
+          0: {
+            cellWidth: 35,
+            fontStyle: "bold",
+          },
+          1: {
+            cellWidth: 63,
+            fontSize: 10,
+            fontStyle: "bold",
+          },
+          2: {
+            cellWidth: 60,
+            fontSize: 10,
+            fontStyle: "bold",
+          },
+          3: {
+            cellWidth: 60,
+            fontSize: 10,
+            fontStyle: "bold",
+          },
+          4: {
+            cellWidth: 55,
+            fontSize: 10,
+            fontStyle: "bold",
+          },
+          5: {
+            cellWidth: 115,
+            fontSize: 10,
+            fontStyle: "bold",
+          },
+          6: {
+            cellWidth: 115,
+            fontSize: 10,
+            fontStyle: "bold",
+          },
+          7: {
+            cellWidth: 67,
+            fontSize: 10,
+            fontStyle: "bold",
+          },
+          8: {
+            cellWidth: 70,
+            fontSize: 10,
+            fontStyle: "bold",
+          },
+          9: {
+            cellWidth: 50,
+            fontSize: 10,
+            fontStyle: "bold",
+          },
+          10: {
+            cellWidth: 50,
+            fontSize: 10,
+            fontStyle: "bold",
+          },
+          11: {
+            cellWidth: 40,
+            fontSize: 10,
+            fontStyle: "bold",
+          },
+        },
+        styles: {
+          minCellHeight: 1,
+        },
+      });
+      break;
+    default:
+      doc.autoTable({
+        html: `#${tablename}`,
+        startY: 70,
+        theme: "striped",
+        headStyles: {
+          fillColor: "#1b1a1a",
+        },
+        columnStyles: {
+          0: {
+            cellWidth: 55,
+            fontStyle: "bold",
+          },
+          1: {
+            fontSize: 10,
+            fontStyle: "bold",
+          },
+          2: {
+            fontSize: 10,
+            fontStyle: "bold",
+          },
+        },
+        styles: {
+          minCellHeight: 1,
+        },
+      });
+
+  }
+  doc = addWaterMark(doc);
+  doc.save(filename + "-" + dateString);
+}
+
+
 
 // document.querySelector("#logs-download").addEventListener("click", downloadTableAsExcel);
 document.querySelector("#logout-btn").addEventListener("click", onLogoutClick);

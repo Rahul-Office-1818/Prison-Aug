@@ -67,7 +67,7 @@ function ardiunoCommunication(command, { address, port }) {
     const message = Buffer.from(command);
     client.send(message, port, address, (err) => (err ? reject(err) : null));
     let timer = setTimeout(
-      () => reject({ payload: "PCU box didnt responded" }),
+      () => reject({ payload: "PCU box didn't responded" }),
       1000 * 5
     );
     client.on("message", (m, info) => {

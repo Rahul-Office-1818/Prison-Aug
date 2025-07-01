@@ -19,7 +19,8 @@ cpulogsApi.get("/", async (req, res) => {
             return;
         }
         // console.log(`stdout: ${stdout}`);
-        console.log(stdout);
+        // console.log(stdout); Change by  Rahul to not show all CPU log again and again
+        console.log("CPU Logs but clicked"); 
 
         const responses = [];
         const user = os.userInfo().username;
@@ -31,7 +32,6 @@ cpulogsApi.get("/", async (req, res) => {
             if (line.startsWith(os.userInfo().username)) {
                 const parts = line.split(/\s+/);
                 currentReason = parts.slice(3).join(' ');
-
             } else if (line.startsWith('reboot')) {
                 const parts = line.split(/\s+/);
                 const timing = parts[parts.length - 3] + ' ' + parts[parts.length - 2] + ' ' + parts[parts.length - 1];

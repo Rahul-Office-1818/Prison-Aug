@@ -37,7 +37,7 @@ const markerGroup = L.markerClusterGroup({
 });
 
 const onJammer = L.icon({
-  iconUrl: "./assets/icon/antenna.png",
+  iconUrl: "./assets/icon/toweron1.png",
   iconSize: [60, 60],
   iconAnchor: [50, 60],
   className: "jammer-icon",
@@ -45,7 +45,7 @@ const onJammer = L.icon({
 });
 
 const offJammer = L.icon({
-  iconUrl: "./assets/icon/antenna.png",
+  iconUrl: "./assets/icon/toweroff2.png",
   iconSize: [60, 60],
   iconAnchor: [50, 60],
   className: "jammer-icon",
@@ -282,17 +282,23 @@ async function onBlockLoad() {
               .then((data) => {
                 let item = document.querySelector("#voltage-span");
                 let span = document.querySelector("#temp-span");
+                let volt = document.querySelector("#volt-d");
                 const voltage = data.payload.voltage.split(":")[1];
                 const temperature = data.payload.temperature.split(":")[1];
+                // const voltage = 330;
+                // const temperature = 220;
                 console.log(`Voltage: ${voltage}`);
                 if (voltage > 220.0) {
                   removeAllClasses(item, "bg-");
                   item.classList.add("bg-green-500");
+                  volt.textContent = voltage + "V"; // <--- Display value
                 } else if (voltage >= 200.0 && voltage < 100.0) {
                   removeAllClasses(item, "bg-");
                   item.classList.add("bg-yellow-500");
+                  volt.textContent = voltage + "V"; // <--- Display value
                 } else {
                   console.log("Red: else is called");
+                  volt.textContent = voltage + "V"; // <--- Display value
 
                   removeAllClasses(item, "bg-");
                   item.classList.add("bg-red-500");
@@ -344,9 +350,11 @@ async function onBlockLoad() {
                                 <tr>
                                 <td scope="col" class="px-3 py-1 text-right font-bold text-black">Volt :</td>
                                 <td scope="col" class="px-3 py-1 text-left"><span id ="voltage-span" class=' flex text-sm shadow border-4   border-double rounded-full size-4 bg-red-500' connection="f" " id="jammer-connection"></span></td>
-                                </tr>
+                                
+                                
                             </table>
               `;
+              // </tr><td scope="col" class="px-3 py-1 text-left" id="volt-d" ></td>
             popup.style.position = "absolute";
             popup.style.zIndex = "9999";
             popup.style.padding = "10px";
@@ -556,20 +564,22 @@ async function checkPingConnection() {
     if (isJammersConnectionLost.length) {
       Toastify({
         text: `<div>
-                <strong>Jammer Connection Lost!!!</strong>
-                <p style="margin: 0;" class="text-base">Jammer Name: ${isJammersConnectionLost.map(item => item.jammerName).join(",")}</p>
+                <strong style="Text-align: center; width: 100%;">Jammer Connection Lost!!!</strong>
+                <p style="margin: 0; font-size: 22px ;" class="text-base">
+                Jammer Name: ${isJammersConnectionLost.map(item => `${item.jammerName} (J${item.blockId})`).join(", ")}
+                </p>
               </div>`,
-        duration: 10000,
+        duration: 2200,
         newWindow: true,
         position: "center",
-        gravity: "top",
+        gravity: "bottom",
         stopOnFocus: true,
         close: false,
         escapeMarkup: false,
         style: {
           color: "black",
           fontWeight: "bold",
-          fontSize: "32px",
+          fontSize: "32px", 
           border: "1px solid #FEEC6F",
           borderRadius: "10px",
           background: "rgb(255, 77, 77)",
@@ -581,6 +591,8 @@ async function checkPingConnection() {
     } else {
       jammerAlarm.pause();
     }
+
+    //  <p style="margin: 0;" class="text-base">Jammer ID: ${isJammersConnectionLost.map(item => item.jammerId).join(",")}</p>
 
     localStorage.setItem("ping", JSON.stringify(payload));
     try {

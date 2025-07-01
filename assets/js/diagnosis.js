@@ -78,31 +78,41 @@ class Diagnosys {
     }
 
     async initialJammerLoad() {
-        let id = localStorage.getItem("blockId") || 1;
-        if (id) {
-            const getJammers = await fetch(`/api/jammer/block?id=${id}`, { method: "GET", headers: { "Content-Type": "application/json" } });
-            if (getJammers.status === 200) {
-                const { block } = await getJammers.json();
-                let jammerContainer = document.querySelector('#jammer-container');
-                let jammerTitle = document.querySelector("#jammer-title");
-                jammerTitle.innerHTML = `Block ${id} - Jammers`
-                jammerContainer.innerHTML = "";
+    let id = localStorage.getItem("blockId") || 1;
+    if (id) {
+        const getJammers = await fetch(`/api/jammer/block?id=${id}`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" }
+        });
 
-                block.forEach((jammer, idx) => {
+        if (getJammers.status === 200) {
+            const { block } = await getJammers.json();
+            let jammerContainer = document.querySelector('#jammer-container');
+            let jammerTitle = document.querySelector("#jammer-title");
+            jammerTitle.innerHTML = `Block ${id} - Jammers`;
+            jammerContainer.innerHTML = "";
 
-                    jammerContainer.innerHTML += (`
-                    <button class="w-11/12 mx-auto p-4 grid grid-rows-2 text-black ${jammer.status ? "bg-green-500" : "bg-red-500"} border rounded-lg" onclick="onJammerClick(this)" jammerId="${jammer.id}" blockId="${id}" jammerName="${jammer.name}" data-address='${jammer.ipAddress}' data-port='${jammer.ipPort}'>
-                    <span class="font-bold ">J ${idx + 1}</span>
-                    <span class="text-sm shadow rounded-full">${jammer.name}</span>
-                </button>
-                        `)
-                })
-                return;
-            }
+            block.forEach((jammer, idx) => {
+                jammerContainer.innerHTML += (`
+                    <button class="w-11/12 mx-auto p-4 grid grid-rows-2 text-black ${jammer.status ? "bg-green-500" : "bg-red-500"} border rounded-lg"
+                        onclick="onJammerClick(this)" 
+                        jammerId="${jammer.id}" 
+                        blockId="${id}" 
+                        jammerName="${jammer.name}" 
+                        data-address='${jammer.ipAddress}' 
+                        data-port='${jammer.ipPort}'>
+                        <span class="font-bold">J ${idx + 1}</span>
+                        <span class="text-sm shadow rounded-full">${jammer.name}</span>
+                    </button>
+                `);
+            });
+
+        } else {
             Toast.fire({ icon: "error", title: "Something went wrong!" });
         }
-
     }
+}
+
 }
 
 const initial = async () => {
@@ -120,8 +130,8 @@ async function onJammerClick(ev) {
     const voltageService = await fetch('/api/automation/smpsvoltage?' + voltageQuery, { method: "GET", headers: { 'Content-Type': 'application/json' } });
 
 
-    // if (service.status === 200 && voltageService.status === 200) {
-        if (service.status === 500 && voltageService.status === 500) {
+    if (service.status === 200 && voltageService.status === 200) { 
+        // if (service.status === 500 && voltageService.status === 500) {
         const { payload } = await service.json();
         const isAll = payload.every((ele) => ele === true);
 
@@ -166,6 +176,8 @@ async function onJammerClick(ev) {
 
 
 }
+
+
 
 async function onChannelClick(ev) {
     let info = {
