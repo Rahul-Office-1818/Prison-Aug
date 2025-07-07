@@ -1,66 +1,111 @@
 <%- include('../partial/header'); %>
 
-    <div id="history" class="w-full">
-        <div class="w-11/12 m-auto mt-2 " >
-           <div class="all_option w-full ">
-            <div class="filter-section">
-                <div class="flex items-center gap-4">
-                    <label for="startdate" class="text-white font-bold py-1">Start</label>
-                    <input name="startdate" id="startdate"
-                        class="px-2 py-1 opacity-60 rounded hover:opacity-80 ease-in-out duration-300" type="datetime-local"
-                        placeholder="start date" />
-                    <label for="enddate" class="text-white font-bold py-1">End</label>
-                    <input name="enddate" id="enddate"
-                        class="px-2 py-1 opacity-60 rounded hover:opacity-80 ease-in-out duration-300" type="datetime-local"
-                        placeholder="start date" />
-                    
-                    <button  class="button-width" type="button" id="date-filter" title="apply filter">
-                        <img class="button-width invert "src="./assets/icon/filter.png" alt="filter" > 
-                    </button>
-                    <button type="button" id="logs-reload" class="button-width">
-                        <img class="h-8 button-width invert py-1" src="./assets/icon/reload.png" alt="reload" srcset=""> 
-                    </button>
+<div id="history" class="w-full">
+  <div class="w-11/12 m-auto mt-2">
+    <div class="all_option w-full">
+      <div class="filter-section">
+        <div class="flex items-center gap-4">
+          <label for="startdate" class="text-white font-bold py-1">Start</label>
+          <input
+            name="startdate"
+            id="startdate"
+            class="px-2 py-1 opacity-60 rounded hover:opacity-80 ease-in-out duration-300"
+            type="datetime-local"
+            placeholder="start date"
+          />
+          <label for="enddate" class="text-white font-bold py-1">End</label>
+          <input
+            name="enddate"
+            id="enddate"
+            class="px-2 py-1 opacity-60 rounded hover:opacity-80 ease-in-out duration-300"
+            type="datetime-local"
+            placeholder="start date"
+          />
 
-                </div>
-                <div class="block-status">
-                    <div class="hidden" >
-                        <label for="statusOptions" class="text-white font-bold py-1 pr-1 ">Status</label>
-                        <select name="statusOptions" id="statusOptions"
-                            class="px-2 py-1 opacity-60 rounded hover:opacity-80 ease-in-out duration-300">
-                            <option value="" selected disabled>select</option>
-                            <option value="1">On</option>
-                            <option value="0">Off</option>
-                            <!-- <option value="2">All</option> -->
-                        </select>
-                    </div>
-    
-                    <div>
-                        <label for="blockOptions" class="text-white font-bold py-1 pr-1">Block</label>
-                        <select name="blockOptions" id="blockOptions"
-                            class="px-2 py-1 opacity-60 rounded hover:opacity-80 ease-in-out duration-300">
-                            <!-- <option value="" selected disabled>select</option> -->
-    
-                        </select>
-                    </div>
-                </div>
-
-            </div>
-            <div class="download_Powerfail">
-               <div>
-                <!-- <button type="button" id="logs-download" onclick="downloadTableAsExcel('logs-table')" class="button-width"> orignal code 23 April -->
-                    <button type="button" id="logs-download" onclick="download_toggle()" class="button-width">
-                    <img class="h-8 button-width invert py-1" src="./assets/icon/download.png" alt="reload" srcset="">
-                </button>
-               </div>
-               <div>
-                <a target="_blank" href="/pflogs" class="bg-red-800 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-md font-medium " style="margin-left: 20px;">
-                    Power Failure Logs
-                </a> 
-               </div>
-            </div>
-           </div>
+          <button
+            class="button-width"
+            type="button"
+            id="date-filter"
+            title="apply filter"
+          >
+            <img
+              class="button-width"
+              style="width: 30px; height: 30px"
+              src="./assets/icon/apply_filter.png"
+              alt="filter"
+            />
+          </button>
+          <button type="button" id="logs-reload" class="button-width">
+            <img
+              class="h-8 button-width invert py-1"
+              src="./assets/icon/reload.png"
+              alt="reload"
+              srcset=""
+            />
+          </button>
         </div>
-        <!-- <div class="filter-div w-11/12 m-auto mt-2">
+        <div class="block-status">
+          <div class="hidden">
+            <label for="statusOptions" class="text-white font-bold py-1 pr-1"
+              >Status</label
+            >
+            <select
+              name="statusOptions"
+              id="statusOptions"
+              class="px-2 py-1 opacity-60 rounded hover:opacity-80 ease-in-out duration-300"
+            >
+              <option value="" selected disabled>select</option>
+              <option value="1">On</option>
+              <option value="0">Off</option>
+              <!-- <option value="2">All</option> -->
+            </select>
+          </div>
+
+          <div>
+            <label for="blockOptions" class="text-white font-bold py-1 pr-1"
+              >Block</label
+            >
+            <select
+              name="blockOptions"
+              id="blockOptions"
+              class="px-2 py-1 opacity-60 rounded hover:opacity-80 ease-in-out duration-300"
+            >
+              <!-- <option value="" selected disabled>select</option> -->
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="download_Powerfail">
+        <div>
+          <!-- <button type="button" id="logs-download" onclick="downloadTableAsExcel('logs-table')" class="button-width"> orignal code 23 April -->
+          <button
+            type="button"
+            id="logs-download"
+            onclick="download_toggle()"
+            class="button-width"
+          >
+            <img
+              class="h-8 button-width invert py-1"
+              src="./assets/icon/download.png"
+              alt="reload"
+              srcset=""
+            />
+          </button>
+        </div>
+        <div>
+          <a
+            target="_blank"
+            href="/pflogs"
+            class="text-white hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-md font-medium"
+            style="margin-left: 20px"
+          >
+            Power Failure Logs
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="filter-div w-11/12 m-auto mt-2">
 
             <div class="flex  bg-slate-800 w-full ">
                 <div class="flex flex-row items-center gap-4 bg-yellow-500">
@@ -72,7 +117,7 @@
                     <input name="enddate" id="enddate"
                         class="px-2 py-1 opacity-60 rounded hover:opacity-80 ease-in-out duration-300" type="datetime-local"
                         placeholder="start date" />
-                    <button type="button" id="date-filter" title="apply filter" class="button-width"><img class="h-8 button-width invert py-1"
+                    <button type="button" id="date- filter" title="apply filter" class="button-width"><img class="h-8 button-width invert py-1"
                             src="./assets/icon/filter.png" alt="filter" srcset=""> </button>
                     <button type="button" id="logs-reload" class="button-width"><img class="h-8 button-width invert py-1"
                             src="./assets/icon/reload.png" alt="reload" srcset=""> dfdsfsfs</button>
@@ -110,62 +155,69 @@
 
         </div> -->
 
+  <div id="selectOption" class="disable-bg" onclick="download_toggle();">
+    <div class="downlaod_choice">
+      <div class="content">
+        <div class="divimg">
+          <button
+            id="excel_button"
+            onclick="downloadTableAsExcel('logs-table')"
+          >
+            <i class="fa dicon">&#xf1c3;</i>
+          </button>
 
-
-        <div id="selectOption" class="disable-bg" onclick="download_toggle();">
-            <div class="downlaod_choice">
-                <div class="content">
-                    <div class="divimg">
-                        <button id="excel_button" onclick="downloadTableAsExcel('logs-table')">
-                            <i class="fa dicon">&#xf1c3;</i>
-                        </button>
-    
-                        <button id="pdf_button" onclick='downloadTableAsPDF("Jammer History","logs-table",10);'>
-                            <i class="fa dicon">&#xf1c1;</i>
-                        </button>
-                        <!-- <div id="cr" onclick="download_toggle();" class="fa" style="cursor: pointer;">&#xf00d;</div> -->
-                    </div>
-                </div>
-            </div>
-    
+          <button
+            id="pdf_button"
+            onclick='downloadTableAsPDF("Jammer History","logs-table",10);'
+          >
+            <i class="fa dicon">&#xf1c1;</i>
+          </button>
+          <!-- <div id="cr" onclick="download_toggle();" class="fa" style="cursor: pointer;">&#xf00d;</div> -->
         </div>
-
-
-        <div id="logs-div" class="w-11/12 m-auto mt-6 overflow-auto ">
-            <table id="logs-table"
-                class="w-full text-white border-slate-500 divide-y divide-gray-300  text-xl">
-                <thead class="sticky top-0 bg-black">
-                    <tr class=" ">
-                        <th scope="col" class="py-2 text-yellow-50">S.N.</th>
-                        <th scope="col" class="py-2 text-yellow-50">NAME</th>
-                        <th scope="col" class="py-2 text-yellow-50">BLOCK</th>
-                        <th scope="col" class="py-2 text-yellow-50">Jammer ON</th>
-                        <th scope="col" class="py-2 text-yellow-50">Jammer OFF</th>
-                        <th scope="col" class="py-2 text-yellow-50">DURATION</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y overflow-y-auto  w-full" style="height: 10px !important;">
-                </tbody>
-            </table>
-        </div>
-
+      </div>
     </div>
-    <script src="./assets/js/history.js"></script>
-    <script src="./assets/js/tableToExcel.js"></script>
-    
-    <script>
-        function download_toggle() {
-            $("#selectOption").toggle();
-        }
+  </div>
 
-        function filter() {
-            var a = document.getElementById("start_date").value;
-            var b = document.getElementById("end_date").value;
-            window.location.href = `/featherLogs?start=${a}&end=${b}`;
-        }
-        
-    </script>
-    <%- include('../partial/footer'); %>
+  <div id="logs-div" class="w-11/12 m-auto mt-6 overflow-auto">
+    <table
+      id="logs-table"
+      class="w-full text-white border-slate-500 divide-y divide-gray-300 text-xl"
+    >
+      <thead class="sticky top-0 bg-black">
+        <tr class=" ">
+          <th scope="col" class="py-2 text-yellow-50">S.N.</th>
+          <th scope="col" class="py-2 text-yellow-50">NAME</th>
+          <th scope="col" class="py-2 text-yellow-50">BLOCK</th>
+          <th scope="col" class="py-2 text-yellow-50">Jammer ON</th>
+          <th scope="col" class="py-2 text-yellow-50">Jammer OFF</th>
+          <th scope="col" class="py-2 text-yellow-50">DURATION</th>
+        </tr>
+      </thead>
+      <tbody
+        class="divide-y overflow-y-auto w-full"
+        style="height: 10px !important"
+      ></tbody>
+    </table>
+  </div>
+</div>
+<script src="./assets/js/history.js"></script>
+<script src="./assets/js/tableToExcel.js"></script>
 
-     <script type="text/javascript" src="./../../assets/js/jspdf.min.js" ></script>
-        <script type="text/javascript" src="./../../assets/js/jspdf.plugin.autotable.min.js"></script>
+<script>
+  function download_toggle() {
+    $("#selectOption").toggle();
+  }
+
+  function filter() {
+    var a = document.getElementById("start_date").value;
+    var b = document.getElementById("end_date").value;
+    window.location.href = `/featherLogs?start=${a}&end=${b}`;
+  }
+</script>
+<%- include('../partial/footer'); %>
+
+<script type="text/javascript" src="./../../assets/js/jspdf.min.js"></script>
+<script
+  type="text/javascript"
+  src="./../../assets/js/jspdf.plugin.autotable.min.js"
+></script>

@@ -5,16 +5,16 @@ const pflogsTableBodySelector = document.querySelector(
 async function onPFLogsLoad() {
   let start = document.querySelector("#startdate").value;
   let end = document.querySelector("#enddate").value;
-//   let selectedBlock = document.querySelector("#blockOptions").value;
+  //   let selectedBlock = document.querySelector("#blockOptions").value;
   console.log(start, end);
 
   const get = await fetch(
     "/api/pflogs?start=" +
-      start +
-      "&end=" +
-      end +
-      
-      "",
+    start +
+    "&end=" +
+    end +
+
+    "",
     {
       method: "GET",
       headers: {
@@ -40,9 +40,8 @@ async function onPFLogsLoad() {
       tr.innerHTML = `<td scope="col" class="py-2">${idx + 1}</td>
             <td scope="col" class="py-2">${el.jammer_id}</td>
             <td scope="col" class="py-2">${el.jammer_name}</td>
-            <td scope="col" class="py-2">${
-              el.status ? "Jammer ON" : "Jammer Connectivity Lost"
-            }</td>
+            <td scope="col" class="py-2">${el.status ? "Jammer ON" : "Jammer Connectivity Lost"
+        }</td>
             <td scope="col" class="py-2">${el.FROM}</td>
             <td scope="col" class="py-2">${el.To}</td>
             <td scope="col" class="py-2">${el.Duration}</td>
@@ -63,7 +62,7 @@ async function onLogsReload(ev) {
     .querySelectorAll("tr")
     .forEach((row) => (row.style.display = ""));
   onPFLogsLoad();
-  Toast.fire({ icon: "success", title: "Reload jammer logs!" });
+  Toast.fire({ icon: "success", title: "Filter Applied Successfully" });
 }
 
 document

@@ -9,12 +9,12 @@ async function onLogsLoad() {
 
   const get = await fetch(
     "/api/logs?start=" +
-      start +
-      "&end=" +
-      end +
-      "&blockId=" +
-      selectedBlock +
-      "",
+    start +
+    "&end=" +
+    end +
+    "&blockId=" +
+    selectedBlock +
+    "",
     {
       method: "GET",
       headers: {
@@ -35,9 +35,8 @@ async function onLogsLoad() {
       let date = d.getDate().toString().padStart(2, "0");
       let datetime = `${date}/${months}/${d.getFullYear()} ${hours}:${minutes}:${seconds}`;
       let seconds2 = d.getSeconds().toString().padStart(2, "0");
-      let StatTime = `${d.getDate()}/${
-        d.getMonth() + 1
-      }/${d.getFullYear()} ${hours}:${minutes}:${seconds2}`;
+      let StatTime = `${d.getDate()}/${d.getMonth() + 1
+        }/${d.getFullYear()} ${hours}:${minutes}:${seconds2}`;
       const tr = document.createElement("tr");
       tr.classList.add("text-center", "text-xl", "divide-gray-200");
       tr.setAttribute("status", el.status);
@@ -45,9 +44,8 @@ async function onLogsLoad() {
       tr.innerHTML = `<td scope="col" class="py-2">${idx + 1}</td>
             <td scope="col" class="py-2">${el.jammerName}</td>
             <td scope="col" class="py-2" >Block ${el.blockId}</td>
-            <td scope="col" class="py-2" datetime="${StatTime}">${
-        el.jammer_on
-      }</td>
+            <td scope="col" class="py-2" datetime="${StatTime}">${el.jammer_on
+        }</td>
             <td scope="col" class="py-2">${el.jammer_off}</td>
             <td scope="col" class="py-2" >${el.diffrence}</td>
             `;
