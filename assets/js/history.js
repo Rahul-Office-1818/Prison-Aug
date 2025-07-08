@@ -59,6 +59,7 @@ async function onLogsLoad() {
 }
 
 const filter_log = document.querySelector("#date-filter");
+const filter_remove_log = document.querySelector("#date-filter-remove");
 
 async function initial() {
   onLogsLoad();
@@ -142,6 +143,7 @@ initial();
 
 document.querySelector("#date-filter").addEventListener("click", onLogsLoad);
 document.querySelector("#logs-reload").addEventListener("click", onLogsReload);
+document.querySelector("#date-filter-remove").addEventListener("click", onLogsLoad);
 // document.querySelector("#powerfailure-logs").addEventListener("click", pflogs);
 
 document

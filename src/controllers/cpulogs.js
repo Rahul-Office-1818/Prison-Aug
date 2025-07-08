@@ -19,7 +19,7 @@ cpulogsApi.get("/", async (req, res) => {
             return;
         }
         // console.log(`stdout: ${stdout}`);
-        // console.log(stdout); Change by  Rahul to not show all CPU log again and again
+        // console.log(stdout);     //Change by  Rahul to not show all CPU log again and again
         console.log("CPU Logs but clicked"); 
 
         const responses = [];
