@@ -1,5 +1,8 @@
 const logsTableBodySelector = document.querySelector("#logs-table tbody");
 
+
+
+
 async function onLogsLoad() {
   let start = document.querySelector("#startdate").value;
   let end = document.querySelector("#enddate").value;
@@ -21,7 +24,6 @@ async function onLogsLoad() {
     let { payload } = await get.json();
     logsTableBodySelector.innerHTML = "";
 
-    console.log("Full payload:", payload);
 
     // Group logs by jammer identity
     const groupedLogs = {};
@@ -82,8 +84,8 @@ async function onLogsLoad() {
         <td scope="col" class="py-2">${idx + 1}</td>
         <td scope="col" class="py-2">${el.jammerName}</td>
         <td scope="col" class="py-2">Block ${el.blockId}</td>
-        <td scope="col" class="py-2" datetime="${StatTime}">${el.jammer_on}</td>
-        <td scope="col" class="py-2">${el.jammer_off}</td>
+        <td scope="col" class="py-2" datetime="${StatTime}">${formatDateTime(el.jammer_on)}</td>
+        <td scope="col" class="py-2">${formatDateTime(el.jammer_off)}</td>
         <td scope="col" class="py-2">${el.diffrence}</td>
         <td scope="col" class="py-2">${offDuration}</td>
       `;
@@ -142,7 +144,6 @@ async function onLogsLoadWithoutDateFilter() {
     let { payload } = await get.json();
     logsTableBodySelector.innerHTML = "";
 
-    console.log("Full payload:", payload);
 
     // Group logs by jammer identity
     const groupedLogs = {};
@@ -203,8 +204,8 @@ async function onLogsLoadWithoutDateFilter() {
         <td scope="col" class="py-2">${idx + 1}</td>
         <td scope="col" class="py-2">${el.jammerName}</td>
         <td scope="col" class="py-2">Block ${el.blockId}</td>
-        <td scope="col" class="py-2" datetime="${StatTime}">${el.jammer_on}</td>
-        <td scope="col" class="py-2">${el.jammer_off}</td>
+        <td scope="col" class="py-2" datetime="${StatTime}">${formatDateTime(el.jammer_on)}</td>
+        <td scope="col" class="py-2">${formatDateTime(el.jammer_off)}</td>
         <td scope="col" class="py-2">${el.diffrence}</td>
         <td scope="col" class="py-2">${offDuration}</td>
       `;
