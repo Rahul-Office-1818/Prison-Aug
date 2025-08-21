@@ -198,7 +198,7 @@ async function onLogsLoadWithoutDateFilter() {
       tr.setAttribute("status", el.status);
       tr.setAttribute("blockId", el.blockId);
 
-      const offDuration = offDurationMap[el.id] || "--";
+      const offDuration = offDurationMap[el.id] || "";
 
       tr.innerHTML = `
         <td scope="col" class="py-2">${idx + 1}</td>

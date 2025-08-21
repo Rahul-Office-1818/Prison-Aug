@@ -36,7 +36,7 @@ async function onPFLogsLoad() {
       const tr = document.createElement("tr");
       tr.classList.add("text-center", "text-xl", "divide-gray-200");
       tr.setAttribute("status", el.status);
-      tr.setAttribute("blockId", el.blockId);
+      tr.setAttribute("blockId", el.blockId);   
       tr.innerHTML = `<td scope="col" class="py-2">${idx + 1}</td>
             <td scope="col" class="py-2">${el.jammer_id}</td>
             <td scope="col" class="py-2">${el.jammer_name}</td>

@@ -59,4 +59,27 @@ auth.get('/checkpass', (req, res) => {
     }
 })
 
+
+// /auth/admin/login
+auth.get('/admin/login', async (req, res) => {
+    const { username, password } = req.query;
+    try {
+        const user = await User.findOne({ where: { username, password } });
+        if (!user || user.type !== "admin") {
+            return res.status(401).json({ message: "Admin authentication failed!" });
+        }
+        let secret = {
+            user: user.username,
+            type: user.type
+        }
+        let token = jwt.sign({ data: secret }, process.env.JWT_SECRET_KEY)
+        res.cookie('token', token);
+        return res.status(200).json({ message: "Admin login successful!", user: user });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: "Internal server error!", err });
+    }
+});
+        
+
 export default auth;

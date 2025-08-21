@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Login</title>
+  <link rel="stylesheet" href="/assets/tailwind/output.css">
+</head>
+<body class="bg-gray-900 flex items-center justify-center h-screen">
+ <section>
+            <div
+                class="flex flex-col items-center justify-center backdrop-blur-md px-6 py-8 mx-auto md:h-screen lg:py-0">
+                <a href="/login" class="flex items-center mb-6 text-2xl font-semibold text-white">
+                    <img class="w-8 h-8 mr-2 invert" src="./assets/icon/project-icon.png" alt="logo">
+                    Prison Jammer
+                </a>
+                <div class="w-full bg-gray-100 bg-opacity-50 rounded-lg shadow  md:mt-0 sm:max-w-md xl:p-0">
+                    <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+                        <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
+                            Log in to Admin account
+                        </h1>
+
+                        <form id="admin-login-form">
+      <div class="mb-4">
+        <label for="username" class="block text-sm font-medium">Username</label>
+        <input type="text" id="username" name="username" class="w-full border rounded p-2" required>
+      </div>
+      <div class="mb-4">
+        <label for="password" class="block text-sm font-medium">Password</label>
+        <input type="password" id="password" name="password" class="w-full border rounded p-2" required>
+      </div>
+      <button type="submit" class="w-full text-black bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Login as Admin</button>
+    </form>
+                       
+                    </div>
+                </div>
+            </div>
+        </section>
+  <script src="/assets/js/adminlogin.js"></script>
+</body>
+</html>
+
+
