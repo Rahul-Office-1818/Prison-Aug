@@ -709,6 +709,70 @@ function removeDublicateBlocks(value) {
 
 initial();
 
+
+
+// // This code for prevent the page from being refreshed/reloaded while the Jammer are ON. 27 Aug  Rahul
+// function hexToRgb(hex) {
+//   hex = hex.replace("#", "");
+//   if (hex.length === 3) {
+//     hex = hex.split("").map(ch => ch + ch).join("");
+//   }
+//   const r = parseInt(hex.substring(0, 2), 16);
+//   const g = parseInt(hex.substring(2, 4), 16);
+//   const b = parseInt(hex.substring(4, 6), 16);
+//   return `rgb(${r}, ${g}, ${b})`;
+// }
+
+// // Store green reference values
+// const greenValues = [
+//   "rgb(34, 197, 94)",       // Tailwind green-500
+//   hexToRgb("#22c55e")       // Hex equivalent
+// ];
+
+// function isJammerGreen() {
+//   const jammer = document.querySelector(".Jammer-btn");
+//   if (!jammer) return false;
+
+//   const style = getComputedStyle(jammer);
+//   const bgColor = style.backgroundColor.trim();
+//   return greenValues.includes(bgColor);
+// }
+
+
+// // Block refresh if green
+// window.addEventListener("beforeunload", function (event) {
+//   if (isJammerGreen()) {
+//     event.preventDefault();
+//     // Chrome requires returnValue to show confirmation dialog
+//     event.returnValue = "Jammer is green, page reload is restricted!";
+//     return "Jammer is ON, page reload is restricted!";
+//   }
+// });
+
+
+// This code for prevent the page from being refreshed/reloaded while the Jammer are ON. 29 Aug  Rahul using Tower
+
+document.addEventListener("DOMContentLoaded", () => {
+  window.addEventListener("beforeunload", (event) => {
+    const imgs = document.querySelectorAll(".jammer-icon");
+    let blockReload = false;
+
+    imgs.forEach(img => {
+      if (img.src.includes("toweron1.png")) {
+        blockReload = true;
+      }
+    });
+
+    if (blockReload) {
+      event.preventDefault();
+      event.returnValue = "A jammer is ON. Leaving will stop monitoring.";
+      return "A jammer is ON. Leaving will stop monitoring.";
+    }
+  });
+});
+
+
+
 document.querySelector("#drawer-close").addEventListener("click", toggleDrawer);
 closeJammerSelector.addEventListener("click", closeModal);
 addJammerFormSelector.addEventListener("submit", onFormSubmit);
