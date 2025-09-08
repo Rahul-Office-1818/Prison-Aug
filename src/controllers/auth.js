@@ -34,12 +34,17 @@ auth.get('/logout', (req, res) => {
 
 // /auth/signup
 auth.post('/signup', async (req, res) => {
-    const { username, password, type } = req.body;
+    const { username, password, usertype } = req.body; // <-- usertype instead of type
     try {
-        const user = await User.findOne({ where: { username: username } });
+        const user = await User.findOne({ where: { username } });
         if (user) return res.status(401).json({ payload: { message: "User already exists!" } });
 
-        const create = await User.create({ username: username, password: password, type: type || "user" });
+        const create = await User.create({
+            username,
+            password,
+            type: usertype || "user"   // map usertype -> type
+        });
+
         res.status(201).json({ payload: { message: "Sign up successful!", user: create } });
     } catch (err) {
         console.log(err);
