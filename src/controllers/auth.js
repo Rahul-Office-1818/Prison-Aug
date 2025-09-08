@@ -36,7 +36,7 @@ auth.get('/logout', (req, res) => {
 auth.post('/signup', async (req, res) => {
     const { username, password, usertype } = req.body; // <-- usertype instead of type
     try {
-        const user = await User.findOne({ where: { username } });
+        const user = await User.findOne({ where: { username } }); 
         if (user) return res.status(401).json({ payload: { message: "User already exists!" } });
 
         const create = await User.create({
